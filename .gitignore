@@ -1,0 +1,9 @@
+# ignoring venv folder
+venv/
+
+# ignoring the __pycache__ folder
+__pycache__/
+*.pycgit
+
+# ignoring the .idea folder
+.idea/
