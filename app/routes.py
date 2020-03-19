@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, render_template, redirect, ur
 from app.models import user_exists, save_user
 from app import app
 
+
 @app.route('/')
 def hello_world():
     return render_template('index.html')
@@ -63,6 +64,10 @@ def logout():
     session.clear()
     return render_template('index.html')
 
+
+@app.route('/home')
+def home():
+    return "Welcome"
 
 #if __name__ == '__main__':
 #    app.run(debug=True)

@@ -4,6 +4,8 @@
 	<title>Login V1</title>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="google-signin-client_id" content="676778732236-am30ol067bbhm4ajmd35g0li64l02ve9.apps.googleusercontent.com">
+
 <!--===============================================================================================-->
 	<link rel="icon" type="image/png" href="./../static/images/icons/favicon.ico"/>
 <!--===============================================================================================-->
@@ -74,6 +76,8 @@
 							<i class="fa fa-long-arrow-right m-l-5" aria-hidden="true"></i>
 						</a>
 					</div>
+
+					<div class="g-signin2" data-onsuccess="onSignIn"></div>
 				</form>
 			</div>
 		</div>
@@ -81,7 +85,8 @@
 	
 	
 
-	
+<!--===============================================================================================-->
+	<script src="https://apis.google.com/js/platform.js" async defer></script>
 <!--===============================================================================================-->
 	<script src="./../static/vendor/jquery/jquery-3.2.1.min.js"></script>
 <!--===============================================================================================-->
