@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, render_template, redirect, url_for, session
+
 from app.models import user_exists, save_user
 from app import app
 
