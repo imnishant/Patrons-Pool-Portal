@@ -1,23 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <title>Login V1</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+	<title>Error</title>
+    <link rel="icon" href="../static/images/fav.png" type="image/png" sizes="16x16"> 
+    
+    <link rel="stylesheet" href="../static/css/main.min.css">
+    <link rel="stylesheet" href="../static/css/style.css">
+    <link rel="stylesheet" href="../static/css/color.css">
+    <link rel="stylesheet" href="../static/css/responsive.css">
+
 </head>
 <body>
-<!-- page content -->
-<div class="col-md-12">
-        <div class="col-middle">
-          <div class="text-center text-center">
-            <h1 class="error-number">403</h1>
-            <h1>Access denied</h1>
-            <br />
-            <h2>{{ error_msg }} </h2>
-            
-          </div>
-        </div>
-      </div>
-      <!-- /page content -->
+<!--<div class="se-pre-con"></div>-->
+<div class="theme-layout">
+	<div class="container-fluid pdng0">
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="error-page">
+					<div class="bg-image" style="background-image: url(../static/images/resources/404.jpg)"></div>
+					<div class="error-meta">
+						<h1>whoops!</h1>
+						<span>{{ error_msg }}</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+	
+	<script src="../static/js/main.min.js"></script>
+	<script src="../static/js/script.js"></script>
 
-    </body>
-    </html>
-    
+</body>	
+
+</html>

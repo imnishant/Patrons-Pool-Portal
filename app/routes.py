@@ -6,7 +6,7 @@ from app import app
 
 @app.route('/')
 def hello_world():
-    return render_template('index.html')
+    return render_template('landing.html')
 
 
 @app.route('/login', methods=['POST', 'GET'])
@@ -70,5 +70,5 @@ def logout():
 def home():
     return "Welcome"
 
-#if __name__ == '__main__':
-#    app.run(debug=True)
+if __name__ == '__main__':
+    app.run(debug=True)
