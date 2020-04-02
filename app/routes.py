@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, render_template, redirect, ur
 
 from app.models import user_exists, save_user
 from app import app
+from utils import signup_util
 
 
 @app.route('/')
@@ -12,9 +13,7 @@ def hello_world():
 @app.route('/login', methods=['POST', 'GET'])
 def login():
     if request.method == 'POST':
-        username = request.form['email']
-        password = request.form['pass']
-        result = user_exists(username)
+        result = login_util(request)
 
         if result:
             if result['password'] != password:
@@ -31,15 +30,9 @@ def login():
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     if request.method == 'POST':
-        user_info = {}
-        user_info['fname'] = request.form['fname']
-        user_info['lname'] = request.form['lname']
-        user_info['gender'] = request.form['gender']
-        user_info['age'] = request.form['age']
-        user_info['password'] = request.form['password1']
-        user_info['email'] = request.form['email']
-        user_info['occupation'] = request.form['occupation']
-        user_info['organization'] = request.form['organization']
+        
+        user_info = signup_util(request)
+        
         if (request.form['isSponsor'] == "Sponsor"):
             user_info['isSponsor'] = 1
         else:
