@@ -272,6 +272,8 @@
 								</div>									
 								</aside>
 							</div><!-- sidebar -->
+
+
 							<div class="col-lg-6">
 								<div class="central-meta">
 									<div class="about">
@@ -281,69 +283,64 @@
 												Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
 											</p>
 										</div>
-										<div class="d-flex flex-row mt-2">
-											<ul class="nav nav-tabs nav-tabs--vertical nav-tabs--left" >
-												<li class="nav-item">
-													<a href="{{ url_for('.profile', _anchor='basic') }}" class="nav-link" data-toggle="tab" >Basic info</a>
-												</li>
-												<li class="nav-item">
-													<a href="{{ url_for('.profile', _anchor='location') }}" class="nav-link" data-toggle="tab" >location</a>
-												</li>
-												<li class="nav-item">
-													<a href="#work" class="nav-link" data-toggle="tab" >work and education</a>
-												</li>
-												<li class="nav-item">
-													<a href="#interest" class="nav-link" data-toggle="tab"  >interests</a>
-												</li>
-												<li class="nav-item">
-													<a href="#lang" class="nav-link" data-toggle="tab" >languages</a>
-												</li>
-											</ul>
-											<div class="tab-content">
-												<div class="tab-pane fade show active" id="basic" >
-													<ul class="basics">
-														<li><i class="ti-user"></i>sarah grey</li>
-														<li><i class="ti-map-alt"></i>live in Dubai</li>
-														<li><i class="ti-mobile"></i>+1-234-345675</li>
-														<li><i class="ti-email"></i><a href="https://wpkixx.com/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="3c4553494e515d55507c59515d5550125f5351">[email&#160;protected]</a></li>
-														<li><i class="ti-world"></i>www.yoursite.com</li>
-													</ul>
+										<div class = "container">
+											<div class = "row">
+												<div class = "col-sm-4">
+													<button onclick="basic()" class="width" id="b1">Basic Info</button>
+													<button onclick="locations()" class="width" id="b2">Location</button>
+													<button onclick="work()" class="width" id="b3">Work and Education</button>
+													<button onclick="interest()" class="width" id="b4">Interests</button>
+													<button onclick="langs()" class="width" id="b5">Languages</button>
 												</div>
-												<div class="tab-pane fade" id="location" role="tabpanel">
-													<div class="location-map">
-														<div id="map-canvas"></div>
-													</div>
-												</div>
-												<div class="tab-pane fade" id="work" role="tabpanel">
-													<div>
-														
-														<a href="#" title="">Envato</a>
-														<p>work as autohr in envato themeforest from 2013</p> 
-														<ul class="education">
-															<li><i class="ti-facebook"></i> BSCS from Oxford University</li>
-															<li><i class="ti-twitter"></i> MSCS from Harvard Unversity</li>
+												<div class="col-sm-8" id="border"> 
+													<div class="tab-pane" id="basic">
+														<ul class="basics">
+															<li><i class="ti-user"></i>sarah grey</li>
+															<li><i class="ti-map-alt"></i>live in Dubai</li>
+															<li><i class="ti-mobile"></i>+1-234-345675</li>
+															<li><i class="ti-email"></i><a href="https://wpkixx.com/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="3c4553494e515d55507c59515d5550125f5351">[email&#160;protected]</a></li>
+															<li><i class="ti-world"></i>www.yoursite.com</li>
 														</ul>
 													</div>
-												</div>
-												<div class="tab-pane fade" id="interest" role="tabpanel">
-													<ul class="basics">
-														<li>Footbal</li>
-														<li>internet</li>
-														<li>photography</li>
-													</ul>
-												</div>
-												<div class="tab-pane fade" id="lang" role="tabpanel">
-													<ul class="basics">
-														<li>english</li>
-														<li>french</li>
-														<li>spanish</li>
-													</ul>
-												</div>
+													<div class="tab-pane" id="location" role="tabpanel">
+														<ul class="basics">
+															<li>Address Line </li>
+															<li>City</li>
+															<li>Country</li>
+														</ul>
+													</div>
+													<div class="tab-pane" id="work" role="tabpanel">
+														<div>
+															
+															<a href="#" title="">Envato</a>
+															<p>work as autohr in envato themeforest from 2013</p> 
+															<ul class="education">
+																<li><i class="ti-facebook"></i> BSCS from Oxford University</li>
+																<li><i class="ti-twitter"></i> MSCS from Harvard Unversity</li>
+															</ul>
+														</div>
+													</div>
+													<div class="tab-pane" id="interest" role="tabpanel">
+														<ul class="basics">
+															<li>Footbal</li>
+															<li>internet</li>
+															<li>photography</li>
+														</ul>
+													</div>
+													<div class="tab-pane" id="lang" role="tabpanel">
+														<ul class="basics">
+															<li>english</li>
+															<li>french</li>
+															<li>spanish</li>
+														</ul>
+													</div>
+												</div>	
 											</div>
 										</div>
 									</div>
 								</div>	
 							</div><!-- centerl meta -->
+
 							<div class="col-lg-3">
 								<aside class="sidebar static">
 									<div class="widget stick-widget">
@@ -450,6 +447,48 @@
 	</footer><!-- footer -->
 </div>
 	
+	<script type = "text/javascript">
+		function off(s1,s2,s3,s4,b1,b2,b3,b4) {
+			document.getElementById(s1).style.display = "none";
+			document.getElementById(s2).style.display = "none";
+			document.getElementById(s3).style.display = "none";
+			document.getElementById(s4).style.display = "none";
+			document.getElementById(b1).style.backgroundColor = "white";
+			document.getElementById(b1).style.color = 'black';
+			document.getElementById(b2).style.backgroundColor = "white";
+			document.getElementById(b2).style.color = 'black';
+			document.getElementById(b3).style.backgroundColor = "white";
+			document.getElementById(b3).style.color = 'black';
+			document.getElementById(b4).style.backgroundColor = "white";
+			document.getElementById(b4).style.color = 'black';
+		}
+		function on(s1,b1) {
+			document.getElementById(s1).style.display = "block";
+			document.getElementById(b1).style.backgroundColor = "blue";
+			document.getElementById(b1).style.color = 'white';
+		}
+		function basic() {
+			on('basic','b1');
+			off('location','work','interest','lang','b2','b3','b4','b5');
+		}
+		function locations() {
+			on('location','b2');
+			off('basic','work','interest','lang','b1','b3','b4','b5');
+		}
+		function work() {
+			on('work','b3');
+			off('location','basic','interest','lang','b2','b1','b4','b5');
+		}
+		function interest() {
+			on('interest','b4');
+			off('location','work','basic','lang','b2','b3','b1','b5');
+		}
+		function langs() {
+			on('lang','b5');
+			off('location','work','interest','basic','b2','b3','b4','b1');
+		}
+		basic();
+	</script>
 	<script data-cfasync="false" src="../../cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="js/main.min.js"></script>
 	<script src="../static/js/script.js"></script>
 	<script src="../static/js/map-init.js"></script>
