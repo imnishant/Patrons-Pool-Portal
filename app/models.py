@@ -3,7 +3,7 @@ from app import db
 
 def user_exists(email):
     query = {"email": email}
-    result = db['user'].find_one(query)
+    result = db['users'].find_one(query)
     
     if bool(result):
         return result
@@ -11,4 +11,8 @@ def user_exists(email):
 
 
 def save_user(user_info):
-    db['user'].insert_one(user_info)
+    db['users'].insert_one(user_info)
+
+
+def store_posts(post_info):
+    db['posts'].insert_one(post_info)
