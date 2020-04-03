@@ -51,7 +51,19 @@ Last change:  4/september/18
     src: url('../fonts/HoboStd.ttf'), url('../fonts/HoboStd.eot');
 }
 
+/* Changed */
+.width {
+    margin: 3% 0%;
+    width: inherit;
+    background-color: white;
+    display: inline-block;
+}
 
+#border {
+    border:1px solid grey;
+}
+
+/* Till here */
 /*===============
 ***General Styling 
 ===============*/
