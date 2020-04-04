@@ -97,7 +97,7 @@ def add_post():
             store_posts(post_info)
             # searches for dockerfile in the extracted folder
             # call this function after the user presses on the submit button or so
-            return "Post Added Successfully"
+            return render_template("home.html", msg="Post Added Successfully")
         else:
             flash('Allowed file types are mp4, mp3, png, jpg, jpeg, gif')
             return redirect(request.url)
