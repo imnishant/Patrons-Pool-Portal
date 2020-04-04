@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, render_template, redirect, url_for, session, flash, make_response
 import os
 
-from app.models import user_exists, save_user, store_posts
+from app.models import user_exists, save_user, store_posts, get_profile
 from app import app, BLOB
 from app.utils import signup_util, login_util, allowed_file
 from werkzeug.utils import secure_filename
@@ -10,7 +10,6 @@ import datetime
 @app.route('/')
 def hello_world():
     return render_template('landing.html')
-
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
@@ -29,7 +28,6 @@ def login():
             return render_template('home.html')
         return render_template('access_denied.html', error_msg="Username doesn't exist")
     return render_template('landing.html')
-
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
@@ -60,7 +58,7 @@ def signup():
         user_info['profile']['address']['city'] = ""
         user_info['profile']['address']['country'] = ""
 
-        user_info['profile']['education'] = []
+        user_info['profile']['education'] = ""
         user_info['profile']['interest'] = []
         user_info['profile']['language'] = []
 
@@ -78,7 +76,6 @@ def signup():
         return render_template('home.html')
 
     return render_template('signup.html')
-
 
 @app.route('/addpost', methods=["POST"])
 def add_post():
@@ -128,17 +125,14 @@ def add_post():
     print("Response came")
     return make_response(('ok', 200))
 
-
 @app.route('/logout')
 def logout():
     session.clear()
     return render_template('logout.html')
 
-
 @app.route('/home')
 def home():
     return render_template('home.html')
-
 
 @app.route('/profile')
 def profile():
@@ -147,64 +141,60 @@ def profile():
         return render_template('access_denied.html', error_msg="Error Occured while fetching Profile Details")
     return render_template('profile.html',profile=res)
 
-@app.route('/profile_basic')
-def profile_basic():
-    return redirect(url_for('profile') + '#basic')
-
-@app.route('/profile_loc')
-def profile_loc():
-    return redirect(url_for('profile') + '#location')
-
-
 @app.route('/edit_basic')
 def edit_basic():
-    return render_template('edit-profile-basic.html')
-
+    res = get_profile(session['useremail'])
+    if not res:
+        return render_template('access_denied.html', error_msg="Error Occured while fetching Profile Details")
+    return render_template('edit-profile-basic.html',profile=res)
 
 @app.route('/edit_work')
 def edit_work():
-    return render_template('edit-work-eductation.html')
-
+    res = get_profile(session['useremail'])
+    if not res:
+        return render_template('access_denied.html', error_msg="Error Occured while fetching Profile Details")
+    return render_template('edit-work-education.html',profile=res)
 
 @app.route('/edit_interest')
 def edit_interest():
-    return render_template('edit-interest.html')
+    res = get_profile(session['useremail'])
+    if not res:
+        return render_template('access_denied.html', error_msg="Error Occured while fetching Profile Details")
+    return render_template('edit-interest.html',profile=res)
 
-
-@app.route('/edit_account')
-def edit_account():
-    return render_template('edit-account-setting.html')
-
+@app.route('/edit_language')
+def edit_language():
+    res = get_profile(session['useremail'])
+    if not res:
+        return render_template('access_denied.html', error_msg="Error Occured while fetching Profile Details")
+    return render_template('edit-language.html',profile=res)
 
 @app.route('/edit_password')
 def edit_password():
-    return render_template('edit-password.html')
-
+    res = get_profile(session['useremail'])
+    if not res:
+        return render_template('access_denied.html', error_msg="Error Occured while fetching Profile Details")
+    return render_template('edit-password.html',profile=res)
 
 @app.route('/inbox')
 def inbox():
     return render_template('inbox.html')
 
-
 @app.route('/followers')
 def followers():
     return render_template('followers.html')
-
 
 @app.route('/images')
 def images():
     return render_template('images.html')
 
-
 @app.route('/videos')
 def videos():
     return render_template('videos.html')
 
-
 @app.route('/messages')
 def messages():
     return render_template('messages.html')
-
 
 @app.route('/notifications')
 def notifications():
@@ -217,7 +207,6 @@ def not_found():
 @app.errorhandler(400)
 def bad_request():
     return render_template('access_denied.html', error_msg="Bad Request")
-
 
 @app.errorhandler(500)
 def server_error():

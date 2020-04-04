@@ -298,13 +298,13 @@
 															<li><i class="ti-user"></i>{{profile['fname']}} {{profile['lname']}}</li>
 															<li><i class="ti-email"></i>{{profile['email']}}</li>
 															{% if profile['address']['city'] != ""%}
-																<li><i class="ti-map-alt"></i>lives in {{profile['address']['city']}}</li>
+																<li><i class="ti-map-alt"></i>Living in {{profile['address']['city']}}</li>
 															{% endif %}
 															{% if profile['phone'] != ""%}
-																<li><i class="ti-map-alt"></i>lives in {{profile['phone']}}</li>
+																<li><i class="ti-map-alt"></i>{{profile['phone']}}</li>
 															{% endif %}
 															{% if profile['website'] != ""%}
-																<li><i class="ti-map-alt"></i>lives in {{profile['website']}}</li>
+																<li><i class="ti-map-alt"></i>{{profile['website']}}</li>
 															{% endif %}
 														</ul>
 													</div>
@@ -316,14 +316,14 @@
 															{% if profile['address']['city'] != ""%}
 																<li>City : {{profile['address']['city']}}</li>
 															{% endif %}
-															{% if profile['address']['line'] != ""%}
+															{% if profile['address']['country'] != ""%}
 																<li>Country : {{profile['address']['country']}}</li>
 															{% endif %}
 														</ul>
 													</div>
 													<div class="tab-pane" id="work" role="tabpanel">
 														<div>
-															<p>Works as {{profile['occupation']}} at {{profile['organization']}}</p> 
+															<p>Working as {{profile['occupation']}} at {{profile['organization']}}</p> 
 															<ul class="education">
 																{% for res in profile['education'] %}
 																	<li>{{res}}</li>
