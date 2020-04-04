@@ -1,7 +1,7 @@
 from app.models import user_exists
 import os
 
-ALLOWED_EXTENSIONS = {'mp4', 'mp3', 'm4a', 'png', 'jpg', 'jpeg', 'gif', 'pdf', 'xls', 'txt'}
+ALLOWED_EXTENSIONS = {'mpeg', 'mp4', 'mp3', 'm4a', 'png', 'jpg', 'jpeg', 'gif', 'pdf', 'xls', 'txt', 'mkv', 'x-matroska', 'webm'}
 
 my_path = os.path.abspath(os.path.dirname(__file__))
 

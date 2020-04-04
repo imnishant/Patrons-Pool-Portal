@@ -72,6 +72,7 @@ def signup():
                                    error_msg="Password doesn't match. Go back and re-renter the password")
 
         save_user(user_info)
+        session['username'] = user_info['email']
         session['useremail'] = user_info['email']
         return render_template('home.html')
 
@@ -84,24 +85,28 @@ def add_post():
         post_headline = request.form.get('headline')
         multimedia = ''
 
-        if 'image' in request.files:
+        if 'image' in request.files and request.files['image'].filename != '':
             multimedia = 'image'
 
-        elif 'audio' in request.files:
+        elif 'audio' in request.files and request.files['audio'].filename != '':
             multimedia = 'audio'
 
-        elif 'video' in request.files:
+        elif 'video' in request.files and request.files['video'].filename != '':
             multimedia = 'video'
-
-        if multimedia not in request.files:
-            flash('No file part')
-            return redirect(request.url)
-
-        file = request.files[multimedia]
-        if file.filename == '':
+        else:
             flash('No file selected for uploading')
             return redirect(request.url)
 
+        """if multimedia not in request.files:
+            flash('No file part')
+            return redirect(request.url)
+        """
+        
+        file = request.files[multimedia]
+        """if file.filename == '':
+            flash('No file selected for uploading')
+            return redirect(request.url)
+        """
         if file and allowed_file(file.content_type):
             filename = secure_filename(file.filename)
             file.save(os.path.join(BLOB, session['username'], 'posts', filename))
