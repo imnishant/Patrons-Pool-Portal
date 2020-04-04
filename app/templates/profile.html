@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="" />
     <meta name="keywords" content="" />
-	<title>Winku Social Network Toolkit</title>
+	<title>Profile</title>
     <link rel="icon" href="../static/images/fav.png" type="image/png" sizes="16x16"> 
     
     <link rel="stylesheet" href="../static/css/main.min.css">
@@ -226,7 +226,7 @@
 						<div class="timeline-info">
 							<ul>
 								<li class="admin-name">
-								  <h5>Janice Griffith</h5>
+								  <h5>{{profile['fname']}} {{profile['lname']}}</h5>
 								</li>
 							</ul>
 						</div>
@@ -280,7 +280,7 @@
 										<div class="personal">
 											<h5 class="f-title"><i class="ti-info-alt"></i> Personal Info</h5>
 											<p>
-												Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+												{{profile['about']}}
 											</p>
 										</div>
 										<div class = "container">
@@ -295,43 +295,54 @@
 												<div class="col-sm-8" id="border"> 
 													<div class="tab-pane" id="basic">
 														<ul class="basics">
-															<li><i class="ti-user"></i>sarah grey</li>
-															<li><i class="ti-map-alt"></i>live in Dubai</li>
-															<li><i class="ti-mobile"></i>+1-234-345675</li>
-															<li><i class="ti-email"></i><a href="https://wpkixx.com/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="3c4553494e515d55507c59515d5550125f5351">[email&#160;protected]</a></li>
-															<li><i class="ti-world"></i>www.yoursite.com</li>
+															<li><i class="ti-user"></i>{{profile['fname']}} {{profile['lname']}}</li>
+															<li><i class="ti-email"></i>{{profile['email']}}</li>
+															{% if profile['address']['city'] != ""%}
+																<li><i class="ti-map-alt"></i>lives in {{profile['address']['city']}}</li>
+															{% endif %}
+															{% if profile['phone'] != ""%}
+																<li><i class="ti-map-alt"></i>lives in {{profile['phone']}}</li>
+															{% endif %}
+															{% if profile['website'] != ""%}
+																<li><i class="ti-map-alt"></i>lives in {{profile['website']}}</li>
+															{% endif %}
 														</ul>
 													</div>
 													<div class="tab-pane" id="location" role="tabpanel">
 														<ul class="basics">
-															<li>Address Line </li>
-															<li>City</li>
-															<li>Country</li>
+															{% if profile['address']['line'] != ""%}
+																<li>Address : {{profile['address']['line']}}</li>
+															{% endif %}
+															{% if profile['address']['city'] != ""%}
+																<li>City : {{profile['address']['city']}}</li>
+															{% endif %}
+															{% if profile['address']['line'] != ""%}
+																<li>Country : {{profile['address']['country']}}</li>
+															{% endif %}
 														</ul>
 													</div>
 													<div class="tab-pane" id="work" role="tabpanel">
 														<div>
-															
-															<a href="#" title="">Envato</a>
-															<p>work as autohr in envato themeforest from 2013</p> 
+															<p>Works as {{profile['occupation']}} at {{profile['organization']}}</p> 
 															<ul class="education">
-																<li><i class="ti-facebook"></i> BSCS from Oxford University</li>
-																<li><i class="ti-twitter"></i> MSCS from Harvard Unversity</li>
+																{% for res in profile['education'] %}
+																	<li>{{res}}</li>
+																{% endfor %}
 															</ul>
 														</div>
 													</div>
 													<div class="tab-pane" id="interest" role="tabpanel">
 														<ul class="basics">
-															<li>Footbal</li>
-															<li>internet</li>
-															<li>photography</li>
+															{% for res in profile['interest'] %}
+																<li>{{res}}</li>
+															{% endfor %}
 														</ul>
 													</div>
 													<div class="tab-pane" id="lang" role="tabpanel">
 														<ul class="basics">
-															<li>english</li>
-															<li>french</li>
-															<li>spanish</li>
+															{% for res in profile['language'] %}
+																<li>{{res}}</li>
+															{% endfor %}
 														</ul>
 													</div>
 												</div>	
