@@ -7,7 +7,6 @@ from app.utils import signup_util, login_util, allowed_file
 from werkzeug.utils import secure_filename
 import datetime
 
-
 @app.route('/')
 def hello_world():
     return render_template('landing.html')
@@ -16,15 +15,17 @@ def hello_world():
 @app.route('/login', methods=['POST', 'GET'])
 def login():
     if request.method == 'POST':
+        useremail = request.form['email']
+        password = request.form['pass']
+        result = user_exists(useremail)
         result, password, username = login_util(request)
-
         if result:
             if result['password'] != password:
                 return render_template('access_denied.html',
                                        error_msg="Password doesn't match. Go back and re-renter the password")
-
+            session['useremail'] = useremail
+            # session['c_type'] = result['c_type']
             session['username'] = username
-
             return render_template('home.html')
         return render_template('access_denied.html', error_msg="Username doesn't exist")
     return render_template('landing.html')
@@ -33,13 +34,35 @@ def login():
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     if request.method == 'POST':
-        
-        user_info = signup_util(request)
-        
+        user_info = {}
+        user_info['email'] = request.form['email']
+        user_info['password'] = request.form['password1']
         if (request.form['isSponsor'] == "Sponsor"):
             user_info['isSponsor'] = 1
         else:
             user_info['isSponsor'] = 0
+
+        user_info['profile'] = {}
+        user_info['profile']['fname'] = request.form['fname']
+        user_info['profile']['lname'] = request.form['lname']
+        user_info['profile']['email'] = request.form['email']
+        user_info['profile']['gender'] = request.form['gender']
+        user_info['profile']['age'] = request.form['age']
+        user_info['profile']['occupation'] = request.form['occupation']
+        user_info['profile']['organization'] = request.form['organization']
+
+        user_info['profile']['phone'] = ""
+        user_info['profile']['website'] = ""
+        user_info['profile']['about'] = ""
+
+        user_info['profile']['address'] = {}
+        user_info['profile']['address']['line'] = ""
+        user_info['profile']['address']['city'] = ""
+        user_info['profile']['address']['country'] = ""
+
+        user_info['profile']['education'] = []
+        user_info['profile']['interest'] = []
+        user_info['profile']['language'] = []
 
         password2 = request.form['password2']
 
@@ -52,6 +75,7 @@ def signup():
 
         save_user(user_info)
         session['username'] = user_info['email']
+        session['useremail'] = user_info['email']
         return render_template('home.html')
 
     return render_template('signup.html')
@@ -123,7 +147,18 @@ def home():
 
 @app.route('/profile')
 def profile():
-    return render_template('profile.html')
+    res = get_profile(session['useremail'])
+    if not res:
+        return render_template('access_denied.html', error_msg="Error Occured while fetching Profile Details")
+    return render_template('profile.html',profile=res)
+
+@app.route('/profile_basic')
+def profile_basic():
+    return redirect(url_for('profile') + '#basic')
+
+@app.route('/profile_loc')
+def profile_loc():
+    return redirect(url_for('profile') + '#location')
 
 
 @app.route('/edit_basic')
@@ -179,4 +214,18 @@ def messages():
 @app.route('/notifications')
 def notifications():
     return render_template('notifications.html')
+
+@app.errorhandler(404)
+def not_found():
+    return render_template('access_denied.html', error_msg="Page Not Found")
+
+@app.errorhandler(400)
+def bad_request():
+    return render_template('access_denied.html', error_msg="Bad Request")
+
+
+@app.errorhandler(500)
+def server_error():
+    return render_template('access_denied.html', error_msg="Internal Server Error")
+
 
