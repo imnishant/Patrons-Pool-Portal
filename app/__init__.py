@@ -5,8 +5,8 @@ from pymongo import MongoClient
 
 from config import app_config
 
-
 my_path = os.path.abspath(os.path.dirname(__file__))
+BLOB = os.path.join(my_path, '../BLOB')
 
 
 def create_app(config_name):
@@ -18,7 +18,7 @@ def create_app(config_name):
 
 
 # configuring the Flask app and SQLAlchemy
-app = create_app(config_name="config")
+app: Flask = create_app(config_name="config")
 client = MongoClient()
 db = client['FYP']
 
