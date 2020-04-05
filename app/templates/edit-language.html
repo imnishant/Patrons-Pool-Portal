@@ -316,22 +316,30 @@
 							<div class="col-lg-3">
 								<aside class="sidebar static">
 									<div class="widget">
-										<h4 class="widget-title">Profile intro</h4>
+										<h4 class="widget-title">Profile Intro</h4>
 										<ul class="short-profile">
 											<li>
 												<span>about</span>
-												<p>Hi, i am jhon kates, i am 32 years old and worked as a web developer in microsoft </p>
+												<p>{{profile['about']}}</p>
 											</li>
 											<li>
-												<span>fav tv show</span>
-												<p>Sacred Games, Spartcus Blood, Games of Theron </p>
+												<span>Interests</span>
+												<ul class="basics">
+													{% for res in profile['interest'] %}
+														<li>{{res}}</li>
+													{% endfor %}
+												</ul>
 											</li>
 											<li>
-												<span>favourit music</span>
-												<p>Justin Biber, Shakira, Nati Natasah</p>
+												<span>Languages</span>
+												<ul class="basics">
+													{% for res in profile['language'] %}
+														<li>{{res}}</li>
+													{% endfor %}
+												</ul>
 											</li>
 										</ul>
-									</div>
+									</div>		
 									<div class="widget stick-widget">
 										<h4 class="widget-title">Who's follownig</h4>
 										<ul class="followers">

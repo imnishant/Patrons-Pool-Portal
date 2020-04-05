@@ -302,7 +302,7 @@
 									<div class="editing-info">
 										<h5 class="f-title"><i class="ti-info-alt"></i> Edit Basic Information</h5>
 
-										<form method="post">
+										<form method="post" action='/edit_basic'>
 											<div class="form-group half">	
 											  <input type="text" id="input" name="fname" value = "{{profile['fname']}}" required="required"/>
 											  <label class="control-label" for="input">First Name</label><i class="mtrl-select"></i>
@@ -332,12 +332,12 @@
 												<label class="control-label" for="input">Country</label><i class="mtrl-select"></i>
 											</div>
 											<div class="form-group">	
-                                                <textarea rows="5" id="about" name="about" value = "{{profile['about']}}" required="required"></textarea>
+                                                <textarea rows="5" id="about" name="about" required="required">{{profile['about']}}</textarea>
 												<label class="control-label" for="about">About Me</label><i class="mtrl-select"></i>
 											</div>
 											<div class="submit-btns">
 												<button type="reset" class="mtr-btn"><span>Cancel</span></button>
-												<button type="button" class="mtr-btn"><span>Update</span></button>
+												<button type="submit" class="mtr-btn"><span>Update</span></button>
 											</div>
 										</form>
 									</div>
@@ -346,19 +346,27 @@
 							<div class="col-lg-3">
 								<aside class="sidebar static">	
 									<div class="widget">
-										<h4 class="widget-title">Profile intro</h4>
+										<h4 class="widget-title">Profile Intro</h4>
 										<ul class="short-profile">
 											<li>
 												<span>about</span>
-												<p>Hi, i am jhon kates, i am 32 years old and worked as a web developer in microsoft </p>
+												<p>{{profile['about']}}</p>
 											</li>
 											<li>
-												<span>fav tv show</span>
-												<p>Sacred Games, Spartcus Blood, Games of Theron </p>
+												<span>Interests</span>
+												<ul class="basics">
+													{% for res in profile['interest'] %}
+														<li>{{res}}</li>
+													{% endfor %}
+												</ul>
 											</li>
 											<li>
-												<span>favourit music</span>
-												<p>Justin Biber, Shakira, Nati Natasah</p>
+												<span>Languages</span>
+												<ul class="basics">
+													{% for res in profile['language'] %}
+														<li>{{res}}</li>
+													{% endfor %}
+												</ul>
 											</li>
 										</ul>
 									</div>								

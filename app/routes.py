@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, render_template, redirect, url_for, session, flash, make_response
 import os
 
-from app.models import user_exists, save_user, store_posts, get_profile
+from app.models import user_exists, save_user, store_posts, get_profile, update_basic, update_work, update_password, get_password
 from app import app, BLOB
 from app.utils import signup_util, login_util, allowed_file
 from werkzeug.utils import secure_filename
@@ -146,19 +146,47 @@ def profile():
         return render_template('access_denied.html', error_msg="Error Occured while fetching Profile Details")
     return render_template('profile.html',profile=res)
 
-@app.route('/edit_basic')
+@app.route('/edit_basic', methods=['GET', 'POST'])
 def edit_basic():
-    res = get_profile(session['useremail'])
-    if not res:
-        return render_template('access_denied.html', error_msg="Error Occured while fetching Profile Details")
-    return render_template('edit-profile-basic.html',profile=res)
+    if request.method == 'POST':
+        prof = {}
+        prof['fname'] = request.form['fname']
+        prof['lname'] = request.form['lname']
+        prof['phone'] = request.form['phone']
+        prof['website'] = request.form['website']
+        prof['address'] = request.form['address']
+        prof['city'] = request.form['city']
+        prof['country'] = request.form['country']
+        prof['about'] = request.form['about']
+        if update_basic(session['username'],prof):
+            return redirect(url_for('profile'))
+        else:
+            return render_template('access_denied.html', error_msg="Error Occured while updating Profile Details")
+    else:
+        res = get_profile(session['useremail'])
+        if not res:
+            return render_template('access_denied.html', error_msg="Error Occured while fetching Profile Details")
+        return render_template('edit-profile-basic.html',profile=res)
+    return render_template('access_denied.html', error_msg="wrong method invocaton")
 
-@app.route('/edit_work')
+@app.route('/edit_work', methods=['GET', 'POST'])
 def edit_work():
-    res = get_profile(session['useremail'])
-    if not res:
-        return render_template('access_denied.html', error_msg="Error Occured while fetching Profile Details")
-    return render_template('edit-work-education.html',profile=res)
+    if request.method == 'POST':
+        prof = {}
+        prof['course'] = request.form['course']
+        prof['institution'] = request.form['institution']
+        prof['occupation'] = request.form['occupation']
+        prof['organization'] = request.form['organization']
+        if update_work(session['username'],prof):
+            return redirect(url_for('profile'))
+        else:
+            return render_template('access_denied.html', error_msg="Error Occured while updating Profile Details")
+    else:
+        res = get_profile(session['useremail'])
+        if not res:
+            return render_template('access_denied.html', error_msg="Error Occured while fetching Profile Details")
+        return render_template('edit-work-education.html',profile=res)
+    return render_template('access_denied.html', error_msg="wrong method invocaton")
 
 @app.route('/edit_interest')
 def edit_interest():
@@ -174,12 +202,27 @@ def edit_language():
         return render_template('access_denied.html', error_msg="Error Occured while fetching Profile Details")
     return render_template('edit-language.html',profile=res)
 
-@app.route('/edit_password')
+@app.route('/edit_password', methods=['GET', 'POST'])
 def edit_password():
-    res = get_profile(session['useremail'])
-    if not res:
-        return render_template('access_denied.html', error_msg="Error Occured while fetching Profile Details")
-    return render_template('edit-password.html',profile=res)
+    if request.method == 'POST':
+        prof = {}
+        prof['new_pass'] = request.form['new_pass']
+        prof['con_pass'] = request.form['con_pass']
+        prof['cur_pass'] = request.form['cur_pass']
+        if prof['new_pass'] != prof['con_pass']:
+            return render_template('access_denied.html', error_msg="Passwords Don't match!")
+        if prof['cur_pass'] != get_password(session['username']):
+            return render_template('access_denied.html', error_msg="Current Password entered is wrong!")
+        if update_password(session['username'],prof['new_pass']):
+            return redirect(url_for('profile'))
+        else:
+            return render_template('access_denied.html', error_msg="Error Occured while updating Password")
+    else:
+        res = get_profile(session['useremail'])
+        if not res:
+            return render_template('access_denied.html', error_msg="Error Occured while fetching Profile Details")
+        return render_template('edit-password.html',profile=res)
+    return render_template('access_denied.html', error_msg="wrong method invocaton")
 
 @app.route('/inbox')
 def inbox():

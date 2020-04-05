@@ -261,8 +261,8 @@
 											<a title="" href="/edit_interest">My interests</a>
 										</li>
 										<li>
-											<i class="ti-settings"></i>
-											<a title="" href="/edit_account">account setting</a>
+											<i class="ti-world"></i>
+											<a title="" href="/edit_language">Languages</a>
 										</li>
 										<li>
 											<i class="ti-lock"></i>
@@ -324,11 +324,7 @@
 													<div class="tab-pane" id="work" role="tabpanel">
 														<div>
 															<p>Working as {{profile['occupation']}} at {{profile['organization']}}</p> 
-															<ul class="education">
-																{% for res in profile['education'] %}
-																	<li>{{res}}</li>
-																{% endfor %}
-															</ul>
+															<p>Education : {{profile['course']}} at {{profile['institution']}}</p>
 														</div>
 													</div>
 													<div class="tab-pane" id="interest" role="tabpanel">
