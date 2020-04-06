@@ -301,15 +301,16 @@
 								<div class="central-meta">
 									<div class="editing-interest">
 										<h5 class="f-title"><i class="ti-world"></i>Languages</h5>
-										<form method="post">
+										<form id="form1">
 											<label>Add languages: </label>
-											<input type="text" placeholder="English, Hindi, Kannada...">
-											<button type="submit">Add</button>
+											<input type="text" name="lang" placeholder="English, Hindi, Kannada...">
+											<button type="button" onclick="add();">Add</button>
 											<div class="submit-btns">
 												<button type="reset" class="mtr-btn"><span>Cancel</span></button>
 												<button type="button" class="mtr-btn"><span>Update</span></button>
 											</div>
 										</form>
+										<div id="languages"></div>
 									</div>
 								</div>	
 							</div><!-- centerl meta -->
@@ -443,6 +444,24 @@
 		</div>
 	</footer><!-- footer -->
 </div>
+
+	<script type = "text/javascript">
+		var arr = Array();
+		for(i in "{{ profile['language'] }}")
+			arr.push(i)
+		function add() {
+			var x = document.getElementById("form1");
+ 			var i;
+			arr.push(form1.elements.lang.value);
+			alert(arr);
+		}
+		function del() {
+			alert("h1");
+		}
+		
+		document.getElementById("languages").innerHTML = '<form><span>Hindi</span><input type="text" value="Hindi" hidden><input type="image" onclick="del();" img src="../static/images/cross.png" width="10px" height="10px"></form>';
+	</script>
+
 	
 	<script data-cfasync="false" src="../../cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="js/main.min.js"></script>
 	<script src="../static/js/script.js"></script>

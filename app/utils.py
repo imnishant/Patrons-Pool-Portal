@@ -73,3 +73,30 @@ def login_util(request):
     password = request.form['pass']
     result = user_exists(username)
     return result, password, username
+
+def edit_basic_util(request):
+    prof = {}
+    prof['fname'] = request.form['fname']
+    prof['lname'] = request.form['lname']
+    prof['phone'] = request.form['phone']
+    prof['website'] = request.form['website']
+    prof['address'] = request.form['address']
+    prof['city'] = request.form['city']
+    prof['country'] = request.form['country']
+    prof['about'] = request.form['about']
+    return prof
+
+def edit_work_util(request):
+    prof = {}
+    prof['course'] = request.form['course']
+    prof['institution'] = request.form['institution']
+    prof['occupation'] = request.form['occupation']
+    prof['organization'] = request.form['organization']
+    return prof
+
+def edit_pass_util(request):
+    prof = {}
+    prof['new_pass'] = request.form['new_pass']
+    prof['con_pass'] = request.form['con_pass']
+    prof['cur_pass'] = request.form['cur_pass']
+    return prof    
