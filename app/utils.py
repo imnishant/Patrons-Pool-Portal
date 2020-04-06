@@ -53,7 +53,19 @@ def signup_util(obj):
     posts_path = os.path.join(my_path, '../BLOB', obj.form['email'], 'posts')
     if not os.path.exists(posts_path):
         os.mkdir(posts_path)
-
+        
+    posts_path = os.path.join(my_path, '../BLOB', obj.form['email'], 'posts', 'images')
+    if not os.path.exists(posts_path):
+        os.mkdir(posts_path)
+        
+    posts_path = os.path.join(my_path, '../BLOB', obj.form['email'], 'posts', 'audios')
+    if not os.path.exists(posts_path):
+        os.mkdir(posts_path)
+        
+    posts_path = os.path.join(my_path, '../BLOB', obj.form['email'], 'posts', 'videos')
+    if not os.path.exists(posts_path):
+        os.mkdir(posts_path)
+        
     return user_info, password2
 
 def login_util(request):

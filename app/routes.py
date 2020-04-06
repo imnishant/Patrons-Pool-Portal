@@ -52,15 +52,19 @@ def add_post():
         # check if the post request has the file part
         post_headline = request.form.get('headline')
         multimedia = ''
+        folder_name = ''
 
         if 'image' in request.files and request.files['image'].filename != '':
             multimedia = 'image'
+            folder_name = 'images'
 
         elif 'audio' in request.files and request.files['audio'].filename != '':
             multimedia = 'audio'
+            folder_name = 'audios'
 
         elif 'video' in request.files and request.files['video'].filename != '':
             multimedia = 'video'
+            folder_name = 'videos'
         else:
             flash('No file selected for uploading')
             return redirect(request.url)
@@ -77,7 +81,7 @@ def add_post():
         """
         if file and allowed_file(file.content_type):
             filename = secure_filename(file.filename)
-            file.save(os.path.join(BLOB, session['username'], 'posts', filename))
+            file.save(os.path.join(BLOB, session['username'], 'posts', folder_name, filename))
             flash('File successfully uploaded')
 
             post_info = {
@@ -161,7 +165,7 @@ def edit_interest():
     res = get_profile(session['username'])
     if not res:
         return render_template('access_denied.html', error_msg="Error Occured while fetching Profile Details")
-    return render_template('edit-interest.html',profile=res)
+    return render_template('edit-interest.html', profile=res)
 
 @app.route('/edit_language')
 def edit_language():
@@ -202,6 +206,7 @@ def followers():
 
 @app.route('/images')
 def images():
+    path = '../BLOB/' + session['username'] + '/posts'
     return render_template('images.html')
 
 @app.route('/videos')
