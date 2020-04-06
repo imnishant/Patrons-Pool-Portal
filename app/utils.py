@@ -1,5 +1,6 @@
 from app.models import user_exists
 import os
+from flask import request
 
 ALLOWED_EXTENSIONS = {'mpeg', 'mp4', 'mp3', 'm4a', 'png', 'jpg', 'jpeg', 'gif', 'pdf', 'xls', 'txt', 'mkv', 'x-matroska', 'webm'}
 
@@ -13,14 +14,36 @@ def allowed_file(filetype):
 
 def signup_util(obj):
     user_info = {}
-    user_info['fname'] = obj.form['fname']
-    user_info['lname'] = obj.form['lname']
-    user_info['gender'] = obj.form['gender']
-    user_info['age'] = obj.form['age']
-    user_info['password'] = obj.form['password1']
-    user_info['email'] = obj.form['email']
-    user_info['occupation'] = obj.form['occupation']
-    user_info['organization'] = obj.form['organization']
+    user_info['email'] = request.form['email']
+    user_info['password'] = request.form['password1']
+    if (request.form['isSponsor'] == "Sponsor"):
+        user_info['isSponsor'] = 1
+    else:
+        user_info['isSponsor'] = 0
+
+    user_info['profile'] = {}
+    user_info['profile']['fname'] = request.form['fname']
+    user_info['profile']['lname'] = request.form['lname']
+    user_info['profile']['email'] = request.form['email']
+    user_info['profile']['gender'] = request.form['gender']
+    user_info['profile']['age'] = request.form['age']
+    user_info['profile']['occupation'] = request.form['occupation']
+    user_info['profile']['organization'] = request.form['organization']
+
+    user_info['profile']['phone'] = ""
+    user_info['profile']['website'] = ""
+    user_info['profile']['about'] = ""
+
+    user_info['profile']['address'] = {}
+    user_info['profile']['address']['line'] = ""
+    user_info['profile']['address']['city'] = ""
+    user_info['profile']['address']['country'] = ""
+
+    user_info['profile']['education'] = ""
+    user_info['profile']['interest'] = []
+    user_info['profile']['language'] = []
+
+    password2 = request.form['password2']
 
     #Creating a directory for the user so that his/her posts will be available
     directory_path = os.path.join(my_path, '../BLOB', obj.form['email'])
@@ -31,10 +54,37 @@ def signup_util(obj):
     if not os.path.exists(posts_path):
         os.mkdir(posts_path)
 
-    return user_info
+    return user_info, password2
 
 def login_util(request):
     username = request.form['email']
     password = request.form['pass']
     result = user_exists(username)
     return result, password, username
+
+def edit_basic_util(request):
+    prof = {}
+    prof['fname'] = request.form['fname']
+    prof['lname'] = request.form['lname']
+    prof['phone'] = request.form['phone']
+    prof['website'] = request.form['website']
+    prof['address'] = request.form['address']
+    prof['city'] = request.form['city']
+    prof['country'] = request.form['country']
+    prof['about'] = request.form['about']
+    return prof
+
+def edit_work_util(request):
+    prof = {}
+    prof['course'] = request.form['course']
+    prof['institution'] = request.form['institution']
+    prof['occupation'] = request.form['occupation']
+    prof['organization'] = request.form['organization']
+    return prof
+
+def edit_pass_util(request):
+    prof = {}
+    prof['new_pass'] = request.form['new_pass']
+    prof['con_pass'] = request.form['con_pass']
+    prof['cur_pass'] = request.form['cur_pass']
+    return prof    

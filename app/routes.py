@@ -3,7 +3,7 @@ import os
 
 from app.models import user_exists, save_user, store_posts, get_profile, update_basic, update_work, update_password, get_password
 from app import app, BLOB
-from app.utils import signup_util, login_util, allowed_file
+from app.utils import signup_util, login_util, allowed_file, edit_basic_util, edit_work_util, edit_pass_util
 from werkzeug.utils import secure_filename
 import datetime
 
@@ -14,14 +14,12 @@ def hello_world():
 @app.route('/login', methods=['POST', 'GET'])
 def login():
     if request.method == 'POST':
-        username = request.form['email']
-        password = request.form['pass']
-        result = user_exists(username)
         result, password, username = login_util(request)
         if result:
             if result['password'] != password:
                 return render_template('access_denied.html',
                                        error_msg="Password doesn't match. Go back and re-renter the password")
+            #session['useremail'] = useremail
             # session['c_type'] = result['c_type']
             session['username'] = username
             return render_template('home.html')
@@ -32,36 +30,7 @@ def login():
 def signup():
     if request.method == 'POST':
         user_info = {}
-        user_info['email'] = request.form['email']
-        user_info['password'] = request.form['password1']
-        if (request.form['isSponsor'] == "Sponsor"):
-            user_info['isSponsor'] = 1
-        else:
-            user_info['isSponsor'] = 0
-
-        user_info['profile'] = {}
-        user_info['profile']['fname'] = request.form['fname']
-        user_info['profile']['lname'] = request.form['lname']
-        user_info['profile']['email'] = request.form['email']
-        user_info['profile']['gender'] = request.form['gender']
-        user_info['profile']['age'] = request.form['age']
-        user_info['profile']['occupation'] = request.form['occupation']
-        user_info['profile']['organization'] = request.form['organization']
-
-        user_info['profile']['phone'] = ""
-        user_info['profile']['website'] = ""
-        user_info['profile']['about'] = ""
-
-        user_info['profile']['address'] = {}
-        user_info['profile']['address']['line'] = ""
-        user_info['profile']['address']['city'] = ""
-        user_info['profile']['address']['country'] = ""
-
-        user_info['profile']['education'] = ""
-        user_info['profile']['interest'] = []
-        user_info['profile']['language'] = []
-
-        password2 = request.form['password2']
+        user_info, password2 = signup_util(request)
 
         if user_exists(user_info['email']):
             return render_template('access_denied.html', error_msg="Username already exist")
@@ -72,6 +41,7 @@ def signup():
 
         save_user(user_info)
         session['username'] = user_info['email']
+        #session['useremail'] = user_info['email']
         return render_template('home.html')
 
     return render_template('signup.html')
@@ -147,15 +117,7 @@ def profile():
 @app.route('/edit_basic', methods=['GET', 'POST'])
 def edit_basic():
     if request.method == 'POST':
-        prof = {}
-        prof['fname'] = request.form['fname']
-        prof['lname'] = request.form['lname']
-        prof['phone'] = request.form['phone']
-        prof['website'] = request.form['website']
-        prof['address'] = request.form['address']
-        prof['city'] = request.form['city']
-        prof['country'] = request.form['country']
-        prof['about'] = request.form['about']
+        prof = edit_basic_util(request)
         if update_basic(session['username'],prof):
             return redirect(url_for('profile'))
         else:
@@ -170,11 +132,7 @@ def edit_basic():
 @app.route('/edit_work', methods=['GET', 'POST'])
 def edit_work():
     if request.method == 'POST':
-        prof = {}
-        prof['course'] = request.form['course']
-        prof['institution'] = request.form['institution']
-        prof['occupation'] = request.form['occupation']
-        prof['organization'] = request.form['organization']
+        prof = edit_work_util(request)
         if update_work(session['username'],prof):
             return redirect(url_for('profile'))
         else:
@@ -203,10 +161,7 @@ def edit_language():
 @app.route('/edit_password', methods=['GET', 'POST'])
 def edit_password():
     if request.method == 'POST':
-        prof = {}
-        prof['new_pass'] = request.form['new_pass']
-        prof['con_pass'] = request.form['con_pass']
-        prof['cur_pass'] = request.form['cur_pass']
+        prof = edit_pass_util(request)
         if prof['new_pass'] != prof['con_pass']:
             return render_template('access_denied.html', error_msg="Passwords Don't match!")
         if prof['cur_pass'] != get_password(session['username']):
