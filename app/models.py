@@ -3,7 +3,7 @@ from app import db
 
 def user_exists(email):
     query = {"email": email}
-    result = db['users'].find_one(query)
+    result = db['user'].find_one(query)
     
     if bool(result):
         return result

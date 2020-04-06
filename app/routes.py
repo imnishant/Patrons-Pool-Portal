@@ -14,19 +14,18 @@ def hello_world():
 @app.route('/login', methods=['POST', 'GET'])
 def login():
     if request.method == 'POST':
-        useremail = request.form['email']
+        username = request.form['email']
         password = request.form['pass']
-        result = user_exists(useremail)
+        result = user_exists(username)
         result, password, username = login_util(request)
         if result:
             if result['password'] != password:
                 return render_template('access_denied.html',
                                        error_msg="Password doesn't match. Go back and re-renter the password")
-            session['useremail'] = useremail
             # session['c_type'] = result['c_type']
             session['username'] = username
             return render_template('home.html')
-        return render_template('access_denied.html', error_msg="Username doesn't exist")
+        return render_template('access_denied.html', error_msg=result)
     return render_template('landing.html')
 
 @app.route('/signup', methods=['GET', 'POST'])
@@ -73,7 +72,6 @@ def signup():
 
         save_user(user_info)
         session['username'] = user_info['email']
-        session['useremail'] = user_info['email']
         return render_template('home.html')
 
     return render_template('signup.html')
@@ -141,7 +139,7 @@ def home():
 
 @app.route('/profile')
 def profile():
-    res = get_profile(session['useremail'])
+    res = get_profile(session['username'])
     if not res:
         return render_template('access_denied.html', error_msg="Error Occured while fetching Profile Details")
     return render_template('profile.html',profile=res)
@@ -163,7 +161,7 @@ def edit_basic():
         else:
             return render_template('access_denied.html', error_msg="Error Occured while updating Profile Details")
     else:
-        res = get_profile(session['useremail'])
+        res = get_profile(session['username'])
         if not res:
             return render_template('access_denied.html', error_msg="Error Occured while fetching Profile Details")
         return render_template('edit-profile-basic.html',profile=res)
@@ -182,7 +180,7 @@ def edit_work():
         else:
             return render_template('access_denied.html', error_msg="Error Occured while updating Profile Details")
     else:
-        res = get_profile(session['useremail'])
+        res = get_profile(session['username'])
         if not res:
             return render_template('access_denied.html', error_msg="Error Occured while fetching Profile Details")
         return render_template('edit-work-education.html',profile=res)
@@ -190,14 +188,14 @@ def edit_work():
 
 @app.route('/edit_interest')
 def edit_interest():
-    res = get_profile(session['useremail'])
+    res = get_profile(session['username'])
     if not res:
         return render_template('access_denied.html', error_msg="Error Occured while fetching Profile Details")
     return render_template('edit-interest.html',profile=res)
 
 @app.route('/edit_language')
 def edit_language():
-    res = get_profile(session['useremail'])
+    res = get_profile(session['username'])
     if not res:
         return render_template('access_denied.html', error_msg="Error Occured while fetching Profile Details")
     return render_template('edit-language.html',profile=res)
@@ -218,7 +216,7 @@ def edit_password():
         else:
             return render_template('access_denied.html', error_msg="Error Occured while updating Password")
     else:
-        res = get_profile(session['useremail'])
+        res = get_profile(session['username'])
         if not res:
             return render_template('access_denied.html', error_msg="Error Occured while fetching Profile Details")
         return render_template('edit-password.html',profile=res)
