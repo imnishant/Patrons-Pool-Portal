@@ -78,10 +78,8 @@ def add_post():
         if file and allowed_file(extension):
             filename = secure_filename(file.filename)
             file.save(os.path.join(BLOB, session['username'], 'posts', folder_name, filename))
-            flash('File successfully uploaded')
 
             post_info = {
-                "username": session['username'],
                 "post_type": multimedia,
                 "post_name": filename,
                 "post_headline": post_headline,
@@ -91,12 +89,10 @@ def add_post():
             store_posts(post_info)
             # searches for dockerfile in the extracted folder
             # call this function after the user presses on the submit button or so
-            return render_template("home.html", msg="Post Added Successfully")
+            
         else:
-            flash('Allowed file types are mp4, mp3, png, jpg, jpeg, gif')
-            return redirect(request.url)
-    print("Response came")
-    return make_response(('ok', 200))
+            return render_template("home.html", msg='Allowed file types are mp4, mp3, png, jpg, jpeg, gif')
+    return render_template("home.html", msg='Added Successfully Bro! :-D')
 
 @app.route('/logout')
 def logout():
