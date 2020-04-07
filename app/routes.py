@@ -65,21 +65,17 @@ def add_post():
         elif 'video' in request.files and request.files['video'].filename != '':
             multimedia = 'video'
             folder_name = 'videos'
+        elif 'document' in request.files and request.files['document'].filename != '': 
+            multimedia = 'document'
+            folder_name = 'documents'
         else:
             flash('No file selected for uploading')
             return redirect(request.url)
 
-        """if multimedia not in request.files:
-            flash('No file part')
-            return redirect(request.url)
-        """
-        
         file = request.files[multimedia]
-        """if file.filename == '':
-            flash('No file selected for uploading')
-            return redirect(request.url)
-        """
-        if file and allowed_file(file.content_type):
+        extension = file.filename.split('.')[1]
+        
+        if file and allowed_file(extension):
             filename = secure_filename(file.filename)
             file.save(os.path.join(BLOB, session['username'], 'posts', folder_name, filename))
             flash('File successfully uploaded')
