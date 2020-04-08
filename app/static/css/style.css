@@ -69,7 +69,11 @@ Last change:  4/september/18
     margin-left: 10px;
 }
 
-#languages, #interests {
+#languages {
+    padding: 20px;
+}
+
+#interests {
     padding: 20px;
 }
 
