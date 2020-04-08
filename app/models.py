@@ -1,4 +1,5 @@
 from app import db
+from flask import session
 
 
 def user_exists(email):
@@ -95,4 +96,9 @@ def update_interest(email, interest):
     return res.matched_count > 0
 
 def store_posts(post_info):
-    db['posts'].insert_one(post_info)
+    obj = {}
+    obj['posts'] = post_info
+    
+    find_query = {'email': session['username']}
+    update_query = {"$set": obj}
+    db['user'].update_one(find_query, update_query)

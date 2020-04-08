@@ -2,7 +2,7 @@ from app.models import user_exists
 import os
 from flask import request
 
-ALLOWED_EXTENSIONS = {'mpeg', 'mp4', 'mp3', 'm4a', 'png', 'jpg', 'jpeg', 'gif', 'pdf', 'xls', 'txt', 'mkv', 'x-matroska', 'webm'}
+ALLOWED_EXTENSIONS = {'mpeg', 'mp4', 'mp3', 'm4a', 'png', 'jpg', 'jpeg', 'gif', 'pdf', 'xls', 'txt', 'mkv', 'x-matroska', 'webm', 'wav', 'avi', 'flv', 'doc', 'docx', 'odt', 'pdf', 'wpd'}
 
 my_path = os.path.abspath(os.path.dirname(__file__))
 
@@ -63,6 +63,10 @@ def signup_util(obj):
         os.mkdir(posts_path)
         
     posts_path = os.path.join(my_path, '../BLOB', obj.form['email'], 'posts', 'videos')
+    if not os.path.exists(posts_path):
+        os.mkdir(posts_path)
+        
+    posts_path = os.path.join(my_path, '../BLOB', obj.form['email'], 'posts', 'documents')
     if not os.path.exists(posts_path):
         os.mkdir(posts_path)
         
