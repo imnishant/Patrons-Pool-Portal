@@ -1,9 +1,9 @@
 from flask import Flask, render_template, request, render_template, redirect, url_for, session, flash, make_response
 import os
 
-from app.models import user_exists, save_user, store_posts, get_profile, update_basic, update_work, update_password, get_password
+from app.models import user_exists, save_user, store_posts, get_profile, update_basic, update_work, update_password, get_password, update_language, update_interest
 from app import app, BLOB
-from app.utils import signup_util, login_util, allowed_file, edit_basic_util, edit_work_util, edit_pass_util
+from app.utils import signup_util, login_util, allowed_file, edit_basic_util, edit_work_util, edit_pass_util, edit_lan_int_util
 from werkzeug.utils import secure_filename
 import datetime
 
@@ -126,7 +126,7 @@ def edit_basic():
             return redirect(url_for('profile'))
         else:
             return render_template('access_denied.html', error_msg="Error Occured while updating Profile Details")
-    else:
+    if request.method == 'GET':
         res = get_profile(session['username'])
         if not res:
             return render_template('access_denied.html', error_msg="Error Occured while fetching Profile Details")
@@ -141,26 +141,42 @@ def edit_work():
             return redirect(url_for('profile'))
         else:
             return render_template('access_denied.html', error_msg="Error Occured while updating Profile Details")
-    else:
+    if request.method == 'GET':
         res = get_profile(session['username'])
         if not res:
             return render_template('access_denied.html', error_msg="Error Occured while fetching Profile Details")
         return render_template('edit-work-education.html',profile=res)
     return render_template('access_denied.html', error_msg="wrong method invocaton")
 
-@app.route('/edit_interest')
+@app.route('/edit_interest', methods=['GET', 'POST'])
 def edit_interest():
-    res = get_profile(session['username'])
-    if not res:
-        return render_template('access_denied.html', error_msg="Error Occured while fetching Profile Details")
-    return render_template('edit-interest.html', profile=res)
+    if request.method == 'POST':
+        interest = edit_lan_int_util(request)
+        if update_interest(session['username'],interest):
+            return redirect(url_for('profile'))
+        else:
+            return render_template('access_denied.html', error_msg="Error Occured while updating Interests")
+    if request.method == 'GET':
+        res = get_profile(session['username'])
+        if not res:
+            return render_template('access_denied.html', error_msg="Error Occured while fetching Profile Details")
+        return render_template('edit-interest.html', profile=res)
+    return render_template('access_denied.html', error_msg="wrong method invocaton")
 
-@app.route('/edit_language')
+@app.route('/edit_language', methods=['GET', 'POST'])
 def edit_language():
-    res = get_profile(session['username'])
-    if not res:
-        return render_template('access_denied.html', error_msg="Error Occured while fetching Profile Details")
-    return render_template('edit-language.html',profile=res)
+    if request.method == 'POST':
+        lan = edit_lan_int_util(request)
+        if update_language(session['username'],lan):
+            return redirect(url_for('profile'))
+        else:
+            return render_template('access_denied.html', error_msg="Error Occured while updating Languages")
+    if request.method == 'GET':
+        res = get_profile(session['username'])
+        if not res:
+            return render_template('access_denied.html', error_msg="Error Occured while fetching Profile Details")
+        return render_template('edit-language.html',profile=res)
+    return render_template('access_denied.html', error_msg="wrong method invocaton")
 
 @app.route('/edit_password', methods=['GET', 'POST'])
 def edit_password():
@@ -174,7 +190,7 @@ def edit_password():
             return redirect(url_for('profile'))
         else:
             return render_template('access_denied.html', error_msg="Error Occured while updating Password")
-    else:
+    if request.method == 'GET':
         res = get_profile(session['username'])
         if not res:
             return render_template('access_denied.html', error_msg="Error Occured while fetching Profile Details")

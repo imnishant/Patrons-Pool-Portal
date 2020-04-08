@@ -63,6 +63,19 @@ Last change:  4/september/18
     border:1px solid grey;
 }
 
+.size {
+    width:15px;
+    height:15px;
+    margin-left: 10px;
+}
+
+#languages, #interests {
+    padding: 20px;
+}
+
+.list {
+    padding: 0px;
+}
 /* Till here */
 /*===============
 ***General Styling 
@@ -3696,9 +3709,6 @@ a.add-butn.more-action {
     padding-top: 20px;
 }
 
-.education {
-    list-style: none;
-}
 
 .basics > li,
 .education > li {

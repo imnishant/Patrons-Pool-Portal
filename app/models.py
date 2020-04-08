@@ -72,5 +72,27 @@ def update_password(email, password):
     )
     return res.matched_count > 0
 
+def update_language(email, lan):
+    res = db['user'].update_one(
+        { "email": email},
+        {
+            "$set": {
+                "profile.language": lan
+            }
+        }
+    )
+    return res.matched_count > 0
+
+def update_interest(email, interest):
+    res = db['user'].update_one(
+        { "email": email},
+        {
+            "$set": {
+                "profile.interest": interest
+            }
+        }
+    )
+    return res.matched_count > 0
+
 def store_posts(post_info):
     db['posts'].insert_one(post_info)

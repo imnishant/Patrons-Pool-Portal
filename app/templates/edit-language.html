@@ -301,16 +301,17 @@
 								<div class="central-meta">
 									<div class="editing-interest">
 										<h5 class="f-title"><i class="ti-world"></i>Languages</h5>
-										<form id="form1">
+										<form id="form1" method="post" action="/edit_language">
 											<label>Add languages: </label>
-											<input type="text" name="lang" placeholder="English, Hindi, Kannada...">
+											<input type="text" name="lang" id="lang" placeholder="English, Hindi, Kannada...">
+											<input type="text" name="arrval" hidden id="int">
 											<button type="button" onclick="add();">Add</button>
+											<div id="languages"></div>
 											<div class="submit-btns">
 												<button type="reset" class="mtr-btn"><span>Cancel</span></button>
-												<button type="button" class="mtr-btn"><span>Update</span></button>
+												<button type="submit" class="mtr-btn"><span>Update</span></button>
 											</div>
 										</form>
-										<div id="languages"></div>
 									</div>
 								</div>	
 							</div><!-- centerl meta -->
@@ -320,23 +321,24 @@
 										<h4 class="widget-title">Profile Intro</h4>
 										<ul class="short-profile">
 											<li>
-												<span>about</span>
+												<span>About</span>
 												<p>{{profile['about']}}</p>
 											</li>
 											<li>
 												<span>Interests</span>
-												<ul class="basics">
+												<ul class="list">
 													{% for res in profile['interest'] %}
-														<li>{{res}}</li>
+														<li class="fa fa-circle">    {{res}}</li>
 													{% endfor %}
 												</ul>
 											</li>
 											<li>
+												
 												<span>Languages</span>
-												<ul class="basics">
-													{% for res in profile['language'] %}
-														<li>{{res}}</li>
-													{% endfor %}
+												<ul class="list">
+												{% for res in profile['language'] %}
+													<li class="fa fa-circle">    {{res}}</li>
+												{% endfor %}
 												</ul>
 											</li>
 										</ul>
@@ -447,19 +449,29 @@
 
 	<script type = "text/javascript">
 		var arr = Array();
-		for(i in "{{ profile['language'] }}")
-			arr.push(i)
+		{% for lan in  profile['language'] %} 
+			var i = '{{ lan }}';
+			arr.push(i);
+			document.getElementById("int").value += i + " ";
+			document.getElementById("languages").innerHTML += '<p><span>' + i + '</span><i class="fa fa-close size" onclick="rem(\'' + i + '\')"></i></p>';
+		{% endfor %}
 		function add() {
-			var x = document.getElementById("form1");
- 			var i;
-			arr.push(form1.elements.lang.value);
-			alert(arr);
+			var i = form1.elements.lang.value;
+			arr.push(i);
+			document.getElementById("lang").value = "";
+			document.getElementById("int").value += i + " ";
+			document.getElementById("languages").innerHTML += '<p><span>' + i + '</span><i class="fa fa-close size" onclick="rem(\'' + i + '\')"></i></p>';
 		}
-		function del() {
-			alert("h1");
-		}
-		
-		document.getElementById("languages").innerHTML = '<form><span>Hindi</span><input type="text" value="Hindi" hidden><input type="image" onclick="del();" img src="../static/images/cross.png" width="10px" height="10px"></form>';
+		function rem(s) {
+			var i = arr.indexOf(s);
+			arr.splice(i,1);
+			document.getElementById("languages").innerHTML = "";
+			document.getElementById("int").value = "";
+			for(i=0;i<arr.length;i++) {
+				document.getElementById("int").value += i + " ";
+				document.getElementById("languages").innerHTML += '<p><span>' + arr[i] + '</span><i class="fa fa-close size" onclick="rem(\'' + arr[i] + '\')"></i></p>';
+			}
+		} 
 	</script>
 
 	

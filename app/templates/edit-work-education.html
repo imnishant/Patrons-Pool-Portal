@@ -340,18 +340,19 @@
 											</li>
 											<li>
 												<span>Interests</span>
-												<ul class="basics">
+												<ul class="list">
 													{% for res in profile['interest'] %}
-														<li>{{res}}</li>
+														<li class="fa fa-circle">    {{res}}</li>
 													{% endfor %}
 												</ul>
 											</li>
 											<li>
+												
 												<span>Languages</span>
-												<ul class="basics">
-													{% for res in profile['language'] %}
-														<li>{{res}}</li>
-													{% endfor %}
+												<ul class="list">
+												{% for res in profile['language'] %}
+													<li class="fa fa-circle">    {{res}}</li>
+												{% endfor %}
 												</ul>
 											</li>
 										</ul>

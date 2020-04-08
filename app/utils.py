@@ -100,3 +100,7 @@ def edit_pass_util(request):
     prof['con_pass'] = request.form['con_pass']
     prof['cur_pass'] = request.form['cur_pass']
     return prof    
+
+def edit_lan_int_util(request):
+    string = request.form['arrval']
+    return list(string.split())
