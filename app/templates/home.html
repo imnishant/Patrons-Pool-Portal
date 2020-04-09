@@ -25,7 +25,7 @@
 				<a class="" href="#menu"><i class="fa fa-align-justify"></i></a>
 			</span>
 			<span class="mh-text">
-				<a href="newsfeed.html" title=""><img src="../static/images/logo2.png" alt=""></a>
+				<a href="/home" title=""><img src="../static/images/logo2.png" alt=""></a>
 			</span>
 			<span class="mh-btns-right">
 				<a class="fa fa-sliders" href="#shoppingbag"></a>
@@ -303,7 +303,10 @@
 											</form>
 										</div>
 									</div>
-								</div><!-- add post new box -->
+								</div>
+
+								{% for post in posts[::-1] %}
+								<!-- add post new box -->
 								<div class="loadMore">
 								<div class="central-meta item">
 									<div class="user-post">
@@ -312,11 +315,11 @@
 												<img src="../static/images/resources/friend-avatar10.jpg" alt="">
 											</figure>
 											<div class="friend-name">
-												<ins><a href="time-line.html" title="">Janice Griffith</a></ins>
-												<span>published: june,2 2018 19:PM</span>
+												<ins><a href="time-line.html" title="">{{ session['name'] }}</a></ins>
+												<span> Published on: {{ post['date_time_added'] }}</span>
 											</div>
 											<div class="post-meta">
-												<img src="../static/images/resources/user-post.jpg" alt="">
+												<img src="../BLOB/s@s.com/posts/images/blinding-lights.jpg" alt="">
 												<div class="we-video-info">
 													<ul>
 														<li>
@@ -380,9 +383,7 @@
 												</div>
 												<div class="description">
 													
-													<p>
-														World's most beautiful car in Curabitur <a href="#" title="">#test drive booking !</a> the most beatuiful car available in america and the saudia arabia, you can book your test drive by our official website
-													</p>
+													<p> {{ post.post_headline }} </p>
 												</div>
 											</div>
 										</div>
@@ -479,6 +480,10 @@
 										</div>
 									</div>
 								</div>
+
+								{% endfor %}
+
+
 								<div class="central-meta item">
 									<div class="user-post">
 										<div class="friend-info">

@@ -1,6 +1,6 @@
 from app.models import user_exists
 import os
-from flask import request
+from flask import request, session
 
 ALLOWED_EXTENSIONS = {'mpeg', 'mp4', 'mp3', 'm4a', 'png', 'jpg', 'jpeg', 'gif', 'pdf', 'xls', 'txt', 'mkv', 'x-matroska', 'webm', 'wav', 'avi', 'flv', 'doc', 'docx', 'odt', 'pdf', 'wpd'}
 
@@ -76,6 +76,7 @@ def login_util(request):
     username = request.form['email']
     password = request.form['pass']
     result = user_exists(username)
+    session['name'] = result['profile']['fname'] + " " + result['profile']['lname']
     return result, password, username
 
 def edit_basic_util(request):

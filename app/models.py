@@ -14,6 +14,7 @@ def user_exists(email):
 def save_user(user_info):
     db['user'].insert_one(user_info)
 
+
 def get_password(email):
     query = {"email": email}
     result = db['user'].find_one(query)
@@ -22,6 +23,7 @@ def get_password(email):
         return result['password']
     return False
 
+
 def get_profile(email):
     query = {"email": email}
     result = db['user'].find_one(query)
@@ -29,6 +31,16 @@ def get_profile(email):
     if bool(result):
         return result['profile']
     return False
+
+
+def get_posts(email):
+   query = {"email": email}
+   result = db['user'].find_one(query)
+
+   if bool(result):
+       return result['posts']
+   return False
+
 
 def update_basic(email, profile):
     res = db['user'].update_one(
@@ -48,6 +60,7 @@ def update_basic(email, profile):
     )
     return res.matched_count > 0
 
+
 def update_work(email, profile):
     res = db['user'].update_one(
         { "email": email},
@@ -62,6 +75,7 @@ def update_work(email, profile):
     )
     return res.matched_count > 0
 
+
 def update_password(email, password):
     res = db['user'].update_one(
         { "email": email},
@@ -72,6 +86,7 @@ def update_password(email, password):
         }
     )
     return res.matched_count > 0
+
 
 def update_language(email, lan):
     res = db['user'].update_one(
@@ -84,6 +99,7 @@ def update_language(email, lan):
     )
     return res.matched_count > 0
 
+
 def update_interest(email, interest):
     res = db['user'].update_one(
         { "email": email},
@@ -95,10 +111,11 @@ def update_interest(email, interest):
     )
     return res.matched_count > 0
 
+
 def store_posts(post_info):
     obj = {}
     obj['posts'] = post_info
     
     find_query = {'email': session['username']}
-    update_query = {"$set": obj}
-    db['user'].update_one(find_query, update_query)
+    action =  {"$addToSet": { "posts": { "$each": [post_info] }}}
+    db['user'].update(find_query, action)

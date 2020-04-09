@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, render_template, redirect, url_for, session, flash, make_response
 import os
 
-from app.models import user_exists, save_user, store_posts, get_profile, update_basic, update_work, update_password, get_password, update_language, update_interest
+from app.models import user_exists, save_user, store_posts, get_profile, update_basic, update_work, update_password, get_password, update_language, update_interest, get_posts
 from app import app, BLOB
 from app.utils import signup_util, login_util, allowed_file, edit_basic_util, edit_work_util, edit_pass_util, edit_lan_int_util
 from werkzeug.utils import secure_filename
@@ -19,10 +19,10 @@ def login():
             if result['password'] != password:
                 return render_template('access_denied.html',
                                        error_msg="Password doesn't match. Go back and re-renter the password")
-            #session['useremail'] = useremail
-            # session['c_type'] = result['c_type']
+
             session['username'] = username
-            return render_template('home.html')
+            posts = get_posts(username)
+            return render_template('home.html', posts = posts)
         return render_template('access_denied.html', error_msg=result)
     return render_template('landing.html')
 
@@ -87,12 +87,13 @@ def add_post():
             }
 
             store_posts(post_info)
+            posts = get_posts(session['username'])
             # searches for dockerfile in the extracted folder
             # call this function after the user presses on the submit button or so
             
         else:
             return render_template("home.html", msg='Allowed file types are mp4, mp3, png, jpg, jpeg, gif')
-    return render_template("home.html", msg='Added Successfully Bro! :-D')
+    return render_template("home.html", posts = posts, msg='Added Successfully Bro! :-D')
 
 @app.route('/logout')
 def logout():
@@ -101,7 +102,8 @@ def logout():
 
 @app.route('/home')
 def home():
-    return render_template('home.html')
+    posts = get_posts(session['username'])
+    return render_template('home.html', posts = posts)
 
 @app.route('/profile')
 def profile():
