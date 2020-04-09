@@ -42,7 +42,8 @@ def signup():
         save_user(user_info)
         session['username'] = user_info['email']
         #session['useremail'] = user_info['email']
-        return render_template('home.html')
+        posts = get_posts(session['username'])
+        return render_template('home.html', posts = posts)
 
     return render_template('signup.html')
 
@@ -92,7 +93,7 @@ def add_post():
             # call this function after the user presses on the submit button or so
             
         else:
-            return render_template("home.html", msg='Allowed file types are mp4, mp3, png, jpg, jpeg, gif')
+            return render_template("home.html", posts = posts, msg='Allowed file types are mp4, mp3, png, jpg, jpeg, gif')
     return render_template("home.html", posts = posts, msg='Added Successfully Bro! :-D')
 
 @app.route('/logout')

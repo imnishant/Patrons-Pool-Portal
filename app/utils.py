@@ -43,6 +43,8 @@ def signup_util(obj):
     user_info['profile']['interest'] = []
     user_info['profile']['language'] = []
 
+    user_info['posts'] = []
+
     password2 = request.form['password2']
 
     #Creating a directory for the user so that his/her posts will be available
