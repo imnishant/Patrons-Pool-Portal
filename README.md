@@ -22,12 +22,12 @@ flask run
 
 ## Start the MongoDB server
 
-'''
+```
 sudo systemctl start mongod
-'''
+```
 
 ## To go inside the MongoDB shell
 
-'''
+```
 mongo
-'''
+```
