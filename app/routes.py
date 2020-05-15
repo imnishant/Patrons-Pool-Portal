@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, render_template, redirect, url_for, session, flash, make_response
+from flask import Flask, send_from_directory, render_template, request, render_template, redirect, url_for, session, flash, make_response
 import os
 
 from app.models import user_exists, save_user, store_posts, get_profile, update_basic, update_work, update_password, get_password, update_language, update_interest, get_posts
@@ -6,6 +6,8 @@ from app import app, BLOB
 from app.utils import signup_util, login_util, allowed_file, edit_basic_util, edit_work_util, edit_pass_util, edit_lan_int_util
 from werkzeug.utils import secure_filename
 import datetime
+
+my_path = os.path.abspath(os.path.dirname(__file__))
 
 @app.route('/')
 def hello_world():
@@ -17,12 +19,11 @@ def login():
         result, password, username = login_util(request)
         if result:
             if result['password'] != password:
-                return render_template('access_denied.html',
-                                       error_msg="Password doesn't match. Go back and re-renter the password")
+                return render_template('access_denied.html', error_msg="Password doesn't match. Go back and re-renter the password")
 
             session['username'] = username
             posts = get_posts(username)
-            return render_template('home.html', posts = posts)
+            return render_template('home.html', posts=posts)
         return render_template('access_denied.html', error_msg=result)
     return render_template('landing.html')
 
@@ -54,6 +55,7 @@ def add_post():
         post_headline = request.form.get('headline')
         multimedia = ''
         folder_name = ''
+        posts = ''
 
         if 'image' in request.files and request.files['image'].filename != '':
             multimedia = 'image'
@@ -74,7 +76,7 @@ def add_post():
             return redirect(request.url)
 
         file = request.files[multimedia]
-        extension = file.filename.split('.')[1]
+        extension = file.filename.split('.')[-1]
         
         if file and allowed_file(extension):
             filename = secure_filename(file.filename)
@@ -216,6 +218,10 @@ def messages():
 @app.route('/notifications')
 def notifications():
     return render_template('notifications.html')
+
+@app.route('/get_BLOB')
+def get_BLOB():
+    return send_from_directory(my_path, request.get.args('filename'))
 
 @app.errorhandler(404)
 def not_found():

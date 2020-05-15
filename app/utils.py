@@ -48,27 +48,27 @@ def signup_util(obj):
     password2 = request.form['password2']
 
     #Creating a directory for the user so that his/her posts will be available
-    directory_path = os.path.join(my_path, '../BLOB', obj.form['email'])
+    directory_path = os.path.join(my_path, 'static/BLOB', obj.form['email'])
     if not os.path.exists(directory_path):
         os.mkdir(directory_path)
 
-    posts_path = os.path.join(my_path, '../BLOB', obj.form['email'], 'posts')
+    posts_path = os.path.join(my_path, 'static/BLOB', obj.form['email'], 'posts')
     if not os.path.exists(posts_path):
         os.mkdir(posts_path)
         
-    posts_path = os.path.join(my_path, '../BLOB', obj.form['email'], 'posts', 'images')
+    posts_path = os.path.join(my_path, 'static/BLOB', obj.form['email'], 'posts', 'images')
     if not os.path.exists(posts_path):
         os.mkdir(posts_path)
         
-    posts_path = os.path.join(my_path, '../BLOB', obj.form['email'], 'posts', 'audios')
+    posts_path = os.path.join(my_path, 'static/BLOB', obj.form['email'], 'posts', 'audios')
     if not os.path.exists(posts_path):
         os.mkdir(posts_path)
         
-    posts_path = os.path.join(my_path, '../BLOB', obj.form['email'], 'posts', 'videos')
+    posts_path = os.path.join(my_path, 'static/BLOB', obj.form['email'], 'posts', 'videos')
     if not os.path.exists(posts_path):
         os.mkdir(posts_path)
         
-    posts_path = os.path.join(my_path, '../BLOB', obj.form['email'], 'posts', 'documents')
+    posts_path = os.path.join(my_path, 'static/BLOB', obj.form['email'], 'posts', 'documents')
     if not os.path.exists(posts_path):
         os.mkdir(posts_path)
         

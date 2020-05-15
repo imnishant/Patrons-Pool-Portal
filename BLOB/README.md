@@ -1,1 +1,0 @@
-This folder holds the posts for all the users.

@@ -6,7 +6,7 @@ from pymongo import MongoClient
 from config import app_config
 
 my_path = os.path.abspath(os.path.dirname(__file__))
-BLOB = os.path.join(my_path, '../BLOB')
+BLOB = os.path.join(my_path, 'static/BLOB')
 
 
 def create_app(config_name):
