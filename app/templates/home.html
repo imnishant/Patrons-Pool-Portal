@@ -386,8 +386,14 @@
 													<p> {{ post.post_headline }} </p>
 
 												</div>
-
-												<img src="static/BLOB/{{session['username']}}/posts/{{post.post_type + 's'}}/{{post.post_name}}" align="middle">
+												{% if post.post_type == 'image' %}
+													<img src="static/BLOB/{{session['username']}}/posts/{{post.post_type + 's'}}/{{post.post_name}}" align="middle">
+												{% endif %}
+												{% if post.post_type == 'video' %}
+													<video width="100%" height="auto" controls>
+														<source  src="static/BLOB/{{session['username']}}/posts/{{post.post_type + 's'}}/{{post.post_name}}" align="middle">
+													</video>
+												{%endif%}
 											</div>
 										</div>
 										<div class="coment-area">

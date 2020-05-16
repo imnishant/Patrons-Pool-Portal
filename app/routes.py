@@ -219,9 +219,10 @@ def messages():
 def notifications():
     return render_template('notifications.html')
 
-@app.route('/get_BLOB')
+@app.route('/get_BLOB', methods=["GET"])
 def get_BLOB():
-    return send_from_directory(my_path, request.get.args('filename'))
+    if request.method == 'GET':
+        return send_from_directory(my_path, request.get.args('filename'))
 
 @app.errorhandler(404)
 def not_found():
