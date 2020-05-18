@@ -2,7 +2,7 @@ from flask import Flask, send_from_directory, render_template, request, render_t
 import os
 
 from app.models import user_exists, save_user, store_posts, get_profile, update_basic, update_work, update_password, get_password, update_language, update_interest, get_posts
-from app import app, BLOB
+from app import app, BLOB, db
 from app.utils import signup_util, login_util, allowed_file, edit_basic_util, edit_work_util, edit_pass_util, edit_lan_int_util
 from werkzeug.utils import secure_filename
 import datetime
@@ -223,6 +223,34 @@ def notifications():
 def get_BLOB():
     if request.method == 'GET':
         return send_from_directory(my_path, request.get.args('filename'))
+
+@app.route('/delete_post', methods=["POST"])
+def delete_post():
+    if request.method == 'POST':
+        folder = request.form['folder']
+        filename = request.form['filename']
+        date_time = request.form['date_time']
+        headline = request.form['headline']
+
+        if os.path.exists(os.path.join(BLOB, session['username'], 'posts', folder + 's', filename)):
+            os.remove(os.path.join(BLOB, session['username'], 'posts', folder + 's', filename))
+        else:
+            return render_template('access_denied.html', error_msg="File does not exist locally")
+
+        query = {"email": session['username']}
+        result = db['user'].find_one(query)
+
+        if bool(result):
+            res = db['user'].update_one(
+                {"email": session['username']},
+                {"$pull": {"posts": {'post_name': filename}}}
+            )
+        else:
+            return render_template('access_denied.html', error_msg="File does not exist in mongodb database")
+
+        posts = get_posts(session['username'])
+        return render_template('home.html', posts=posts)
+    return render_template('access_denied.html', error_msg="Delete Post Method is not POST")
 
 @app.errorhandler(404)
 def not_found():

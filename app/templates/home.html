@@ -395,14 +395,26 @@
 													</video>
 												{% endif %}
 												{% if post.post_type == 'audio' %}
+													<center>
 													<audio controls>
 														<source src="static/BLOB/{{session['username']}}/posts/{{post.post_type + 's'}}/{{post.post_name}}">
 													</audio>
+													</center>
 												{% endif %}
 												{% if post.post_type == 'document' %}
 													<object data="static/BLOB/{{session['username']}}/posts/{{post.post_type + 's'}}/{{post.post_name}}" height="auto" width="100%"></object>
 												{% endif %}
 											</div>
+											<br>
+											<center>
+												<form action="delete_post" method="POST">
+													<input type="text" name="filename" value="{{ post.post_name }}" hidden>
+													<input type="text" name="folder" value="{{ post.post_type }}" hidden>
+													<input type="text" name="date_time" value="{{ post.date_time_added }}" hidden>
+													<input type="text" name="headline" value="{{ post.post_headline }}" hidden>
+													<button type="submit">Delete</button>
+												</form>
+											</center>
 										</div>
 
 									</div>
