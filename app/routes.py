@@ -1,7 +1,7 @@
 from flask import Flask, send_from_directory, render_template, request, render_template, redirect, url_for, session, flash, make_response
 import os
 
-from app.models import user_exists, save_user, store_posts, get_profile, update_basic, update_work, update_password, get_password, update_language, update_interest, get_posts
+from app.models import user_exists, save_user, store_posts, get_profile, update_basic, update_work, update_password, get_password, update_language, update_interest, get_posts, get_sponser_timeline
 from app import app, BLOB, db
 from app.utils import signup_util, login_util, allowed_file, edit_basic_util, edit_work_util, edit_pass_util, edit_lan_int_util
 from werkzeug.utils import secure_filename
@@ -23,7 +23,9 @@ def login():
 
             session['username'] = username
             if result['isSponsor'] == 1:
-                return render_template('sponsor.html')
+                posts = get_sponser_timeline()
+                print(posts)
+                return render_template('sponsor.html', posts=posts)
             else:
                 posts = get_posts(username)
                 return render_template('home.html', posts=posts)

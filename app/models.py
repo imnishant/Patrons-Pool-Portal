@@ -42,6 +42,22 @@ def get_posts(email):
    return False
 
 
+def get_sponser_timeline():
+    query = {"isSponsor" : 0}
+    users = list(db['user'].find(query))
+    posts = []
+
+    for user in users:
+        username = user['email']
+        userposts = user['posts']
+        for post in userposts:
+            post['username'] = username
+            posts.append(post)
+
+    print( posts)
+    ##   return result
+    return posts
+
 def update_basic(email, profile):
     res = db['user'].update_one(
         { "email": email},
