@@ -16,7 +16,7 @@ def signup_util(obj):
     user_info = {}
     user_info['email'] = request.form['email']
     user_info['password'] = request.form['password1']
-    if (request.form['isSponsor'] == "Sponsor"):
+    if (request.form['isSponsor'] == 'sponsor'):
         user_info['isSponsor'] = 1
     else:
         user_info['isSponsor'] = 0

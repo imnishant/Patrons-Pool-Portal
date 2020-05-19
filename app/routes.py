@@ -22,8 +22,11 @@ def login():
                 return render_template('access_denied.html', error_msg="Password doesn't match. Go back and re-renter the password")
 
             session['username'] = username
-            posts = get_posts(username)
-            return render_template('home.html', posts=posts)
+            if result['isSponsor'] == 1:
+                return render_template('sponsor.html')
+            else:
+                posts = get_posts(username)
+                return render_template('home.html', posts=posts)
         return render_template('access_denied.html', error_msg=result)
     return render_template('landing.html')
 
