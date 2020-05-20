@@ -95,6 +95,7 @@ def add_post():
                 "post_type": multimedia,
                 "post_name": filename,
                 "post_headline": post_headline,
+                "base_price": request.form.get('base_price'),
                 "date_time_added": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             }
 
