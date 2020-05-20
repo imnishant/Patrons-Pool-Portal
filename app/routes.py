@@ -239,8 +239,6 @@ def delete_post():
     if request.method == 'POST':
         folder = request.form['folder']
         filename = request.form['filename']
-        date_time = request.form['date_time']
-        headline = request.form['headline']
 
         if os.path.exists(os.path.join(BLOB, session['username'], 'posts', folder + 's', filename)):
             os.remove(os.path.join(BLOB, session['username'], 'posts', folder + 's', filename))
@@ -260,6 +258,27 @@ def delete_post():
 
         posts = get_posts(session['username'])
         return render_template('home.html', posts=posts)
+    return render_template('access_denied.html', error_msg="Delete Post Method is not POST")
+
+@app.route('/update_bid', methods=["POST"])
+def update_bid():
+    if request.method == 'POST':
+
+        query = {"email": request.form['post_username']}
+        result = db['user'].find_one(query)
+        cur_count = result['bid']['count']
+
+        if bool(result):
+            db['user'].update_one(
+                query,
+                {"$set": {"bid": {'username': session['username'], 'count': cur_count + 1}}}
+            )
+
+
+        else:
+            return render_template('access_denied.html', error_msg="File does not exist in mongodb database")
+        posts = get_sponser_timeline()
+        return render_template('sponsor.html', posts=posts)
     return render_template('access_denied.html', error_msg="Delete Post Method is not POST")
 
 @app.errorhandler(404)

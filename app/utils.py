@@ -44,6 +44,9 @@ def signup_util(obj):
     user_info['profile']['language'] = []
 
     user_info['posts'] = []
+    user_info['bid'] = {}
+    user_info['bid']['count'] = 0
+    user_info['bid']['username'] = None
 
     password2 = request.form['password2']
 
@@ -80,6 +83,7 @@ def login_util(request):
     result = user_exists(username)
     session['name'] = result['profile']['fname'] + " " + result['profile']['lname']
     return result, password, username
+
 
 def edit_basic_util(request):
     prof = {}

@@ -300,6 +300,8 @@
 														</li>
 													</ul>
 												</div>
+												<br>
+												Base Price:  <input type="text" name="base_price">
 											</form>
 										</div>
 									</div>
@@ -404,8 +406,11 @@
 												{% if post.post_type == 'document' %}
 													<object data="static/BLOB/{{session['username']}}/posts/{{post.post_type + 's'}}/{{post.post_name}}" height="auto" width="100%"></object>
 												{% endif %}
+												<br>
+												<h5>Base Price: {{post.base_price}}</h5>
+												<br>
 											</div>
-											<br>
+
 											<center>
 												<form action="delete_post" method="POST">
 													<input type="text" name="filename" value="{{ post.post_name }}" hidden>
