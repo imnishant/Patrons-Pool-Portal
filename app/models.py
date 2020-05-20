@@ -52,6 +52,7 @@ def get_sponser_timeline():
         userposts = user['posts']
         for post in userposts:
             post['username'] = username
+            post['name'] = user['profile']['fname'] + " " + user['profile']['lname']
             posts.append(post)
 
     print( posts)

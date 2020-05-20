@@ -24,7 +24,6 @@ def login():
             session['username'] = username
             if result['isSponsor'] == 1:
                 posts = get_sponser_timeline()
-                print(posts)
                 return render_template('sponsor.html', posts=posts)
             else:
                 posts = get_posts(username)
@@ -49,7 +48,12 @@ def signup():
         session['username'] = user_info['email']
         #session['useremail'] = user_info['email']
         posts = get_posts(session['username'])
-        return render_template('home.html', posts = posts)
+        if user_info['isSponsor'] == 1:
+            posts = get_sponser_timeline()
+            return render_template('sponsor.html', posts=posts)
+        else:
+            posts = get_posts(session['username'])
+            return render_template('home.html', posts=posts)
 
     return render_template('signup.html')
 
