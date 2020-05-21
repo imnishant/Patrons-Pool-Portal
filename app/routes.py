@@ -96,6 +96,8 @@ def add_post():
                 "post_name": filename,
                 "post_headline": post_headline,
                 "base_price": request.form.get('base_price'),
+                "bid_price": "N/A",
+                "bidding_person": "N/A",
                 "date_time_added": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             }
 
@@ -263,15 +265,15 @@ def delete_post():
 @app.route('/update_bid', methods=["POST"])
 def update_bid():
     if request.method == 'POST':
-
-        query = {"email": request.form['post_username']}
+        query = {"email": request.form['email'], "posts.post_headline": request.form['post_headline']}
         result = db['user'].find_one(query)
         cur_count = result['bid']['count']
 
+    '''This below statement needs to be updated only'''
         if bool(result):
             db['user'].update_one(
                 query,
-                {"$set": {"bid": {'username': session['username'], 'count': cur_count + 1}}}
+                {"$set": {"posts.$[i].bid_price": request.form['bid_price'], "posts.$[i].bidding_person": request.form['bidding_person'],'count': cur_count + 1}}
             )
 
 

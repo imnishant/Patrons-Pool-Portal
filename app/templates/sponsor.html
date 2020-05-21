@@ -412,10 +412,11 @@
 											<br>
 											<center>
 												<form action="update_bid" method="POST">
-													<input type="text" name="filename" value="{{ post.post_name }}" hidden>
-													<input type="text" name="folder" value="{{ post.post_type }}" hidden>
-													<input type="text" name="post_username" value="{{ post.username }}" hidden>
-													<button type="submit">Bid</button>
+													<input type="text" name="email" value="{{ post.username }}" hidden>
+													<input type="text" name="post_headline" value="{{ post.post_headline }}" hidden>
+													<input type="text" name="bidding_person" value="{{ session.name }}" hidden>
+													Bid Price:  <input type="text" name="bid_price">
+													<button type="submit">Place Bid</button>
 												</form>
 											</center>
 
