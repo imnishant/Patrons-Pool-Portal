@@ -269,14 +269,12 @@ def update_bid():
         result = db['user'].find_one(query)
         cur_count = result['bid']['count']
 
-    '''This below statement needs to be updated only'''
+        
         if bool(result):
-            db['user'].update_one(
+            res = db['user'].update_one(
                 query,
-                {"$set": {"posts.$[i].bid_price": request.form['bid_price'], "posts.$[i].bidding_person": request.form['bidding_person'],'count': cur_count + 1}}
-            )
-
-
+                {"$set": {"posts.$.bid_price": request.form['bid_price'], "posts.$.bidding_person": request.form['bidding_person']}})
+            a = 10
         else:
             return render_template('access_denied.html', error_msg="File does not exist in mongodb database")
         posts = get_sponser_timeline()

@@ -407,6 +407,7 @@
 												{% endif %}
 												<br>
 												<h5>Base Price: {{post.base_price}}</h5>
+												<h5>Current Bid Price: {{post.bid_price}}</h5>
 												<br>
 											</div>
 											<br>
@@ -414,8 +415,8 @@
 												<form action="update_bid" method="POST">
 													<input type="text" name="email" value="{{ post.username }}" hidden>
 													<input type="text" name="post_headline" value="{{ post.post_headline }}" hidden>
-													<input type="text" name="bidding_person" value="{{ session.name }}" hidden>
-													Bid Price:  <input type="text" name="bid_price">
+													<input type="text" name="bidding_person" value="{{ session.username }}" hidden>
+													Your Bid Price:  <input type="text" name="bid_price">
 													<button type="submit">Place Bid</button>
 												</form>
 											</center>
