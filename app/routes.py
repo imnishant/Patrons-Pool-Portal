@@ -1,5 +1,5 @@
 from flask import Flask, send_from_directory, render_template, request, render_template, redirect, url_for, session, flash, make_response
-import os
+import os, datetime
 
 from app.models import user_exists, save_user, store_posts, get_profile, update_basic, update_work, update_password, get_password, update_language, update_interest, get_posts, get_sponser_timeline, prof_img_upd
 from app import app, BLOB, db
@@ -98,6 +98,8 @@ def add_post():
                 "base_price": request.form.get('base_price'),
                 "bid_price": "N/A",
                 "bidding_person": "N/A",
+                "first_bidding_time": "N/A",
+                "bidding_status": "open",
                 "date_time_added": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             }
 
@@ -265,20 +267,54 @@ def delete_post():
 @app.route('/update_bid', methods=["POST"])
 def update_bid():
     if request.method == 'POST':
-        query = {"email": request.form['email'], "posts.post_headline": request.form['post_headline']}
-        result = db['user'].find_one(query)
-        cur_count = result['bid']['count']
 
-        
-        if bool(result):
-            res = db['user'].update_one(
-                query,
-                {"$set": {"posts.$.bid_price": request.form['bid_price'], "posts.$.bidding_person": request.form['bidding_person']}})
-            a = 10
+        # 600 seconds means 10 minutes bidding time
+        # if you update window time here than also update in models.py get_sponser_timeline()
+        window_in_seconds = 600
+        current_bid_time = int(datetime.datetime.now().timestamp())
+
+        query = {"email": request.form['email']}
+        update_query = {"email": request.form['email'], "posts.post_headline": request.form['post_headline']}
+        result = db['user'].find_one(query)
+        target_post = {}
+        for post in result["posts"]:
+            if post['post_headline'] == request.form['post_headline']:
+                target_post['bid_price'] = post['bid_price']
+                target_post['base_price'] = post['base_price']
+                target_post['first_bidding_time'] = post['first_bidding_time']
+                target_post['bidding_status'] = post['bidding_status']
+                #target_post['bid_price'] = post['bid_price']
+                #target_post['bid_price'] = post['bid_price']
+                break
+
+        if bool(target_post):
+            new_sponser_bid_price = request.form['bid_price']
+
+            earlier_bid_price = target_post['bid_price']
+            base_price = target_post['base_price']
+            first_bidding_time = target_post['first_bidding_time']
+
+            if earlier_bid_price == "N/A" and new_sponser_bid_price > base_price:
+            # retrieve the bid price for the post and check if the bid price equals N/A then set the bid_price then perform the below step
+                db['user'].update_one(update_query, {"$set": {"posts.$.bid_price": new_sponser_bid_price, "posts.$.bidding_person": request.form['bidding_person'], "posts.$.first_bidding_time": int(datetime.datetime.now().timestamp())}})
+
+            elif new_sponser_bid_price > earlier_bid_price and current_bid_time - first_bidding_time < window_in_seconds:
+            # else check if the bid price is > previous bid price and also the time when performing this step falls under the window time
+                db['user'].update_one(update_query,{"$set": {"posts.$.bid_price": new_sponser_bid_price, "posts.$.bidding_person": request.form['bidding_person']}})
+
+            elif new_sponser_bid_price <= earlier_bid_price:
+                posts = get_sponser_timeline()
+                return render_template("sponsor.html", posts=posts, msg='Please enter amount greater than the current bid amount!')
+
+            else:
+            # display time window is over you cannot bid anymore
+                posts = get_sponser_timeline()
+                return render_template("sponsor.html", posts = posts, msg='You cannot bid anymore because Bidding Time is Over')
+
+            posts = get_sponser_timeline()
+            return render_template("sponsor.html", posts=posts, msg='Your Bid Placed Successfully Bro! ATB! :)')
         else:
             return render_template('access_denied.html', error_msg="File does not exist in mongodb database")
-        posts = get_sponser_timeline()
-        return render_template('sponsor.html', posts=posts)
     return render_template('access_denied.html', error_msg="Delete Post Method is not POST")
 
 @app.route('/add_profile_photos', methods=['POST'] )

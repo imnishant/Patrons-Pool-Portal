@@ -1,5 +1,6 @@
 from app import db
 from flask import session
+import datetime
 
 def user_exists(email):
     query = {"email": email}
@@ -52,11 +53,34 @@ def get_sponser_timeline():
         for post in userposts:
             post['username'] = username
             post['name'] = user['profile']['fname'] + " " + user['profile']['lname']
+
+            current_time = int(datetime.datetime.now().timestamp())
+            window_in_seconds = 600
+
+            first_bidding_time = post['first_bidding_time']
+            if first_bidding_time == "N/A":
+                post['bidding_status'] = "open"
+
+            elif current_time - int(first_bidding_time) < window_in_seconds:
+                post['bidding_status'] = "open"
+
+            else:
+                post['bidding_status'] = "closed"
+
+            set_new_bid_update_status(post['username'], post['post_headline'], post['bidding_status'])
+
             posts.append(post)
 
-    print( posts)
-    ##   return result
+    print(posts)
+    #  return result
     return posts
+
+
+def set_new_bid_update_status(email, headline, get_new_update):
+    update_query = {"email": email, "posts.post_headline": headline}
+    db['user'].update_one(update_query, {"$set": {"posts.$.bidding_status": get_new_update}})
+    return
+
 
 def update_basic(email, profile):
     res = db['user'].update_one(
