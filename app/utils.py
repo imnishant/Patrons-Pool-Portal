@@ -1,5 +1,6 @@
 from app.models import user_exists
 import os
+import shutil
 from flask import request, session
 
 ALLOWED_EXTENSIONS = {'mpeg', 'mp4', 'mp3', 'm4a', 'png', 'jpg', 'jpeg', 'gif', 'pdf', 'xls', 'txt', 'mkv', 'x-matroska', 'webm', 'wav', 'avi', 'flv', 'doc', 'docx', 'odt', 'pdf', 'wpd'}
@@ -42,6 +43,8 @@ def signup_util(obj):
     user_info['profile']['education'] = ""
     user_info['profile']['interest'] = []
     user_info['profile']['language'] = []
+    user_info['profile']['cover'] = 'cover.jpg'
+    user_info['profile']['display'] = 'display.jpg'
 
     user_info['posts'] = []
     user_info['bid'] = {}
@@ -74,7 +77,13 @@ def signup_util(obj):
     posts_path = os.path.join(my_path, 'static/BLOB', obj.form['email'], 'posts', 'documents')
     if not os.path.exists(posts_path):
         os.mkdir(posts_path)
-        
+
+    posts_path = os.path.join(my_path, 'static/BLOB', obj.form['email'], 'images')
+    if not os.path.exists(posts_path):
+        os.mkdir(posts_path)
+    shutil.copy(os.path.join(my_path, 'static/images/resources/cover.jpg'), os.path.join(my_path, 'static/BLOB', user_info['email'], 'images', 'cover.jpg'))
+    shutil.copy(os.path.join(my_path, 'static/images/resources/display.jpg'), os.path.join(my_path, 'static/BLOB', user_info['email'], 'images', 'display.jpg'))
+
     return user_info, password2
 
 def login_util(request):

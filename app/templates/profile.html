@@ -195,15 +195,14 @@
 	
 	<section>
 		<div class="feature-photo">
-			<figure><img src="../static/images/resources/timeline-1.jpg" alt=""></figure>
+			<figure><img src="static/BLOB/{{profile['email']}}/images/{{profile['cover']}}" alt="" style="height:400px;"></figure>
 			<div class="add-btn">
 				<span>1205 followers</span>
 			</div>
-			<form class="edit-phto">
+			<form method="POST" class="edit-phto" action="/add_profile_photos" id="upload_form"  enctype="multipart/form-data">
 				<i class="fa fa-camera-retro"></i>
 				<label class="fileContainer">
-					Edit Cover Photo
-				<input type="file"/>
+					<input type="file" accept="image/*" id="myfile" name="myfile">Edit Cover Photo
 				</label>
 			</form>
 			<div class="container-fluid">
@@ -211,13 +210,12 @@
 					<div class="col-lg-2 col-sm-3">
 						<div class="user-avatar">
 							<figure>
-								<img src="../static/images/resources/user-avatar.jpg" alt="">
-								<form class="edit-phto">
+								<img src="static/BLOB/{{profile['email']}}/images/{{profile['display']}}">
+								<form method="POST" class="edit-phto" action="/add_profile_photos" id="upload_form1"  enctype="multipart/form-data">
 									<i class="fa fa-camera-retro"></i>
-									<label class="fileContainer">
-										Edit Display Photo
-										<input type="file"/>
-									</label>
+										<label class="fileContainer">
+											<input type="file" accept="image/*" id="myfile1" name="myfile1">Edit Display Photo
+										</label>
 								</form>
 							</figure>
 						</div>
@@ -455,7 +453,14 @@
 </div>
 	
 	<script type = "text/javascript">
-		function off(s1,s2,s3,s4,b1,b2,b3,b4) {
+
+   	    document.getElementById("upload_form").onchange = function() {
+		   document.getElementById("upload_form").submit();
+		};
+		document.getElementById("upload_form1").onchange = function() {
+		   document.getElementById("upload_form1").submit();
+		};
+ 		function off(s1,s2,s3,s4,b1,b2,b3,b4) {
 			document.getElementById(s1).style.display = "none";
 			document.getElementById(s2).style.display = "none";
 			document.getElementById(s3).style.display = "none";

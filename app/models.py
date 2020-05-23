@@ -1,7 +1,6 @@
 from app import db
 from flask import session
 
-
 def user_exists(email):
     query = {"email": email}
     result = db['user'].find_one(query)
@@ -136,3 +135,15 @@ def store_posts(post_info):
     find_query = {'email': session['username']}
     action =  {"$addToSet": { "posts": { "$each": [post_info] }}}
     db['user'].update(find_query, action)
+
+def prof_img_upd(email, filename, rem):
+    attr = 'profile.' + rem
+    res = db['user'].update_one(
+        {"email": email},
+        {
+            "$set": {
+                attr: filename
+            }
+        }
+    )
+    return res.matched_count > 0

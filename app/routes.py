@@ -1,7 +1,7 @@
 from flask import Flask, send_from_directory, render_template, request, render_template, redirect, url_for, session, flash, make_response
 import os
 
-from app.models import user_exists, save_user, store_posts, get_profile, update_basic, update_work, update_password, get_password, update_language, update_interest, get_posts, get_sponser_timeline
+from app.models import user_exists, save_user, store_posts, get_profile, update_basic, update_work, update_password, get_password, update_language, update_interest, get_posts, get_sponser_timeline, prof_img_upd
 from app import app, BLOB, db
 from app.utils import signup_util, login_util, allowed_file, edit_basic_util, edit_work_util, edit_pass_util, edit_lan_int_util
 from werkzeug.utils import secure_filename
@@ -9,7 +9,7 @@ import datetime
 
 my_path = os.path.abspath(os.path.dirname(__file__))
 
-@app.route('/')
+@app.route('/', methods=['POST', 'GET'])
 def hello_world():
     return render_template('landing.html')
 
@@ -120,7 +120,7 @@ def home():
     posts = get_posts(session['username'])
     return render_template('home.html', posts = posts)
 
-@app.route('/profile')
+@app.route('/profile', methods=['GET', 'POST'])
 def profile():
     res = get_profile(session['username'])
     if not res:
@@ -280,6 +280,36 @@ def update_bid():
         posts = get_sponser_timeline()
         return render_template('sponsor.html', posts=posts)
     return render_template('access_denied.html', error_msg="Delete Post Method is not POST")
+
+@app.route('/add_profile_photos', methods=['POST'] )
+def add_profile_photos():
+    multimedia = ''
+
+    if 'myfile' in request.files and request.files['myfile'].filename != '':
+        multimedia = 'myfile'
+        rem = 'cover'
+
+    elif 'myfile1' in request.files and request.files['myfile1'].filename != '':
+        multimedia = 'myfile1'
+        rem = 'display'
+
+    else:
+        return render_template('access_denied.html', error_msg="Error Occured!")
+
+    file = request.files[multimedia]
+    extension = file.filename.split('.')[-1]
+
+    if file and allowed_file(extension):
+        filename = secure_filename(file.filename)
+        file.save(os.path.join(BLOB, session['username'], 'images', filename))
+        prof = get_profile(session['username'])
+        if os.path.exists(os.path.join(BLOB, session['username'], 'images', prof[rem])):
+            os.remove(os.path.join(BLOB, session['username'], 'images', prof[rem]))
+        res = prof_img_upd(session['username'], filename, rem)
+        if not res:
+            return render_template('access_denied.html', error_msg="Error Occured!")
+
+    return redirect(url_for('profile'))
 
 @app.errorhandler(404)
 def not_found():
