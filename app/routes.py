@@ -96,8 +96,8 @@ def add_post():
                 "post_name": filename,
                 "post_headline": post_headline,
                 "base_price": request.form.get('base_price'),
-                "bid_price": "N/A",
-                "bidding_person": "N/A",
+                "bid_price": [],
+                "bidding_person": [],
                 "first_bidding_time": "N/A",
                 "bidding_status": "open",
                 "date_time_added": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -283,24 +283,33 @@ def update_bid():
                 target_post['base_price'] = post['base_price']
                 target_post['first_bidding_time'] = post['first_bidding_time']
                 target_post['bidding_status'] = post['bidding_status']
+                target_post['bidding_person'] = post['bidding_person']
                 #target_post['bid_price'] = post['bid_price']
                 #target_post['bid_price'] = post['bid_price']
                 break
 
         if bool(target_post):
-            new_sponser_bid_price = request.form['bid_price']
+            new_sponser_bid_price = int(request.form['bid_price'])
 
-            earlier_bid_price = target_post['bid_price']
-            base_price = target_post['base_price']
+            bid_price = target_post['bid_price']
+            if not bid_price:
+                earlier_bid_price = 'N/A'
+            else:
+                earlier_bid_price = bid_price[-1]
+            base_price = int(target_post['base_price'])
             first_bidding_time = target_post['first_bidding_time']
+            bidding_person = target_post['bidding_person']
+            bidding_person.append(request.form['bidding_person'])
 
             if earlier_bid_price == "N/A" and new_sponser_bid_price > base_price:
             # retrieve the bid price for the post and check if the bid price equals N/A then set the bid_price then perform the below step
-                db['user'].update_one(update_query, {"$set": {"posts.$.bid_price": new_sponser_bid_price, "posts.$.bidding_person": request.form['bidding_person'], "posts.$.first_bidding_time": int(datetime.datetime.now().timestamp())}})
+                bid_price.append(int(new_sponser_bid_price))
+                db['user'].update_one(update_query, {"$set": {"posts.$.bid_price": bid_price, "posts.$.bidding_person": bidding_person, "posts.$.first_bidding_time": int(datetime.datetime.now().timestamp())}})
 
             elif new_sponser_bid_price > earlier_bid_price and current_bid_time - first_bidding_time < window_in_seconds:
             # else check if the bid price is > previous bid price and also the time when performing this step falls under the window time
-                db['user'].update_one(update_query,{"$set": {"posts.$.bid_price": new_sponser_bid_price, "posts.$.bidding_person": request.form['bidding_person']}})
+                bid_price.append(int(new_sponser_bid_price))
+                db['user'].update_one(update_query, {"$set": {"posts.$.bid_price": bid_price, "posts.$.bidding_person": bidding_person}})
 
             elif new_sponser_bid_price <= earlier_bid_price:
                 posts = get_sponser_timeline()

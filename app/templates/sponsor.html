@@ -333,68 +333,6 @@
 												<span> Published on: {{ post['date_time_added'] }}</span>
 											</div>
 											<div class="post-meta">
-												<img src="../BLOB/s@s.com/posts/images/blinding-lights.jpg" alt="">
-												<div class="we-video-info">
-													<ul>
-														<li>
-															<span class="views" data-toggle="tooltip" title="views">
-																<i class="fa fa-eye"></i>
-																<ins>1.2k</ins>
-															</span>
-														</li>
-														<li>
-															<span class="comment" data-toggle="tooltip" title="Comments">
-																<i class="fa fa-comments-o"></i>
-																<ins>52</ins>
-															</span>
-														</li>
-														<li>
-															<span class="like" data-toggle="tooltip" title="like">
-																<i class="ti-heart"></i>
-																<ins>2.2k</ins>
-															</span>
-														</li>
-														<li>
-															<span class="dislike" data-toggle="tooltip" title="dislike">
-																<i class="ti-heart-broken"></i>
-																<ins>200</ins>
-															</span>
-														</li>
-														<li class="social-media">
-															<div class="menu">
-															  <div class="btn trigger"><i class="fa fa-share-alt"></i></div>
-															  <div class="rotater">
-																<div class="btn btn-icon"><a href="#" title=""><i class="fa fa-html5"></i></a></div>
-															  </div>
-															  <div class="rotater">
-																<div class="btn btn-icon"><a href="#" title=""><i class="fa fa-facebook"></i></a></div>
-															  </div>
-															  <div class="rotater">
-																<div class="btn btn-icon"><a href="#" title=""><i class="fa fa-google-plus"></i></a></div>
-															  </div>
-															  <div class="rotater">
-																<div class="btn btn-icon"><a href="#" title=""><i class="fa fa-twitter"></i></a></div>
-															  </div>
-															  <div class="rotater">
-																<div class="btn btn-icon"><a href="#" title=""><i class="fa fa-css3"></i></a></div>
-															  </div>
-															  <div class="rotater">
-																<div class="btn btn-icon"><a href="#" title=""><i class="fa fa-instagram"></i></a>
-																</div>
-															  </div>
-																<div class="rotater">
-																<div class="btn btn-icon"><a href="#" title=""><i class="fa fa-dribbble"></i></a>
-																</div>
-															  </div>
-															  <div class="rotater">
-																<div class="btn btn-icon"><a href="#" title=""><i class="fa fa-pinterest"></i></a>
-																</div>
-															  </div>
-
-															</div>
-														</li>
-													</ul>
-												</div>
 												<div class="description">
 
 													<p> {{ post.post_headline }} </p>
@@ -429,8 +367,26 @@
 
 													{% if post.bidding_status == 'open' %}
 														<h5>Base Price: {{post.base_price}}</h5>
-														<h5>Current Bid Price: {{post.bid_price}}</h5>
-													    <h5>Bid Placed By: {{post.bidding_person}}</h5>
+														<table class="table table-striped">
+															  <thead>
+																<tr>
+																  <th scope="col">Bid Price</th>
+																  <th scope="col">Bid Person</th>
+																</tr>
+															  </thead>
+															  <tbody>
+															      {% for i in post.bid_price %}
+																  {% set price = post.bid_price[loop.index-1] %}
+																  {% set name = post.bidding_person[loop.index-1] %}
+																  		<tr>
+																			<td>{{price}}</td>
+													    					<td>{{name}}</td>
+																		</tr>
+															      {% endfor %}
+															  </tbody>
+														</table>
+
+
 														<h5>Your Bid Price: </h5> <input type="text" name="bid_price">
 														<button type="submit">Place Bid</button>
 													{% endif %}
