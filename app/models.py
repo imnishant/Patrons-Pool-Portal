@@ -160,6 +160,7 @@ def store_posts(post_info):
     action =  {"$addToSet": { "posts": { "$each": [post_info] }}}
     db['user'].update(find_query, action)
 
+
 def prof_img_upd(email, filename, rem):
     attr = 'profile.' + rem
     res = db['user'].update_one(

@@ -44,7 +44,7 @@ def signup_util(obj):
     user_info['profile']['interest'] = []
     user_info['profile']['language'] = []
     user_info['profile']['cover'] = 'cover.jpg'
-    user_info['profile']['display'] = 'display.jpg'
+    user_info['profile']['display'] = 'display.png'
 
     user_info['posts'] = []
     user_info['bid'] = {}
@@ -82,7 +82,7 @@ def signup_util(obj):
     if not os.path.exists(posts_path):
         os.mkdir(posts_path)
     shutil.copy(os.path.join(my_path, 'static/images/resources/cover.jpg'), os.path.join(my_path, 'static/BLOB', user_info['email'], 'images', 'cover.jpg'))
-    shutil.copy(os.path.join(my_path, 'static/images/resources/display.jpg'), os.path.join(my_path, 'static/BLOB', user_info['email'], 'images', 'display.jpg'))
+    shutil.copy(os.path.join(my_path, 'static/images/resources/display.png'), os.path.join(my_path, 'static/BLOB', user_info['email'], 'images', 'display.png'))
 
     return user_info, password2
 

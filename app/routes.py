@@ -216,10 +216,18 @@ def inbox():
 def followers():
     return render_template('followers.html')
 
-@app.route('/images')
+@app.route('/images', methods=['GET'])
 def images():
-    path = '../BLOB/' + session['username'] + '/posts'
-    return render_template('images.html')
+    if request.method == 'GET':
+        res = get_profile(session['username'])
+        if not res:
+            return render_template('access_denied.html', error_msg="Error Occured while fetching Profile Details")
+        if os.path.exists(os.path.join(BLOB, session['username'], 'posts', 'images')):
+            files = os.listdir(os.path.join(BLOB, session['username'], 'posts', 'images'))
+        else:
+            files = []
+        return render_template('images.html', profile=res, title="Images", files=files, email=session['username'])
+    return render_template('access_denied.html', error_msg="wrong method invocaton")
 
 @app.route('/videos')
 def videos():
