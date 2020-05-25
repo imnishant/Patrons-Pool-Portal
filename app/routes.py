@@ -244,6 +244,34 @@ def videos():
     return render_template('access_denied.html', error_msg="wrong method invocaton")
 
 
+@app.route('/audios', methods=['GET'])
+def audios():
+    if request.method == 'GET':
+        res = get_profile(session['username'])
+        if not res:
+            return render_template('access_denied.html', error_msg="Error Occured while fetching Profile Details")
+        if os.path.exists(os.path.join(BLOB, session['username'], 'posts', 'audios')):
+            files = os.listdir(os.path.join(BLOB, session['username'], 'posts', 'audios'))
+        else:
+            files = []
+        return render_template('audios.html', profile=res, title="Audios", files=files, email=session['username'])
+    return render_template('access_denied.html', error_msg="wrong method invocaton")
+
+
+@app.route('/documents', methods=['GET'])
+def documents():
+    if request.method == 'GET':
+        res = get_profile(session['username'])
+        if not res:
+            return render_template('access_denied.html', error_msg="Error Occured while fetching Profile Details")
+        if os.path.exists(os.path.join(BLOB, session['username'], 'posts', 'documents')):
+            files = os.listdir(os.path.join(BLOB, session['username'], 'posts', 'documents'))
+        else:
+            files = []
+        return render_template('documents.html', profile=res, title="Documents", files=files, email=session['username'])
+    return render_template('access_denied.html', error_msg="wrong method invocaton")
+
+
 @app.route('/messages')
 def messages():
     return render_template('messages.html')

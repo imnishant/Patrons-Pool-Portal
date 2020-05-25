@@ -3,7 +3,7 @@ import os
 import shutil
 from flask import request, session
 
-ALLOWED_EXTENSIONS = {'mpeg', 'mp4', 'mp3', 'm4a', 'png', 'jpg', 'jpeg', 'gif', 'pdf', 'xls', 'txt', 'mkv', 'x-matroska', 'webm', 'wav', 'avi', 'flv', 'doc', 'docx', 'odt', 'pdf', 'wpd'}
+ALLOWED_EXTENSIONS = {'mpeg', 'mp4', 'mp3', 'm4a', 'png', 'jpg', 'jpeg', 'gif', 'pdf', 'xls', 'xlsx', 'txt', 'mkv', 'x-matroska', 'webm', 'wav', 'avi', 'flv', 'doc', 'docx', 'odt', 'wpd'}
 
 my_path = os.path.abspath(os.path.dirname(__file__))
 
@@ -47,9 +47,6 @@ def signup_util(obj):
     user_info['profile']['display'] = 'display.png'
 
     user_info['posts'] = []
-    user_info['bid'] = {}
-    user_info['bid']['count'] = 0
-    user_info['bid']['username'] = None
 
     password2 = request.form['password2']
 

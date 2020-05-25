@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<div class="col-lg-6">
+	<div class="central-meta">
+			{% for file in files %}
+				<iframe data="static/BLOB/{{email}}/posts/documents/{{file}}" height="400" width="100%"></iframe><hr>
+			{% endfor %}
+	</div>
+
+
+{% endblock %}

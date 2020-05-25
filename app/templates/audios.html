@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<div class="col-lg-6">
+	<div class="central-meta">
+		<div class="row">
+			{% for file in files %}
+			<div class="col-md-6">
+				<audio controls>
+					<source src="static/BLOB/{{email}}/posts/audios/{{file}}">
+				</audio>
+			</div>
+			<div class="col-md-6">
+				<div style="padding-top:15px;">{{file}}</div>
+			</div>
+			{% endfor %}
+		</div>
+	</div>
+
+
+{% endblock %}
