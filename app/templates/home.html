@@ -211,9 +211,24 @@
 			</div>
 		</div>
 	</div><!-- topbar -->
-		<h2>{{msg}}</h2>
+
 	<section>
 		<div class="gap gray-bg">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-3"></div>
+					<div class="col-md-6">
+					{% if msg %}
+					<div class="alert alert-warning alert-dismissible fade show" role="alert">
+						<h5>{{msg}}</h5>
+						<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					  </button>
+					</div>
+					{% endif %}
+					</div>
+				</div>
+			</div>
 			<div class="container-fluid">
 				<div class="row">
 					<div class="col-lg-12">
@@ -242,6 +257,14 @@
 											<li>
 												<i class="ti-video-camera"></i>
 												<a href="/videos" title="">Videos</a>
+											</li>
+											<li>
+												<i class="ti-volume"></i>
+												<a href="/audios" title="">Audios</a>
+											</li>
+											<li>
+												<i class="ti-files"></i>
+												<a href="/documents" title="">Documents</a>
 											</li>
 											<li>
 												<i class="ti-comments-smiley"></i>
@@ -274,25 +297,25 @@
 														<li>
 															<i class="fa fa-music"></i>
 															<label class="fileContainer">
-																<input type="file" name="audio">
+																<input type="file" name="audio" accept="audio/*">
 															</label>
 														</li>
 														<li>
 															<i class="fa fa-image"></i>
 															<label class="fileContainer">
-																<input type="file" name="image">
+																<input type="file" name="image" accept="image/*">
 															</label>
 														</li>
 														<li>
 															<i class="fa fa-video-camera"></i>
 															<label class="fileContainer">
-																<input type="file" name="video">
+																<input type="file" name="video" accept="video/*">
 															</label>
 														</li>
 														<li>
 															<i class="fa fa-file"></i>
 															<label class="fileContainer">
-																<input type="file" name="document">
+																<input type="file" name="document" accept=".pdf">
 															</label>
 														</li>
 														<li>
@@ -455,7 +478,10 @@
 		</div>
 	</footer><!-- footer -->
 </div>	
-	
+
+	<script type="text/javascript">
+		document.getElementsByClassName('alert').alert();
+	</script>
 	<script data-cfasync="false" src="../../cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="js/main.min.js"></script>
 	<script src="../static/js/script.js"></script>
 	<script src="../static/js/map-init.js"></script>

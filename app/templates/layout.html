@@ -6,9 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="" />
     <meta name="keywords" content="" />
-	<title>Edit Profile</title>
-    <link rel="icon" href="../static/images/fav.png" type="image/png" sizes="16x16"> 
-    
+	<title>{{title}}</title>
+    <link rel="icon" href="../static/images/fav.png" type="image/png" sizes="16x16">
+
     <link rel="stylesheet" href="../static/css/main.min.css">
     <link rel="stylesheet" href="../static/css/style.css">
     <link rel="stylesheet" href="../static/css/color.css">
@@ -18,13 +18,13 @@
 <body>
 <!--<div class="se-pre-con"></div>-->
 <div class="theme-layout">
-	
-	
+
+
 	<div class="topbar stick">
 		<div class="logo">
 			<a title="" href="newsfeed.html"><img src="../static/images/logo.png" alt=""></a>
 		</div>
-		
+
 		<div class="top-area">
 			<ul class="setting-area">
 				<li>
@@ -192,7 +192,7 @@
 			</div>
 		</div>
 	</div><!-- topbar -->
-	
+
 	<section>
 		<div class="feature-photo">
 			<figure><img src="static/BLOB/{{profile['email']}}/images/{{profile['cover']}}" style="height:400px;"></figure>
@@ -218,7 +218,6 @@
 			</div>
 		</div>
 	</section><!-- top area -->
-	
 
 	<section>
 		<div class="gap gray-bg">
@@ -229,62 +228,50 @@
 							<div class="col-lg-3">
 								<aside class="sidebar static">
 									<div class="widget">
-										<h4 class="widget-title">Edit info</h4>
+										<h4 class="widget-title">Shortcuts</h4>
 										<ul class="naves">
 											<li>
-												<i class="ti-info-alt"></i>
-												<a title="" href="/edit_basic">Basic info</a>
+												<i class="ti-clipboard"></i>
+												<a href="/profile" title="">Profile</a>
 											</li>
 											<li>
 												<i class="ti-mouse-alt"></i>
-												<a title="" href="/edit_work">Education &amp; Work</a>
+												<a href="/inbox" title="">Inbox</a>
 											</li>
 											<li>
-												<i class="ti-heart"></i>
-												<a title="" href="/edit_interest">My interests</a>
+												<i class="ti-user"></i>
+												<a href="/followers" title="">Followers</a>
 											</li>
 											<li>
-												<i class="ti-world"></i>
-												<a title="" href="/edit_language">Languages</a>
+												<i class="ti-image"></i>
+												<a href="/images" title="">Images</a>
 											</li>
 											<li>
-												<i class="ti-lock"></i>
-												<a title="" href="/edit_password">change password</a>
+												<i class="ti-video-camera"></i>
+												<a href="/videos" title="">Videos</a>
+											</li>
+											<li>
+												<i class="ti-volume"></i>
+												<a href="/audios" title="">Audios</a>
+											</li>
+											<li>
+												<i class="ti-files"></i>
+												<a href="/documents" title="">Documents</a>
+											</li>
+											<li>
+												<i class="ti-comments-smiley"></i>
+												<a href="/messages" title="">Messages</a>
+											</li>
+											<li>
+												<i class="ti-bell"></i>
+												<a href="/notifications" title="">Notifications</a>
+											</li>
+											<li>
+												<i class="ti-power-off"></i>
+												<a href="/logout" title="">Logout</a>
 											</li>
 										</ul>
-									</div><!-- settings widget -->
-									<div class="widget">
-										<h4 class="widget-title">Recent Activity</h4>
-										<ul class="activitiez">
-											<li>
-												<div class="activity-meta">
-													<i>10 hours Ago</i>
-													<span><a title="" href="#">Commented on Video posted </a></span>
-													<h6>by <a href="time-line.html">black demon.</a></h6>
-												</div>
-											</li>
-											<li>
-												<div class="activity-meta">
-													<i>30 Days Ago</i>
-													<span><a title="" href="#">Posted your status. “Hello guys, how are you?”</a></span>
-												</div>
-											</li>
-											<li>
-												<div class="activity-meta">
-													<i>2 Years Ago</i>
-													<span><a title="" href="#">Share a video on her timeline.</a></span>
-													<h6>"<a href="#">you are so funny mr.been.</a>"</h6>
-												</div>
-											</li>
-										</ul>
-									</div>									
-								</aside>
-							</div><!-- sidebar -->
-                            
-                            {% block content %}{% endblock %}
-                            
-							<div class="col-lg-3">
-								<aside class="sidebar static">
+									</div><!-- Shortcuts -->
 									<div class="widget">
 										<h4 class="widget-title">Profile Intro</h4>
 										<ul class="short-profile">
@@ -301,7 +288,6 @@
 												</ul>
 											</li>
 											<li>
-												
 												<span>Languages</span>
 												<ul class="list">
 												{% for res in profile['language'] %}
@@ -310,48 +296,59 @@
 												</ul>
 											</li>
 										</ul>
-									</div>		
-									<div class="widget stick-widget">
-										<h4 class="widget-title">Who's follownig</h4>
-										<ul class="followers">
-											<li>
-												<figure><img src="images/resources/friend-avatar2.jpg" alt=""></figure>
-												<div class="friend-meta">
-													<h4><a href="time-line.html" title="">Kelly Bill</a></h4>
-													<a href="#" title="" class="underline">Add Friend</a>
-												</div>
-											</li>
-											<li>
-												<figure><img src="images/resources/friend-avatar4.jpg" alt=""></figure>
-												<div class="friend-meta">
-													<h4><a href="time-line.html" title="">Issabel</a></h4>
-													<a href="#" title="" class="underline">Add Friend</a>
-												</div>
-											</li>
-											<li>
-												<figure><img src="images/resources/friend-avatar6.jpg" alt=""></figure>
-												<div class="friend-meta">
-													<h4><a href="time-line.html" title="">Andrew</a></h4>
-													<a href="#" title="" class="underline">Add Friend</a>
-												</div>
-											</li>
-											<li>
-												<figure><img src="images/resources/friend-avatar8.jpg" alt=""></figure>
-												<div class="friend-meta">
-													<h4><a href="time-line.html" title="">Sophia</a></h4>
-													<a href="#" title="" class="underline">Add Friend</a>
-												</div>
-											</li>
-										</ul>
-									</div><!-- who's following -->
+									</div>
+									</aside>
+								</div><!-- sidebar -->
+
+
+	{% block content %}{% endblock %}
+
+	</div><!-- centerl meta -->
+							<div class="col-lg-3">
+								<aside class="sidebar static">
+
+								<div class="widget stick-widget">
+									<h4 class="widget-title">Who's follownig</h4>
+									<ul class="followers">
+										<li>
+											<figure><img src="images/resources/friend-avatar2.jpg" alt=""></figure>
+											<div class="friend-meta">
+												<h4><a href="../static/time-line.html" title="">Kelly Bill</a></h4>
+												<a href="#" title="" class="underline">Add Friend</a>
+											</div>
+										</li>
+										<li>
+											<figure><img src="images/resources/friend-avatar4.jpg" alt=""></figure>
+											<div class="friend-meta">
+												<h4><a href="time-line.html" title="">Issabel</a></h4>
+												<a href="#" title="" class="underline">Add Friend</a>
+											</div>
+										</li>
+										<li>
+											<figure><img src="images/resources/friend-avatar6.jpg" alt=""></figure>
+											<div class="friend-meta">
+												<h4><a href="time-line.html" title="">Andrew</a></h4>
+												<a href="#" title="" class="underline">Add Friend</a>
+											</div>
+										</li>
+										<li>
+											<figure><img src="images/resources/friend-avatar8.jpg" alt=""></figure>
+											<div class="friend-meta">
+												<h4><a href="time-line.html" title="">Sophia</a></h4>
+												<a href="#" title="" class="underline">Add Friend</a>
+											</div>
+										</li>
+									</ul>
+								</div><!-- who's following -->
 								</aside>
 							</div><!-- sidebar -->
-						</div>	
+						</div>
 					</div>
 				</div>
 			</div>
-		</div>	
+		</div>
 	</section>
+
 
 	<footer>
 		<div class="container">
@@ -361,7 +358,7 @@
 						<div class="foot-logo">
 							<div class="logo">
 								<a href="index-2.html" title=""><img src="images/logo.png" alt=""></a>
-							</div>	
+							</div>
 							<p>
 								The trio took this simple idea and built it into the world’s leading carpooling platform.
 							</p>
@@ -420,6 +417,6 @@
 	<script src="../static/js/map-init.js"></script>
 	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA8c55_YHLvDHGACkQscgbGLtLRdxBDCfI"></script>
 
-</body>	
+</body>
 
 </html>
