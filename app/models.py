@@ -1,4 +1,6 @@
-from app import db
+from flask_mail import Message
+
+from app import db, mail
 from flask import session
 import datetime
 
@@ -172,3 +174,19 @@ def prof_img_upd(email, filename, rem):
         }
     )
     return res.matched_count > 0
+
+
+def mail_sponsers_when_a_post_is_added():
+    query = {"isSponsor": 1}
+    sponsers = list(db['user'].find(query))
+    email_ids = []
+
+    if sponsers:
+        for sponser in sponsers:
+            email_ids.append(sponser['email'])
+
+        msg = Message('New Post Added', sender='post-update@patronspool.com', recipients=email_ids)
+        msg.body = session['username'] + " posted a new idea. Log in to the portal to view more about it and check if you would like to sponser for it!"
+        mail.send(msg)
+        return
+    return

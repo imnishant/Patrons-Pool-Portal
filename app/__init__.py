@@ -2,6 +2,7 @@ import os.path
 
 from flask import Flask
 from pymongo import MongoClient
+from flask_mail import Mail
 
 from config import app_config
 
@@ -14,6 +15,9 @@ def create_app(config_name):
     app.secret_key = 'hello'
     app.config.from_object(app_config[config_name])
     app.config.from_pyfile(os.path.join(my_path, '../config.py'))
+    app.config['MAIL_SERVER'] = 'localhost'
+    app.config['MAIL_PORT'] = 2525
+
     return app
 
 
@@ -21,7 +25,7 @@ def create_app(config_name):
 app: Flask = create_app(config_name="config")
 client = MongoClient()
 db = client['FYP']
-
+mail = Mail(app)
 
 # running the Flask App in debugging mode
 #if __name__ == "__main__":
