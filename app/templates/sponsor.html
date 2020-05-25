@@ -262,6 +262,22 @@
 												<a href="/followers" title="">Followers</a>
 											</li>
 											<li>
+												<i class="ti-image"></i>
+												<a href="/images" title="">Images</a>
+											</li>
+											<li>
+												<i class="ti-video-camera"></i>
+												<a href="/videos" title="">Videos</a>
+											</li>
+											<li>
+												<i class="ti-volume"></i>
+												<a href="/audios" title="">Audios</a>
+											</li>
+											<li>
+												<i class="ti-files"></i>
+												<a href="/documents" title="">Documents</a>
+											</li>
+											<li>
 												<i class="ti-comments-smiley"></i>
 												<a href="/messages" title="">Messages</a>
 											</li>
@@ -280,6 +296,49 @@
 							</div><!-- sidebar -->
 							<div class="col-lg-6">
 								<div class="central-meta">
+									<div class="new-postbox">
+										<figure>
+											<img src="../static/images/resources/admin2.jpg" alt="">
+										</figure>
+										<div class="newpst-input">
+											<form action="/addpost" method="post" enctype="multipart/form-data">
+												<textarea rows="3" name="headline" placeholder="write something"></textarea>
+												<div class="attachments">
+													<ul>
+														<li>
+															<i class="fa fa-music"></i>
+															<label class="fileContainer">
+																<input type="file" name="audio" accept="audio/*">
+															</label>
+														</li>
+														<li>
+															<i class="fa fa-image"></i>
+															<label class="fileContainer">
+																<input type="file" name="image" accept="image/*">
+															</label>
+														</li>
+														<li>
+															<i class="fa fa-video-camera"></i>
+															<label class="fileContainer">
+																<input type="file" name="video" accept="video/*">
+															</label>
+														</li>
+														<li>
+															<i class="fa fa-file"></i>
+															<label class="fileContainer">
+																<input type="file" name="document" accept=".pdf">
+															</label>
+														</li>
+														<li>
+															<button type="submit" name="submit">Post</button>
+														</li>
+													</ul>
+												</div>
+
+											</form>
+										</div>
+									</div>
+								</div>
 
 								{% for post in posts[::-1] %}
 								<!-- add post new box -->
@@ -327,44 +386,39 @@
 													<input type="text" name="bidding_person" value="{{ session.username }}" hidden>
 													<input type="text" name="base_price" value="{{ post.base_price }}" hidden>
 
-													<div class="row" style="padding:10px;">
-													<div class="col-md-6">Base Price: {{post.base_price}}</div>
-												{% if post.bid_price|length %}
-													<div class="col-md-6">Max. Bid Price: {{post.bid_price|last}} </div>
-												</div>
-													<table class="table table-striped">
-													  <thead>
-														<tr>
-														  <th scope="col">Bid Price</th>
-														  <th scope="col">Bid Person</th>
-														</tr>
-													  </thead>
-													  <tbody>
-														  {% for i in post.bid_price %}
-														  {% set price = post.bid_price[loop.index-1] %}
-														  {% set name = post.bidding_person[loop.index-1] %}
+													{% if post.bidding_status == 'open' %}
+														<h5>Base Price: {{post.base_price}}</h5>
+														<table class="table table-striped">
+															  <thead>
 																<tr>
-																	<td>{{price}}</td>
-																	<td>{{name}}</td>
+																  <th scope="col">Bid Price</th>
+																  <th scope="col">Bid Person</th>
 																</tr>
-														  {% endfor %}
-													  </tbody>
-												</table>
-												{% else %}
-															<div class="col-md-6">Max. Bid Price: --- </div>
-														</div>
-													<center class="alert alert-danger" role="alert">
-														<center>No Bids PLaced Yet!!</center>
-													</div>
-												{% endif %}
-												<h5>Your Bid Price: <input type="text" name="bid_price">
-												<button type="submit" class="btn btn-primary">Place Bid</button></h5>
-												{% if post.bidding_status == 'closed' and post.bidding_person == session.username %}
-														<h5>Your Won the Bid at Price:  {{post.bid_price}}</h5>
-														<button type="submit" class="button-red-pay btn btn-primary">Pay</button>
+															  </thead>
+															  <tbody>
+															      {% for i in post.bid_price %}
+																  {% set price = post.bid_price[loop.index-1] %}
+																  {% set name = post.bidding_person[loop.index-1] %}
+																  		<tr>
+																			<td>{{price}}</td>
+													    					<td>{{name}}</td>
+																		</tr>
+															      {% endfor %}
+															  </tbody>
+														</table>
+
+
+														<h5>Your Bid Price: </h5> <input type="text" name="bid_price">
+														<button type="submit">Place Bid</button>
 													{% endif %}
-													{% if post.bidding_status == 'closed' and post.bidding_person != session.username%}
-														<h5>Bid Closed at Price: {{ post.bid_price }}</h5>
+
+													{% if post.bidding_status == 'closed' and post.bidding_person[-1] == session.username %}
+														<h5>Your Won the Bid at Price:  {{post.bid_price[-1]}}</h5>
+														<button type="submit" class="button-red-pay">Pay</button>
+													{% endif %}
+
+													{% if post.bidding_status == 'closed' and post.bidding_person[-1] != session.username%}
+														<h5>Sponser {{ post.bid_price[-1] }} won the Bid at price {{ post.bid_price[-1] }}</h5>
 													{% endif %}
 												</form>
 											</center>

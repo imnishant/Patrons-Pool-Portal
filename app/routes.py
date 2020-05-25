@@ -1,7 +1,7 @@
 from flask import Flask, send_from_directory, render_template, request, render_template, redirect, url_for, session, flash, make_response
 import os
 
-from app.models import user_exists, save_user, store_posts, get_profile, update_basic, update_work, update_password, get_password, update_language, update_interest, get_posts, get_sponser_timeline, prof_img_upd, mail_sponsers_when_a_post_is_added
+from app.models import user_exists, save_user, store_posts, get_profile, update_basic, update_work, update_password, get_password, update_language, update_interest, get_posts, get_sponser_timeline, prof_img_upd, mail_sponsers_when_a_post_is_added, email_bid_status_to_other_sponsers
 
 from app import app, BLOB, db
 from app.utils import signup_util, login_util, allowed_file, edit_basic_util, edit_work_util, edit_pass_util, edit_lan_int_util
@@ -344,6 +344,7 @@ def update_bid():
         update_query = {"email": request.form['email'], "posts.post_headline": request.form['post_headline']}
         result = db['user'].find_one(query)
         target_post = {}
+
         for post in result["posts"]:
             if post['post_headline'] == request.form['post_headline']:
                 target_post['bid_price'] = post['bid_price']
@@ -357,6 +358,7 @@ def update_bid():
 
         if bool(target_post):
             new_sponser_bid_price = int(request.form['bid_price'])
+            new_sponser_email = session['username']
 
             bid_price = target_post['bid_price']
             if not bid_price:
@@ -377,6 +379,7 @@ def update_bid():
             # else check if the bid price is > previous bid price and also the time when performing this step falls under the window time
                 bid_price.append(int(new_sponser_bid_price))
                 db['user'].update_one(update_query, {"$set": {"posts.$.bid_price": bid_price, "posts.$.bidding_person": bidding_person}})
+                email_bid_status_to_other_sponsers(request.form['email'], request.form['post_headline'])
 
             elif new_sponser_bid_price <= earlier_bid_price:
                 posts = get_sponser_timeline()
