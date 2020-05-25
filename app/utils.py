@@ -87,7 +87,8 @@ def login_util(request):
     username = request.form['email']
     password = request.form['pass']
     result = user_exists(username)
-    session['name'] = result['profile']['fname'] + " " + result['profile']['lname']
+    if result:
+        session['name'] = result['profile']['fname'] + " " + result['profile']['lname']
     return result, password, username
 
 

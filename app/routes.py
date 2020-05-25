@@ -28,7 +28,7 @@ def login():
             else:
                 posts = get_posts(username)
                 return render_template('home.html', posts=posts)
-        return render_template('access_denied.html', error_msg=result)
+        return render_template('access_denied.html', error_msg="Mail Doesn't exists!")
     return render_template('landing.html')
 
 @app.route('/signup', methods=['GET', 'POST'])

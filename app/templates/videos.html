@@ -3,6 +3,7 @@
 
 <div class="col-lg-6">
 	<div class="central-meta">
+		{% if files|length %}
 		<div class="row">
 			{% for file in files %}
 			<div class="col-md-6">
@@ -11,6 +12,11 @@
 				</video>
 			</div>
 			{% endfor %}
+		{% else %}
+			<div class="alert alert-danger" role="alert">
+				<center>No Videos Uploaded Yet!!</center>
+			</div>
+		{% endif%}
 		</div>
 	</div>
 
