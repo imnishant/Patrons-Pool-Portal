@@ -18,6 +18,10 @@ pip3 install -r requirements.txt
  docker run -p 3000:80 -p 2525:25 rnwood/smtp4dev:linux-amd64-v3
 
 ``` 
+## To view the mail server type this below in browser
+```
+localhost:3000
+```
 
 ## To run the application 
 
