@@ -1,7 +1,8 @@
 from flask import Flask, send_from_directory, render_template, request, render_template, redirect, url_for, session, flash, make_response
-import os, datetime
+import os
 
-from app.models import user_exists, save_user, store_posts, get_profile, update_basic, update_work, update_password, get_password, update_language, update_interest, get_posts, get_sponser_timeline, prof_img_upd
+from app.models import user_exists, save_user, store_posts, get_profile, update_basic, update_work, update_password, get_password, update_language, update_interest, get_posts, get_sponser_timeline, prof_img_upd, mail_sponsers_when_a_post_is_added
+
 from app import app, BLOB, db
 from app.utils import signup_util, login_util, allowed_file, edit_basic_util, edit_work_util, edit_pass_util, edit_lan_int_util
 from werkzeug.utils import secure_filename
@@ -107,6 +108,7 @@ def add_post():
             posts = get_posts(session['username'])
             # searches for dockerfile in the extracted folder
             # call this function after the user presses on the submit button or so
+            mail_sponsers_when_a_post_is_added()
             
         else:
             return render_template("home.html", posts = posts, msg='Allowed file types are mp4, mp3, png, jpg, jpeg, gif')
