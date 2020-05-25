@@ -8,3 +8,4 @@ __pycache__/
 # ignoring the .idea folder
 .idea/
 
+app/static/BLOB/*
