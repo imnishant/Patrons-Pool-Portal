@@ -23,12 +23,16 @@ def login():
                 return render_template('access_denied.html', error_msg="Password doesn't match. Go back and re-renter the password")
 
             session['username'] = username
+
+            res = get_profile(session['username'])
+            if not res:
+                return render_template('access_denied.html', error_msg="Error Occured while fetching Profile Details")
             if result['isSponsor'] == 1:
                 posts = get_sponser_timeline()
                 return render_template('sponsor.html', posts=posts)
             else:
                 posts = get_posts(username)
-                return render_template('home.html', posts=posts)
+                return render_template('home.html', posts=posts, profile=res)
         return render_template('access_denied.html', error_msg="Mail Doesn't exists!")
     return render_template('landing.html')
 
@@ -47,6 +51,10 @@ def signup():
 
         save_user(user_info)
         session['username'] = user_info['email']
+
+        res = get_profile(session['username'])
+        if not res:
+            return render_template('access_denied.html', error_msg="Error Occured while fetching Profile Details")
         #session['useremail'] = user_info['email']
         posts = get_posts(session['username'])
         if user_info['isSponsor'] == 1:
@@ -54,12 +62,15 @@ def signup():
             return render_template('sponsor.html', posts=posts)
         else:
             posts = get_posts(session['username'])
-            return render_template('home.html', posts=posts)
+            return render_template('home.html', posts=posts, profile=res)
 
     return render_template('signup.html')
 
 @app.route('/addpost', methods=["POST"])
 def add_post():
+    res = get_profile(session['username'])
+    if not res:
+        return render_template('access_denied.html', error_msg="Error Occured while fetching Profile Details")
     if request.method == 'POST':
         # check if the post request has the file part
         post_headline = request.form.get('headline')
@@ -111,8 +122,8 @@ def add_post():
             mail_sponsers_when_a_post_is_added()
             
         else:
-            return render_template("home.html", posts = posts, msg='Allowed file types are mp4, mp3, png, jpg, jpeg, gif')
-    return render_template("home.html", posts = posts, msg='Added Successfully Bro! :-D')
+            return render_template("home.html", posts = posts, profile=res, msg='Allowed file types are mp4, mp3, png, jpg, jpeg, gif')
+    return render_template("home.html", posts = posts, profile=res, msg='Added Successfully Bro! :-D')
 
 @app.route('/logout')
 def logout():
@@ -122,7 +133,10 @@ def logout():
 @app.route('/home')
 def home():
     posts = get_posts(session['username'])
-    return render_template('home.html', posts = posts)
+    res = get_profile(session['username'])
+    if not res:
+        return render_template('access_denied.html', error_msg="Error Occured while fetching Profile Details")
+    return render_template('home.html', posts = posts, profile=res)
 
 @app.route('/profile', methods=['GET', 'POST'])
 def profile():
@@ -310,7 +324,11 @@ def delete_post():
             return render_template('access_denied.html', error_msg="File does not exist in mongodb database")
 
         posts = get_posts(session['username'])
-        return render_template('home.html', posts=posts)
+
+        res = get_profile(session['username'])
+        if not res:
+            return render_template('access_denied.html', error_msg="Error Occured while fetching Profile Details")
+        return render_template('home.html', posts=posts, profile=res)
     return render_template('access_denied.html', error_msg="Delete Post Method is not POST")
 
 @app.route('/update_bid', methods=["POST"])

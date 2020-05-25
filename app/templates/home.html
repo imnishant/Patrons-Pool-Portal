@@ -7,7 +7,6 @@
     <meta name="description" content="" />
     <meta name="keywords" content="" />
 	<title>Home</title>
-    <link rel="icon" href="../static/fav.png" type="image/png" sizes="16x16"> 
     
     <link rel="stylesheet" href="../static/css/main.min.css">
     <link rel="stylesheet" href="../static/css/style.css">
@@ -41,7 +40,7 @@
 	
 	<div class="topbar stick">
 		<div class="logo">
-			<a title="" href="newsfeed.html"><img src="../static/images/logo.png" alt=""></a>
+			<img src="../static/images/Icon.jpeg" alt="">
 		</div>
 		
 		<div class="top-area">
@@ -287,7 +286,7 @@
 								<div class="central-meta">
 									<div class="new-postbox">
 										<figure>
-											<img src="../static/images/resources/admin2.jpg" alt="">
+											<img src="static/BLOB/{{profile['email']}}/images/{{profile['display']}}" alt="">
 										</figure>
 										<div class="newpst-input">
 											<form action="/addpost" method="post" enctype="multipart/form-data">
@@ -337,7 +336,7 @@
 									<div class="user-post">
 										<div class="friend-info">
 											<figure>
-												<img src="../static/images/resources/friend-avatar10.jpg" alt="">
+												<img src="static/BLOB/{{profile['email']}}/images/{{profile['display']}}" alt="">
 											</figure>
 											<div class="friend-name">
 												<ins><a href="time-line.html" title="">{{ session['name'] }}</a></ins>
