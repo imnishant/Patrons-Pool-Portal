@@ -84,6 +84,32 @@ def set_new_bid_update_status(email, headline, get_new_update):
     return
 
 
+def email_bid_status_to_other_sponsers(email, headline):
+    query = {"email": email, "posts.post_headline": headline}
+    result = db['user'].find_one(query)
+    bidding_status = ""
+    bidding_person_emails = []
+
+    for post in result["posts"]:
+        if post['post_headline'] == headline:
+            bidding_status = post['bidding_status']
+            bidding_person_emails = post['bidding_person']
+
+    # remove the email of the current person which placed the bid earlier
+    try:
+        while True:
+            bidding_person_emails.remove(session['username'])
+    except ValueError:
+        pass
+
+    if bidding_status == 'open':
+        msg = Message('Bid Update', sender='bid-update@patronspool.com', recipients=bidding_person_emails)
+        msg.body = "The sponser " + session['username'] + " placed a higher bid for the idea for which you bid earlier. Place more amount to win the bid before the bidding time gets over! "
+        mail.send(msg)
+
+    return
+
+
 def update_basic(email, profile):
     res = db['user'].update_one(
         { "email": email},
