@@ -291,7 +291,7 @@
 										</figure>
 										<div class="newpst-input">
 											<form action="/addpost" method="post" enctype="multipart/form-data">
-												<textarea rows="3" name="headline" placeholder="write something"></textarea>
+												<textarea rows="3" name="headline" placeholder="write something" required></textarea>
 												<div class="attachments">
 													<ul>
 														<li>
@@ -324,7 +324,7 @@
 													</ul>
 												</div>
 												<br>
-												Base Price:  <input type="text" name="base_price">
+												Base Price:  <input type="text" name="base_price" required>
 											</form>
 										</div>
 									</div>
@@ -368,8 +368,12 @@
 													<object data="static/BLOB/{{session['username']}}/posts/{{post.post_type + 's'}}/{{post.post_name}}" height="auto" width="100%"></object>
 												{% endif %}
 												<br>
-												<h5>Base Price: {{post.base_price}}</h5>
-												<table class="table table-striped">
+												<div class="row" style="padding:10px;">
+													<div class="col-md-6">Base Price: {{post.base_price}}</div>
+												{% if post.bid_price|length %}
+													<div class="col-md-6">Max. Bid Price: {{post.bid_price|last}} </div>
+												</div>
+													<table class="table table-striped">
 													  <thead>
 														<tr>
 														  <th scope="col">Bid Price</th>
@@ -387,6 +391,13 @@
 														  {% endfor %}
 													  </tbody>
 												</table>
+												{% else %}
+															<div class="col-md-6">Max. Bid Price: --- </div>
+														</div>
+													<center class="alert alert-danger" role="alert">
+														<center>No Bids PLaced Yet!!</center>
+													</div>
+												{% endif %}
 												<br>
 											</div>
 

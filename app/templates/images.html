@@ -3,6 +3,7 @@
 
 <div class="col-lg-6">
 	<div class="central-meta">
+		{% if files|length %}
 		<ul class="photos">
 			{% for file in files %}
 			<li>
@@ -11,6 +12,11 @@
 			</li>
 			{% endfor %}
 		</ul>
+		{% else %}
+			<div class="alert alert-danger" role="alert">
+				<center>No Images Uploaded Yet!!</center>
+			</div>
+		{% endif%}
 	</div><!-- photos -->
 
 {% endblock %}
