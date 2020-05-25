@@ -229,9 +229,20 @@ def images():
         return render_template('images.html', profile=res, title="Images", files=files, email=session['username'])
     return render_template('access_denied.html', error_msg="wrong method invocaton")
 
-@app.route('/videos')
+
+@app.route('/videos', methods=['GET'])
 def videos():
-    return render_template('videos.html')
+    if request.method == 'GET':
+        res = get_profile(session['username'])
+        if not res:
+            return render_template('access_denied.html', error_msg="Error Occured while fetching Profile Details")
+        if os.path.exists(os.path.join(BLOB, session['username'], 'posts', 'videos')):
+            files = os.listdir(os.path.join(BLOB, session['username'], 'posts', 'videos'))
+        else:
+            files = []
+        return render_template('videos.html', profile=res, title="Videos", files=files, email=session['username'])
+    return render_template('access_denied.html', error_msg="wrong method invocaton")
+
 
 @app.route('/messages')
 def messages():
