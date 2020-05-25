@@ -413,13 +413,13 @@
 														<button type="submit">Place Bid</button>
 													{% endif %}
 
-													{% if post.bidding_status == 'closed' and post.bidding_person == session.username %}
-														<h5>Your Won the Bid at Price:  {{post.bid_price}}</h5>
+													{% if post.bidding_status == 'closed' and post.bidding_person[-1] == session.username %}
+														<h5>Your Won the Bid at Price:  {{post.bid_price[-1]}}</h5>
 														<button type="submit" class="button-red-pay">Pay</button>
 													{% endif %}
 
-													{% if post.bidding_status == 'closed' and post.bidding_person != session.username%}
-														<h5>Bid Closed at Price: {{ post.bid_price }}</h5>
+													{% if post.bidding_status == 'closed' and post.bidding_person[-1] != session.username%}
+														<h5>Sponser {{ post.bid_price[-1] }} won the Bid at price {{ post.bid_price[-1] }}</h5>
 													{% endif %}
 												</form>
 											</center>
