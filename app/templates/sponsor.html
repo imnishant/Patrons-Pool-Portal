@@ -225,21 +225,21 @@
 	</div><!-- topbar -->
 	<section>
 		<div class="gap gray-bg">
+			{% if msg %}
 			<div class="container">
 				<div class="row">
 					<div class="col-md-2"></div>
 					<div class="col-md-8">
-					{% if msg %}
 					<div class="alert alert-warning alert-dismissible fade show" role="alert">
 						<h5>{{msg}}</h5>
 						<button type="button" class="close" data-dismiss="alert" aria-label="Close">
 						<span aria-hidden="true">&times;</span>
 					  	</button>
 					</div>
-					{% endif %}
 					</div>
 				</div>
 			</div>
+			{% endif %}
 			<div class="container-fluid">
 				<div class="row">
 					<div class="col-lg-12">
@@ -262,22 +262,6 @@
 												<a href="/followers" title="">Followers</a>
 											</li>
 											<li>
-												<i class="ti-image"></i>
-												<a href="/images" title="">Images</a>
-											</li>
-											<li>
-												<i class="ti-video-camera"></i>
-												<a href="/videos" title="">Videos</a>
-											</li>
-											<li>
-												<i class="ti-volume"></i>
-												<a href="/audios" title="">Audios</a>
-											</li>
-											<li>
-												<i class="ti-files"></i>
-												<a href="/documents" title="">Documents</a>
-											</li>
-											<li>
 												<i class="ti-comments-smiley"></i>
 												<a href="/messages" title="">Messages</a>
 											</li>
@@ -296,49 +280,6 @@
 							</div><!-- sidebar -->
 							<div class="col-lg-6">
 								<div class="central-meta">
-									<div class="new-postbox">
-										<figure>
-											<img src="../static/images/resources/admin2.jpg" alt="">
-										</figure>
-										<div class="newpst-input">
-											<form action="/addpost" method="post" enctype="multipart/form-data">
-												<textarea rows="3" name="headline" placeholder="write something"></textarea>
-												<div class="attachments">
-													<ul>
-														<li>
-															<i class="fa fa-music"></i>
-															<label class="fileContainer">
-																<input type="file" name="audio" accept="audio/*">
-															</label>
-														</li>
-														<li>
-															<i class="fa fa-image"></i>
-															<label class="fileContainer">
-																<input type="file" name="image" accept="image/*">
-															</label>
-														</li>
-														<li>
-															<i class="fa fa-video-camera"></i>
-															<label class="fileContainer">
-																<input type="file" name="video" accept="video/*">
-															</label>
-														</li>
-														<li>
-															<i class="fa fa-file"></i>
-															<label class="fileContainer">
-																<input type="file" name="document" accept=".pdf">
-															</label>
-														</li>
-														<li>
-															<button type="submit" name="submit">Post</button>
-														</li>
-													</ul>
-												</div>
-
-											</form>
-										</div>
-									</div>
-								</div>
 
 								{% for post in posts[::-1] %}
 								<!-- add post new box -->
@@ -427,12 +368,21 @@
 
 									</div>
 								</div>
-
 								{% endfor %}
-
-
-					</div>
+								</div>
 				</div>
+								<div class="col-lg-3">
+									<aside class="sidebar static">
+									<div class="widget">
+										<h4 class="widget-title">
+											Bid Notifications
+										</h4>
+										<ul class="naves">
+											<li>Add Here @Sanakalp</li>
+										</ul>
+									</div>
+									</aside>
+								</div>
 			</div>
 		</div>
 	</section>
