@@ -119,7 +119,7 @@ def add_post():
             posts = get_posts(session['username'])
             # searches for dockerfile in the extracted folder
             # call this function after the user presses on the submit button or so
-            mail_sponsers_when_a_post_is_added()
+            #mail_sponsers_when_a_post_is_added()
             
         else:
             return render_template("home.html", posts = posts, profile=res, msg='Allowed file types are mp4, mp3, png, jpg, jpeg, gif')

@@ -17,10 +17,13 @@ def signup_util(obj):
     user_info = {}
     user_info['email'] = request.form['email']
     user_info['password'] = request.form['password1']
+    user_info['wallet_address'] = request.form['wallet_address']
     if (request.form['isSponsor'] == 'sponsor'):
         user_info['isSponsor'] = 1
     else:
         user_info['isSponsor'] = 0
+
+    user_info['transaction'] = []
 
     user_info['profile'] = {}
     user_info['profile']['fname'] = request.form['fname']
