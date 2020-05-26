@@ -12,20 +12,6 @@
     <link rel="stylesheet" href="../static/css/style.css">
     <link rel="stylesheet" href="../static/css/color.css">
     <link rel="stylesheet" href="../static/css/responsive.css">
-	<style>
-		.button-red-pay {
-		  background-color: #f44336; /* Green */
-		  border: none;
-		  color: white;
-		  padding: 15px 32px;
-		  text-align: center;
-		  text-decoration: none;
-		  display: inline-block;
-		  font-size: 16px;
-		  margin: 4px 2px;
-		  cursor: pointer;
-		}
-	</style>
 </head>
 <body>
 <!--<div class="se-pre-con"></div>-->
@@ -288,7 +274,7 @@
 									<div class="user-post">
 										<div class="friend-info">
 											<figure>
-												<img src="../static/images/resources/friend-avatar10.jpg" alt="">
+												<img src="" alt="">
 											</figure>
 											<div class="friend-name">
 												<ins><a href="time-line.html" title="">{{ post['name'] }}</a></ins>
@@ -327,35 +313,46 @@
 													<input type="text" name="bidding_person" value="{{ session.username }}" hidden>
 													<input type="text" name="base_price" value="{{ post.base_price }}" hidden>
 
-													{% if post.bidding_status == 'open' %}
-														<h5>Base Price: {{post.base_price}}</h5>
+
+													<div class="row" style="padding:15px;">
+														<div class="col-md-6">Base Price: {{post.base_price}}</div>
+													{% if post.bid_price|length %}
+														<div class="col-md-6">Max. Bid Price: {{post.bid_price|last}} </div>
+													</div>
 														<table class="table table-striped">
-															  <thead>
-																<tr>
-																  <th scope="col">Bid Price</th>
-																  <th scope="col">Bid Person</th>
-																</tr>
-															  </thead>
-															  <tbody>
-															      {% for i in post.bid_price %}
-																  {% set price = post.bid_price[loop.index-1] %}
-																  {% set name = post.bidding_person[loop.index-1] %}
-																  		<tr>
-																			<td>{{price}}</td>
-													    					<td>{{name}}</td>
-																		</tr>
-															      {% endfor %}
-															  </tbody>
-														</table>
+														  <thead>
+															<tr>
+															  <th scope="col">Bid Price</th>
+															  <th scope="col">Bid Person</th>
+															</tr>
+														  </thead>
+														  <tbody>
+															  {% for i in post.bid_price %}
+															  {% set price = post.bid_price[loop.index-1] %}
+															  {% set name = post.bidding_person[loop.index-1] %}
+																	<tr>
+																		<td>{{price}}</td>
+																		<td>{{name}}</td>
+																	</tr>
+															  {% endfor %}
+														  </tbody>
+													</table>
+													{% else %}
+																<div class="col-md-6">Max. Bid Price: --- </div>
+															</div>
+														<center class="alert alert-danger" role="alert">
+															<center>No Bids PLaced Yet!!</center>
+														</div>
+													{% endif %}
 
-
-														<h5>Your Bid Price: </h5> <input type="text" name="bid_price">
-														<button type="submit">Place Bid</button>
+													{% if post.bidding_status == 'open' %}
+														<h5>Your Bid Price:  <input type="text" name="bid_price">
+														<button type="submit" class="btn btn-primary">Place Bid</button></h5>
 													{% endif %}
 
 													{% if post.bidding_status == 'closed' and post.bidding_person[-1] == session.username %}
-														<h5>You Won the Bid at Price:  {{post.bid_price[-1]}}</h5>
-														<button type="submit" class="button-red-pay">Pay</button>
+														<h5>You Won the Bid at Price:  {{post.bid_price[-1]}}
+														<button type="submit" class="btn btn-danger">Pay</button></h5>
 													{% endif %}
 
 													{% if post.bidding_status == 'closed' and post.bidding_person[-1] != session.username%}
@@ -363,29 +360,30 @@
 													{% endif %}
 												</form>
 											</center>
-
 										</div>
-
 									</div>
 								</div>
 								{% endfor %}
 								</div>
-				</div>
-								<div class="col-lg-3">
-									<aside class="sidebar static">
-									<div class="widget">
-										<h4 class="widget-title">
-											Bid Notifications
-										</h4>
-										<ul class="naves">
-											<li>Add Here @Sanakalp</li>
-										</ul>
-									</div>
-									</aside>
+							</div>
+						<div class="col-lg-3">
+								<aside class="sidebar static">
+								<div class="widget">
+									<h4 class="widget-title">
+										Bid Notifications
+									</h4>
+									<ul class="naves">
+										<li>Add Here @Sanakalp</li>
+									</ul>
 								</div>
+								</aside>
+							</div>
+						</div>
+
+					</div>
+				</div>
 			</div>
-		</div>
-	</section>
+		</section>
 
 	<footer>
 		<div class="container">
@@ -415,7 +413,7 @@
 						<div class="widget-title"><h4>NISHANT SHARMA</h4></div>
 						B.E(CSE, RNSIT), Bangalore<br>
 						Software Developer <br><br>
-						Oracle Certified Java Professional, Will be Working for Cimpress as Software Developer from Aug 2020.
+						Oracle Certified Java Associate, Will be Working for Cimpress as Software Developer from Aug 2020.
 					</div>
 				</div>
 				<div class="col-lg-3 col-md-3">
