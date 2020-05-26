@@ -265,11 +265,17 @@ def delete_post():
 @app.route('/update_bid', methods=["POST"])
 def update_bid():
     if request.method == 'POST':
-        query = {"email": request.form['email'], "posts.post_headline": request.form['post_headline']}
+        query = {"email": request.form['email']}
         result = db['user'].find_one(query)
+        res = ""
+        for post in result["posts"]:
+            if post['post_headline'] ==  request.form['post_headline']:
+                res = post
+
+        a = res['post_name']
         cur_count = result['bid']['count']
 
-        
+
         if bool(result):
             res = db['user'].update_one(
                 query,
