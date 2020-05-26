@@ -352,8 +352,8 @@ def update_bid():
                 target_post['first_bidding_time'] = post['first_bidding_time']
                 target_post['bidding_status'] = post['bidding_status']
                 target_post['bidding_person'] = post['bidding_person']
-                #target_post['bid_price'] = post['bid_price']
-                #target_post['bid_price'] = post['bid_price']
+                # target_post['bid_price'] = post['bid_price']
+                # target_post['bid_price'] = post['bid_price']
                 break
 
         if bool(target_post):
@@ -371,24 +371,27 @@ def update_bid():
             bidding_person.append(request.form['bidding_person'])
 
             if earlier_bid_price == "N/A" and new_sponser_bid_price > base_price:
-            # retrieve the bid price for the post and check if the bid price equals N/A then set the bid_price then perform the below step
+                # retrieve the bid price for the post and check if the bid price equals N/A then set the bid_price then perform the below step
                 bid_price.append(int(new_sponser_bid_price))
                 db['user'].update_one(update_query, {"$set": {"posts.$.bid_price": bid_price, "posts.$.bidding_person": bidding_person, "posts.$.first_bidding_time": int(datetime.datetime.now().timestamp())}})
 
             elif new_sponser_bid_price > earlier_bid_price and current_bid_time - first_bidding_time < window_in_seconds:
-            # else check if the bid price is > previous bid price and also the time when performing this step falls under the window time
+                # else check if the bid price is > previous bid price and also the time when performing this step falls under the window time
                 bid_price.append(int(new_sponser_bid_price))
                 db['user'].update_one(update_query, {"$set": {"posts.$.bid_price": bid_price, "posts.$.bidding_person": bidding_person}})
-                email_bid_status_to_other_sponsers(request.form['email'], request.form['post_headline'])
+
+                #Uncomment it to resume message functionality
+                #email_bid_status_to_other_sponsers(request.form['email'], request.form['post_headline'])
 
             elif new_sponser_bid_price <= earlier_bid_price:
                 posts = get_sponser_timeline()
-                return render_template("sponsor.html", posts=posts, msg='Please enter amount greater than the current bid amount!')
+                return render_template("sponsor.html", posts=posts,msg='Please enter amount greater than the current bid amount!')
 
             else:
-            # display time window is over you cannot bid anymore
+                # display time window is over you cannot bid anymore
                 posts = get_sponser_timeline()
-                return render_template("sponsor.html", posts = posts, msg='You cannot bid anymore because Bidding Time is Over')
+                return render_template("sponsor.html", posts=posts,
+                                       msg='You cannot bid anymore because Bidding Time is Over')
 
             posts = get_sponser_timeline()
             return render_template("sponsor.html", posts=posts, msg='Your Bid Placed Successfully Bro! ATB! :)')
