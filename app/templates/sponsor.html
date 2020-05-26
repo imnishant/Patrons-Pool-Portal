@@ -7,13 +7,11 @@
     <meta name="description" content="" />
     <meta name="keywords" content="" />
 	<title>Home</title>
-    <link rel="icon" href="../static/fav.png" type="image/png" sizes="16x16">
 
     <link rel="stylesheet" href="../static/css/main.min.css">
     <link rel="stylesheet" href="../static/css/style.css">
     <link rel="stylesheet" href="../static/css/color.css">
     <link rel="stylesheet" href="../static/css/responsive.css">
-
 </head>
 <body>
 <!--<div class="se-pre-con"></div>-->
@@ -41,7 +39,7 @@
 
 	<div class="topbar stick">
 		<div class="logo">
-			<a title="" href="newsfeed.html"><img src="../static/images/logo.png" alt=""></a>
+			<a title="" href="newsfeed.html"><img src="../static/images/Icon.jpeg" alt=""></a>
 		</div>
 
 		<div class="top-area">
@@ -211,9 +209,23 @@
 			</div>
 		</div>
 	</div><!-- topbar -->
-		<h2>{{msg}}</h2>
 	<section>
 		<div class="gap gray-bg">
+			{% if msg %}
+			<div class="container">
+				<div class="row">
+					<div class="col-md-2"></div>
+					<div class="col-md-8">
+					<div class="alert alert-warning alert-dismissible fade show" role="alert">
+						<h5>{{msg}}</h5>
+						<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					  	</button>
+					</div>
+					</div>
+				</div>
+			</div>
+			{% endif %}
 			<div class="container-fluid">
 				<div class="row">
 					<div class="col-lg-12">
@@ -236,14 +248,6 @@
 												<a href="/followers" title="">Followers</a>
 											</li>
 											<li>
-												<i class="ti-image"></i>
-												<a href="/images" title="">Images</a>
-											</li>
-											<li>
-												<i class="ti-video-camera"></i>
-												<a href="/videos" title="">Videos</a>
-											</li>
-											<li>
 												<i class="ti-comments-smiley"></i>
 												<a href="/messages" title="">Messages</a>
 											</li>
@@ -262,49 +266,6 @@
 							</div><!-- sidebar -->
 							<div class="col-lg-6">
 								<div class="central-meta">
-									<div class="new-postbox">
-										<figure>
-											<img src="../static/images/resources/admin2.jpg" alt="">
-										</figure>
-										<div class="newpst-input">
-											<form action="/addpost" method="post" enctype="multipart/form-data">
-												<textarea rows="3" name="headline" placeholder="write something"></textarea>
-												<div class="attachments">
-													<ul>
-														<li>
-															<i class="fa fa-music"></i>
-															<label class="fileContainer">
-																<input type="file" name="audio">
-															</label>
-														</li>
-														<li>
-															<i class="fa fa-image"></i>
-															<label class="fileContainer">
-																<input type="file" name="image">
-															</label>
-														</li>
-														<li>
-															<i class="fa fa-video-camera"></i>
-															<label class="fileContainer">
-																<input type="file" name="video">
-															</label>
-														</li>
-														<li>
-															<i class="fa fa-file"></i>
-															<label class="fileContainer">
-																<input type="file" name="document">
-															</label>
-														</li>
-														<li>
-															<button type="submit" name="submit">Post</button>
-														</li>
-													</ul>
-												</div>
-
-											</form>
-										</div>
-									</div>
-								</div>
 
 								{% for post in posts[::-1] %}
 								<!-- add post new box -->
@@ -313,75 +274,13 @@
 									<div class="user-post">
 										<div class="friend-info">
 											<figure>
-												<img src="../static/images/resources/friend-avatar10.jpg" alt="">
+												<img src="" alt="">
 											</figure>
 											<div class="friend-name">
 												<ins><a href="time-line.html" title="">{{ post['name'] }}</a></ins>
 												<span> Published on: {{ post['date_time_added'] }}</span>
 											</div>
 											<div class="post-meta">
-												<img src="../BLOB/s@s.com/posts/images/blinding-lights.jpg" alt="">
-												<div class="we-video-info">
-													<ul>
-														<li>
-															<span class="views" data-toggle="tooltip" title="views">
-																<i class="fa fa-eye"></i>
-																<ins>1.2k</ins>
-															</span>
-														</li>
-														<li>
-															<span class="comment" data-toggle="tooltip" title="Comments">
-																<i class="fa fa-comments-o"></i>
-																<ins>52</ins>
-															</span>
-														</li>
-														<li>
-															<span class="like" data-toggle="tooltip" title="like">
-																<i class="ti-heart"></i>
-																<ins>2.2k</ins>
-															</span>
-														</li>
-														<li>
-															<span class="dislike" data-toggle="tooltip" title="dislike">
-																<i class="ti-heart-broken"></i>
-																<ins>200</ins>
-															</span>
-														</li>
-														<li class="social-media">
-															<div class="menu">
-															  <div class="btn trigger"><i class="fa fa-share-alt"></i></div>
-															  <div class="rotater">
-																<div class="btn btn-icon"><a href="#" title=""><i class="fa fa-html5"></i></a></div>
-															  </div>
-															  <div class="rotater">
-																<div class="btn btn-icon"><a href="#" title=""><i class="fa fa-facebook"></i></a></div>
-															  </div>
-															  <div class="rotater">
-																<div class="btn btn-icon"><a href="#" title=""><i class="fa fa-google-plus"></i></a></div>
-															  </div>
-															  <div class="rotater">
-																<div class="btn btn-icon"><a href="#" title=""><i class="fa fa-twitter"></i></a></div>
-															  </div>
-															  <div class="rotater">
-																<div class="btn btn-icon"><a href="#" title=""><i class="fa fa-css3"></i></a></div>
-															  </div>
-															  <div class="rotater">
-																<div class="btn btn-icon"><a href="#" title=""><i class="fa fa-instagram"></i></a>
-																</div>
-															  </div>
-																<div class="rotater">
-																<div class="btn btn-icon"><a href="#" title=""><i class="fa fa-dribbble"></i></a>
-																</div>
-															  </div>
-															  <div class="rotater">
-																<div class="btn btn-icon"><a href="#" title=""><i class="fa fa-pinterest"></i></a>
-																</div>
-															  </div>
-
-															</div>
-														</li>
-													</ul>
-												</div>
 												<div class="description">
 
 													<p> {{ post.post_headline }} </p>
@@ -405,98 +304,133 @@
 												{% if post.post_type == 'document' %}
 													<object data="static/BLOB/{{post['username']}}/posts/{{post.post_type + 's'}}/{{post.post_name}}" height="auto" width="100%"></object>
 												{% endif %}
-												<br>
-												<h5>Base Price: {{post.base_price}}</h5>
-												<h5>Current Bid Price: {{post.bid_price}}</h5>
-												<br>
 											</div>
 											<br>
 											<center>
-												<form action="update_bid" method="POST">
+												<form name="bidding_form" method="POST" action="update_bid">
 													<input type="text" name="email" value="{{ post.username }}" hidden>
 													<input type="text" name="post_headline" value="{{ post.post_headline }}" hidden>
 													<input type="text" name="bidding_person" value="{{ session.username }}" hidden>
-													Your Bid Price:  <input type="text" name="bid_price">
-													<button type="submit">Place Bid</button>
+													<input type="text" name="base_price" value="{{ post.base_price }}" hidden>
+
+
+													<div class="row" style="padding:15px;">
+														<div class="col-md-6">Base Price: {{post.base_price}}</div>
+													{% if post.bid_price|length %}
+														<div class="col-md-6">Max. Bid Price: {{post.bid_price|last}} </div>
+													</div>
+														<table class="table table-striped">
+														  <thead>
+															<tr>
+															  <th scope="col">Bid Price</th>
+															  <th scope="col">Bid Person</th>
+															</tr>
+														  </thead>
+														  <tbody>
+															  {% for i in post.bid_price %}
+															  {% set price = post.bid_price[loop.index-1] %}
+															  {% set name = post.bidding_person[loop.index-1] %}
+																	<tr>
+																		<td>{{price}}</td>
+																		<td>{{name}}</td>
+																	</tr>
+															  {% endfor %}
+														  </tbody>
+													</table>
+													{% else %}
+																<div class="col-md-6">Max. Bid Price: --- </div>
+															</div>
+														<center class="alert alert-danger" role="alert">
+															<center>No Bids PLaced Yet!!</center>
+														</div>
+													{% endif %}
+
+													{% if post.bidding_status == 'open' %}
+														<h5>Your Bid Price:  <input type="text" name="bid_price">
+														<button type="submit" class="btn btn-primary">Place Bid</button></h5>
+													{% endif %}
+
+													{% if post.bidding_status == 'closed' and post.bidding_person[-1] == session.username %}
+														<h5>You Won the Bid at Price:  {{post.bid_price[-1]}}
+														<button type="submit" class="btn btn-danger">Pay</button></h5>
+													{% endif %}
+
+													{% if post.bidding_status == 'closed' and post.bidding_person[-1] != session.username%}
+														<h5>Sponser {{ post.bidding_persontat[-1] }} won the Bid at price {{ post.bid_price[-1] }}</h5>
+													{% endif %}
 												</form>
 											</center>
-
 										</div>
-
 									</div>
 								</div>
-
 								{% endfor %}
-
+								</div>
+							</div>
+						<div class="col-lg-3">
+								<aside class="sidebar static">
+								<div class="widget">
+									<h4 class="widget-title">
+										Bid Notifications
+									</h4>
+									<ul class="naves">
+										<li>Add Here @Sanakalp</li>
+									</ul>
+								</div>
+								</aside>
+							</div>
+						</div>
 
 					</div>
 				</div>
 			</div>
-		</div>
-	</section>
+		</section>
 
 	<footer>
 		<div class="container">
 			<div class="row">
-				<div class="col-lg-4 col-md-4">
+				<div class="col-lg-3 col-md-3">
 					<div class="widget">
 						<div class="foot-logo">
 							<div class="logo">
-								<a href="index-2.html" title=""><img src="../static/images/logo.png" alt=""></a>
+								<img src="../static/images/Icon.jpeg" alt="">
 							</div>
 							<p>
-								The trio took this simple idea and built it into the world’s leading carpooling platform.
+							Patrons Pool Portal is a platform where an Idea is shared with Sponsors, to recieve Funds in a hassle free manner.
 							</p>
 						</div>
-						<ul class="location">
-							<li>
-								<i class="ti-map-alt"></i>
-								<p>33 new montgomery st.750 san francisco, CA USA 94105.</p>
-							</li>
-							<li>
-								<i class="ti-mobile"></i>
-								<p>+1-56-346 345</p>
-							</li>
-						</ul>
 					</div>
 				</div>
-				<div class="col-lg-2 col-md-4">
+				<div class="col-lg-3 col-md-3">
 					<div class="widget">
-						<div class="widget-title"><h4>follow</h4></div>
-						<ul class="list-style">
-							<li><i class="fa fa-facebook-square"></i> <a href="https://web.facebook.com/shopcircut/" title="">facebook</a></li>
-							<li><i class="fa fa-twitter-square"></i><a href="https://twitter.com/login?lang=en" title="">twitter</a></li>
-							<li><i class="fa fa-instagram"></i><a href="https://www.instagram.com/?hl=en" title="">instagram</a></li>
-							<li><i class="fa fa-google-plus-square"></i> <a href="https://plus.google.com/discover" title="">Google+</a></li>
-							<li><i class="fa fa-pinterest-square"></i> <a href="https://www.pinterest.com/" title="">Pintrest</a></li>
-						</ul>
+						<div class="widget-title"><h4>B MANISH</h4></div>
+							B.E(CSE, RNSIT), Bangalore<br>
+                        	Full Stack Developer <br><br>
+						    AWS Certified Cloud Support Associate, Working for Amazon Web Services as Cloud Support Intern since Feb 2020.
 					</div>
 				</div>
-				<div class="col-lg-2 col-md-4">
+				<div class="col-lg-3 col-md-3">
 					<div class="widget">
-						<div class="widget-title"><h4>Navigate</h4></div>
-						<ul class="list-style">
-							<li><a href="about.html" title="">about us</a></li>
-							<li><a href="contact.html" title="">contact us</a></li>
-							<li><a href="terms.html" title="">terms & Conditions</a></li>
-						</ul>
+						<div class="widget-title"><h4>NISHANT SHARMA</h4></div>
+						B.E(CSE, RNSIT), Bangalore<br>
+						Software Developer <br><br>
+						Oracle Certified Java Associate, Will be Working for Cimpress as Software Developer from Aug 2020.
 					</div>
 				</div>
-				<div class="col-lg-2 col-md-4">
+				<div class="col-lg-3 col-md-3">
 					<div class="widget">
-						<div class="widget-title"><h4>download apps</h4></div>
-						<ul class="colla-apps">
-							<li><a href="https://play.google.com/store?hl=en" title=""><i class="fa fa-android"></i>android</a></li>
-							<li><a href="https://www.apple.com/lae/ios/app-store/" title=""><i class="ti-apple"></i>iPhone</a></li>
-							<li><a href="https://www.microsoft.com/store/apps" title=""><i class="fa fa-windows"></i>Windows</a></li>
-						</ul>
+						<div class="widget-title"><h4>SANKALP SAXENA</h4></div>
+						B.E(CSE, RNSIT), Bangalore<br>
+						Software Developer <br><br>
+						Oracle Certified Java Professional, Working for HashedIn as Software Developer since Jan 2020.
 					</div>
 				</div>
 			</div>
 		</div>
 	</footer><!-- footer -->
 </div>
-
+	<script type="text/javascript">
+		document.getElementsByClassName('alert').alert();
+	</script>
 	<script data-cfasync="false" src="../../cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="js/main.min.js"></script>
 	<script src="../static/js/script.js"></script>
 	<script src="../static/js/map-init.js"></script>

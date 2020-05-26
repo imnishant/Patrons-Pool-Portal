@@ -7,18 +7,21 @@
 		<div class="row">
 			{% for file in files %}
 			<div class="col-md-6">
-				<video controls height="180" width="100%">
-					<source  src="static/BLOB/{{email}}/posts/videos/{{file}}">
-				</video>
+				<audio controls>
+					<source src="static/BLOB/{{email}}/posts/audios/{{file}}">
+				</audio>
+			</div>
+			<div class="col-md-6">
+				<div style="padding-top:15px;">{{file}}</div>
 			</div>
 			{% endfor %}
 		</div>
 		{% else %}
 			<div class="alert alert-danger" role="alert">
-				<center>No Videos Uploaded Yet!!</center>
+				<center>No Audios Uploaded Yet!!</center>
 			</div>
 		{% endif%}
-		</div>
+	</div>
 
 
 {% endblock %}

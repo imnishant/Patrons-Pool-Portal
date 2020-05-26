@@ -6,8 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="" />
     <meta name="keywords" content="" />
-	<title>Edit Profile</title>
-    
+	<title>{{title}}</title>
+
     <link rel="stylesheet" href="../static/css/main.min.css">
     <link rel="stylesheet" href="../static/css/style.css">
     <link rel="stylesheet" href="../static/css/color.css">
@@ -17,13 +17,13 @@
 <body>
 <!--<div class="se-pre-con"></div>-->
 <div class="theme-layout">
-	
-	
+
+
 	<div class="topbar stick">
 		<div class="logo">
-			<img src="../static/images/Icon.jpeg" alt="">
+			<a title="" href="newsfeed.html"><img src="../static/images/Icon.jpeg" alt=""></a>
 		</div>
-		
+
 		<div class="top-area">
 			<ul class="setting-area">
 				<li>
@@ -191,7 +191,7 @@
 			</div>
 		</div>
 	</div><!-- topbar -->
-	
+
 	<section>
 		<div class="feature-photo">
 			<figure><img src="static/BLOB/{{profile['email']}}/images/{{profile['cover']}}" style="height:400px;"></figure>
@@ -217,7 +217,6 @@
 			</div>
 		</div>
 	</section><!-- top area -->
-	
 
 	<section>
 		<div class="gap gray-bg">
@@ -228,62 +227,50 @@
 							<div class="col-lg-3">
 								<aside class="sidebar static">
 									<div class="widget">
-										<h4 class="widget-title">Edit info</h4>
+										<h4 class="widget-title">Shortcuts</h4>
 										<ul class="naves">
 											<li>
-												<i class="ti-info-alt"></i>
-												<a title="" href="/edit_basic">Basic info</a>
+												<i class="ti-clipboard"></i>
+												<a href="/profile" title="">Profile</a>
 											</li>
 											<li>
 												<i class="ti-mouse-alt"></i>
-												<a title="" href="/edit_work">Education &amp; Work</a>
+												<a href="/inbox" title="">Inbox</a>
 											</li>
 											<li>
-												<i class="ti-heart"></i>
-												<a title="" href="/edit_interest">My interests</a>
+												<i class="ti-user"></i>
+												<a href="/followers" title="">Followers</a>
 											</li>
 											<li>
-												<i class="ti-world"></i>
-												<a title="" href="/edit_language">Languages</a>
+												<i class="ti-image"></i>
+												<a href="/images" title="">Images</a>
 											</li>
 											<li>
-												<i class="ti-lock"></i>
-												<a title="" href="/edit_password">change password</a>
+												<i class="ti-video-camera"></i>
+												<a href="/videos" title="">Videos</a>
+											</li>
+											<li>
+												<i class="ti-volume"></i>
+												<a href="/audios" title="">Audios</a>
+											</li>
+											<li>
+												<i class="ti-files"></i>
+												<a href="/documents" title="">Documents</a>
+											</li>
+											<li>
+												<i class="ti-comments-smiley"></i>
+												<a href="/messages" title="">Messages</a>
+											</li>
+											<li>
+												<i class="ti-bell"></i>
+												<a href="/notifications" title="">Notifications</a>
+											</li>
+											<li>
+												<i class="ti-power-off"></i>
+												<a href="/logout" title="">Logout</a>
 											</li>
 										</ul>
-									</div><!-- settings widget -->
-									<div class="widget">
-										<h4 class="widget-title">Recent Activity</h4>
-										<ul class="activitiez">
-											<li>
-												<div class="activity-meta">
-													<i>10 hours Ago</i>
-													<span><a title="" href="#">Commented on Video posted </a></span>
-													<h6>by <a href="time-line.html">black demon.</a></h6>
-												</div>
-											</li>
-											<li>
-												<div class="activity-meta">
-													<i>30 Days Ago</i>
-													<span><a title="" href="#">Posted your status. “Hello guys, how are you?”</a></span>
-												</div>
-											</li>
-											<li>
-												<div class="activity-meta">
-													<i>2 Years Ago</i>
-													<span><a title="" href="#">Share a video on her timeline.</a></span>
-													<h6>"<a href="#">you are so funny mr.been.</a>"</h6>
-												</div>
-											</li>
-										</ul>
-									</div>									
-								</aside>
-							</div><!-- sidebar -->
-                            
-                            {% block content %}{% endblock %}
-                            
-							<div class="col-lg-3">
-								<aside class="sidebar static">
+									</div><!-- Shortcuts -->
 									<div class="widget">
 										<h4 class="widget-title">Profile Intro</h4>
 										<ul class="short-profile">
@@ -300,7 +287,6 @@
 												</ul>
 											</li>
 											<li>
-												
 												<span>Languages</span>
 												<ul class="list">
 												{% for res in profile['language'] %}
@@ -309,86 +295,115 @@
 												</ul>
 											</li>
 										</ul>
-									</div>		
-									<div class="widget stick-widget">
-										<h4 class="widget-title">Who's follownig</h4>
-										<ul class="followers">
-											<li>
-												<figure><img src="images/resources/friend-avatar2.jpg" alt=""></figure>
-												<div class="friend-meta">
-													<h4><a href="time-line.html" title="">Kelly Bill</a></h4>
-													<a href="#" title="" class="underline">Add Friend</a>
-												</div>
-											</li>
-											<li>
-												<figure><img src="images/resources/friend-avatar4.jpg" alt=""></figure>
-												<div class="friend-meta">
-													<h4><a href="time-line.html" title="">Issabel</a></h4>
-													<a href="#" title="" class="underline">Add Friend</a>
-												</div>
-											</li>
-											<li>
-												<figure><img src="images/resources/friend-avatar6.jpg" alt=""></figure>
-												<div class="friend-meta">
-													<h4><a href="time-line.html" title="">Andrew</a></h4>
-													<a href="#" title="" class="underline">Add Friend</a>
-												</div>
-											</li>
-											<li>
-												<figure><img src="images/resources/friend-avatar8.jpg" alt=""></figure>
-												<div class="friend-meta">
-													<h4><a href="time-line.html" title="">Sophia</a></h4>
-													<a href="#" title="" class="underline">Add Friend</a>
-												</div>
-											</li>
-										</ul>
-									</div><!-- who's following -->
+									</div>
+									</aside>
+								</div><!-- sidebar -->
+
+
+	{% block content %}{% endblock %}
+
+	</div><!-- centerl meta -->
+							<div class="col-lg-3">
+								<aside class="sidebar static">
+
+								<div class="widget stick-widget">
+									<h4 class="widget-title">Who's follownig</h4>
+									<ul class="followers">
+										<li>
+											<figure><img src="images/resources/friend-avatar2.jpg" alt=""></figure>
+											<div class="friend-meta">
+												<h4><a href="../static/time-line.html" title="">Kelly Bill</a></h4>
+												<a href="#" title="" class="underline">Add Friend</a>
+											</div>
+										</li>
+										<li>
+											<figure><img src="images/resources/friend-avatar4.jpg" alt=""></figure>
+											<div class="friend-meta">
+												<h4><a href="time-line.html" title="">Issabel</a></h4>
+												<a href="#" title="" class="underline">Add Friend</a>
+											</div>
+										</li>
+										<li>
+											<figure><img src="images/resources/friend-avatar6.jpg" alt=""></figure>
+											<div class="friend-meta">
+												<h4><a href="time-line.html" title="">Andrew</a></h4>
+												<a href="#" title="" class="underline">Add Friend</a>
+											</div>
+										</li>
+										<li>
+											<figure><img src="images/resources/friend-avatar8.jpg" alt=""></figure>
+											<div class="friend-meta">
+												<h4><a href="time-line.html" title="">Sophia</a></h4>
+												<a href="#" title="" class="underline">Add Friend</a>
+											</div>
+										</li>
+									</ul>
+								</div><!-- who's following -->
 								</aside>
 							</div><!-- sidebar -->
-						</div>	
+						</div>
 					</div>
 				</div>
 			</div>
-		</div>	
+		</div>
 	</section>
+
 
 	<footer>
 		<div class="container">
 			<div class="row">
-				<div class="col-lg-3 col-md-3">
+				<div class="col-lg-4 col-md-4">
 					<div class="widget">
 						<div class="foot-logo">
 							<div class="logo">
-								<img src="../static/images/Icon.jpeg" alt="">
+								<a href="index-2.html" title=""><img src="images/logo.png" alt=""></a>
 							</div>
 							<p>
-							Patrons Pool Portal is a platform where an Idea is shared with Sponsors, to recieve Funds in a hassle free manner.
+								The trio took this simple idea and built it into the world’s leading carpooling platform.
 							</p>
 						</div>
+						<ul class="location">
+							<li>
+								<i class="ti-map-alt"></i>
+								<p>33 new montgomery st.750 san francisco, CA USA 94105.</p>
+							</li>
+							<li>
+								<i class="ti-mobile"></i>
+								<p>+1-56-346 345</p>
+							</li>
+						</ul>
 					</div>
 				</div>
-				<div class="col-lg-3 col-md-3">
+				<div class="col-lg-2 col-md-4">
 					<div class="widget">
-						<div class="widget-title"><h4>B MANISH</h4></div>
-							B.E(CSE, RNSIT), Bangalore<br>
-                        	Full Stack Developer <br><br>
-						    AWS Certified Cloud Support Associate, Working for Amazon Web Services as Cloud Support Intern since Feb 2020.
+						<div class="widget-title"><h4>follow</h4></div>
+						<ul class="list-style">
+							<li><i class="fa fa-facebook-square"></i> <a href="https://web.facebook.com/shopcircut/" title="">facebook</a></li>
+							<li><i class="fa fa-twitter-square"></i><a href="https://twitter.com/login?lang=en" title="">twitter</a></li>
+							<li><i class="fa fa-instagram"></i><a href="https://www.instagram.com/?hl=en" title="">instagram</a></li>
+							<li><i class="fa fa-google-plus-square"></i> <a href="https://plus.google.com/discover" title="">Google+</a></li>
+							<li><i class="fa fa-pinterest-square"></i> <a href="https://www.pinterest.com/" title="">Pintrest</a></li>
+						</ul>
 					</div>
 				</div>
-				<div class="col-lg-3 col-md-3">
+				<div class="col-lg-2 col-md-4">
 					<div class="widget">
-						<div class="widget-title"><h4>NISHANT SHARMA</h4></div>
-						B.E(CSE, RNSIT), Bangalore<br>
-						Software Developer <br><br>
-						Oracle Certified Java Associate, Will be Working for Cimpress as Software Developer from Aug 2020.
+						<div class="widget-title"><h4>Navigate</h4></div>
+						<ul class="list-style">
+							<li><a href="about.html" title="">about us</a></li>
+							<li><a href="contact.html" title="">contact us</a></li>
+							<li><a href="terms.html" title="">terms & Conditions</a></li>
+						</ul>
 					</div>
 				</div>
-				<div class="col-lg-3 col-md-3">
+				<div class="col-lg-2 col-md-4">
 					<div class="widget">
-						<div class="widget-title"><h4>SANKALP SAXENA</h4></div>
-						B.E(CSE, RNSIT), Bangalore<br>
-						Software Developer <br><br>
-						Oracle Certified Java Professional, Working for HashedIn as Software Developer since Jan 2020.
+						<div class="widget-title"><h4>download apps</h4></div>
+						<ul class="colla-apps">
+							<li><a href="https://play.google.com/store?hl=en" title=""><i class="fa fa-android"></i>android</a></li>
+							<li><a href="https://www.apple.com/lae/ios/app-store/" title=""><i class="ti-apple"></i>iPhone</a></li>
+							<li><a href="https://www.microsoft.com/store/apps" title=""><i class="fa fa-windows"></i>Windows</a></li>
+						</ul>
 					</div>
 				</div>
 			</div>
@@ -401,6 +416,6 @@
 	<script src="../static/js/map-init.js"></script>
 	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA8c55_YHLvDHGACkQscgbGLtLRdxBDCfI"></script>
 
-</body>	
+</body>
 
 </html>

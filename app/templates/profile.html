@@ -7,8 +7,7 @@
     <meta name="description" content="" />
     <meta name="keywords" content="" />
 	<title>Profile</title>
-    <link rel="icon" href="../static/images/fav.png" type="image/png" sizes="16x16"> 
-    
+
     <link rel="stylesheet" href="../static/css/main.min.css">
     <link rel="stylesheet" href="../static/css/style.css">
     <link rel="stylesheet" href="../static/css/color.css">
@@ -22,7 +21,7 @@
 	
 	<div class="topbar stick">
 		<div class="logo">
-			<a title="" href="/home"><img src="../static/images/logo.png" alt=""></a>
+			<a title="" href="/home"><img src="../static/images/Icon.jpeg" alt=""></a>
 		</div>
 		
 		<div class="top-area">
@@ -195,15 +194,14 @@
 	
 	<section>
 		<div class="feature-photo">
-			<figure><img src="../static/images/resources/timeline-1.jpg" alt=""></figure>
+			<figure><img src="static/BLOB/{{profile['email']}}/images/{{profile['cover']}}" alt="" style="height:400px;"></figure>
 			<div class="add-btn">
 				<span>1205 followers</span>
 			</div>
-			<form class="edit-phto">
+			<form method="POST" class="edit-phto" action="/add_profile_photos" id="upload_form"  enctype="multipart/form-data">
 				<i class="fa fa-camera-retro"></i>
 				<label class="fileContainer">
-					Edit Cover Photo
-				<input type="file"/>
+					<input type="file" accept="image/*" id="myfile" name="myfile">Edit Cover Photo
 				</label>
 			</form>
 			<div class="container-fluid">
@@ -211,13 +209,12 @@
 					<div class="col-lg-2 col-sm-3">
 						<div class="user-avatar">
 							<figure>
-								<img src="../static/images/resources/user-avatar.jpg" alt="">
-								<form class="edit-phto">
+								<img src="static/BLOB/{{profile['email']}}/images/{{profile['display']}}">
+								<form method="POST" class="edit-phto" action="/add_profile_photos" id="upload_form1"  enctype="multipart/form-data">
 									<i class="fa fa-camera-retro"></i>
-									<label class="fileContainer">
-										Edit Display Photo
-										<input type="file"/>
-									</label>
+										<label class="fileContainer">
+											<input type="file" accept="image/*" id="myfile1" name="myfile1">Edit Display Photo
+										</label>
 								</form>
 							</figure>
 						</div>
@@ -391,62 +388,43 @@
 			</div>
 		</div>	
 	</section>
-
-	<footer>
+<footer>
 		<div class="container">
 			<div class="row">
-				<div class="col-lg-4 col-md-4">
+				<div class="col-lg-3 col-md-3">
 					<div class="widget">
 						<div class="foot-logo">
 							<div class="logo">
-								<a href="index-2.html" title=""><img src="images/logo.png" alt=""></a>
-							</div>	
+								<img src="../static/images/Icon.jpeg" alt="">
+							</div>
 							<p>
-								The trio took this simple idea and built it into the world’s leading carpooling platform.
+							Patrons Pool Portal is a platform where an Idea is shared with Sponsors, to recieve Funds in a hassle free manner.
 							</p>
 						</div>
-						<ul class="location">
-							<li>
-								<i class="ti-map-alt"></i>
-								<p>33 new montgomery st.750 san francisco, CA USA 94105.</p>
-							</li>
-							<li>
-								<i class="ti-mobile"></i>
-								<p>+1-56-346 345</p>
-							</li>
-						</ul>
 					</div>
 				</div>
-				<div class="col-lg-2 col-md-4">
+				<div class="col-lg-3 col-md-3">
 					<div class="widget">
-						<div class="widget-title"><h4>follow</h4></div>
-						<ul class="list-style">
-							<li><i class="fa fa-facebook-square"></i> <a href="https://web.facebook.com/shopcircut/" title="">facebook</a></li>
-							<li><i class="fa fa-twitter-square"></i><a href="https://twitter.com/login?lang=en" title="">twitter</a></li>
-							<li><i class="fa fa-instagram"></i><a href="https://www.instagram.com/?hl=en" title="">instagram</a></li>
-							<li><i class="fa fa-google-plus-square"></i> <a href="https://plus.google.com/discover" title="">Google+</a></li>
-							<li><i class="fa fa-pinterest-square"></i> <a href="https://www.pinterest.com/" title="">Pintrest</a></li>
-						</ul>
+						<div class="widget-title"><h4>B MANISH</h4></div>
+							B.E(CSE, RNSIT), Bangalore<br>
+                        	Full Stack Developer <br><br>
+						    AWS Certified Cloud Support Associate, Working for Amazon Web Services as Cloud Support Intern since Feb 2020.
 					</div>
 				</div>
-				<div class="col-lg-2 col-md-4">
+				<div class="col-lg-3 col-md-3">
 					<div class="widget">
-						<div class="widget-title"><h4>Navigate</h4></div>
-						<ul class="list-style">
-							<li><a href="about.html" title="">about us</a></li>
-							<li><a href="contact.html" title="">contact us</a></li>
-							<li><a href="terms.html" title="">terms & Conditions</a></li>
-						</ul>
+						<div class="widget-title"><h4>NISHANT SHARMA</h4></div>
+						B.E(CSE, RNSIT), Bangalore<br>
+						Software Developer <br><br>
+						Oracle Certified Java Associate, Will be Working for Cimpress as Software Developer from Aug 2020.
 					</div>
 				</div>
-				<div class="col-lg-2 col-md-4">
+				<div class="col-lg-3 col-md-3">
 					<div class="widget">
-						<div class="widget-title"><h4>download apps</h4></div>
-						<ul class="colla-apps">
-							<li><a href="https://play.google.com/store?hl=en" title=""><i class="fa fa-android"></i>android</a></li>
-							<li><a href="https://www.apple.com/lae/ios/app-store/" title=""><i class="ti-apple"></i>iPhone</a></li>
-							<li><a href="https://www.microsoft.com/store/apps" title=""><i class="fa fa-windows"></i>Windows</a></li>
-						</ul>
+						<div class="widget-title"><h4>SANKALP SAXENA</h4></div>
+						B.E(CSE, RNSIT), Bangalore<br>
+						Software Developer <br><br>
+						Oracle Certified Java Professional, Working for HashedIn as Software Developer since Jan 2020.
 					</div>
 				</div>
 			</div>
@@ -455,7 +433,14 @@
 </div>
 	
 	<script type = "text/javascript">
-		function off(s1,s2,s3,s4,b1,b2,b3,b4) {
+
+   	    document.getElementById("upload_form").onchange = function() {
+		   document.getElementById("upload_form").submit();
+		};
+		document.getElementById("upload_form1").onchange = function() {
+		   document.getElementById("upload_form1").submit();
+		};
+ 		function off(s1,s2,s3,s4,b1,b2,b3,b4) {
 			document.getElementById(s1).style.display = "none";
 			document.getElementById(s2).style.display = "none";
 			document.getElementById(s3).style.display = "none";
