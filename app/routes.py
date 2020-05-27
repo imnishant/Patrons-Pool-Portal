@@ -346,31 +346,33 @@ def update_bid():
         if bool(target_post):
             new_sponser_bid_price = int(request.form['bid_price'])
             new_sponser_email = session['username']
-
+            base_price = int(target_post['base_price'])
             bid_price = target_post['bid_price']
             if not bid_price:
-                earlier_bid_price = 'N/A'
+                earlier = False
+                earlier_bid_price = base_price
             else:
+                earlier = True
                 earlier_bid_price = bid_price[-1]
-            base_price = int(target_post['base_price'])
             first_bidding_time = target_post['first_bidding_time']
             bidding_person = target_post['bidding_person']
-            bidding_person.append(request.form['bidding_person'])
 
-            if earlier_bid_price == "N/A" and new_sponser_bid_price > base_price:
+            if not earlier and new_sponser_bid_price > base_price:
                 # retrieve the bid price for the post and check if the bid price equals N/A then set the bid_price then perform the below step
                 bid_price.append(int(new_sponser_bid_price))
+                bidding_person.append(request.form['bidding_person'])
                 db['user'].update_one(update_query, {"$set": {"posts.$.bid_price": bid_price, "posts.$.bidding_person": bidding_person, "posts.$.first_bidding_time": int(datetime.datetime.now().timestamp())}})
 
             elif new_sponser_bid_price > earlier_bid_price and current_bid_time - first_bidding_time < window_in_seconds:
                 # else check if the bid price is > previous bid price and also the time when performing this step falls under the window time
                 bid_price.append(int(new_sponser_bid_price))
+                bidding_person.append(request.form['bidding_person'])
                 db['user'].update_one(update_query, {"$set": {"posts.$.bid_price": bid_price, "posts.$.bidding_person": bidding_person}})
 
                 #Uncomment it to resume message functionality
                 #email_bid_status_to_other_sponsers(request.form['email'], request.form['post_headline'])
 
-            elif new_sponser_bid_price <= earlier_bid_price:
+            elif int(new_sponser_bid_price) <= earlier_bid_price:
                 posts = get_sponser_timeline()
                 return render_template("sponsor.html", posts=posts,msg='Please enter amount greater than the current bid amount!')
 
