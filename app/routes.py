@@ -119,7 +119,7 @@ def add_post():
             posts = get_posts(session['username'])
             # searches for dockerfile in the extracted folder
             # call this function after the user presses on the submit button or so
-            mail_sponsers_when_a_post_is_added()
+            #mail_sponsers_when_a_post_is_added()
             
         else:
             return render_template("home.html", posts = posts, profile=res, msg='Allowed file types are mp4, mp3, png, jpg, jpeg, gif')
@@ -224,13 +224,6 @@ def edit_password():
         return render_template('edit-password.html',profile=res)
     return render_template('access_denied.html', error_msg="wrong method invocaton")
 
-@app.route('/inbox')
-def inbox():
-    return render_template('inbox.html')
-
-@app.route('/followers')
-def followers():
-    return render_template('followers.html')
 
 @app.route('/images', methods=['GET'])
 def images():
@@ -286,15 +279,6 @@ def documents():
             files = []
         return render_template('documents.html', profile=res, title="Documents", files=files, email=session['username'])
     return render_template('access_denied.html', error_msg="wrong method invocaton")
-
-
-@app.route('/messages')
-def messages():
-    return render_template('messages.html')
-
-@app.route('/notifications')
-def notifications():
-    return render_template('notifications.html')
 
 @app.route('/get_BLOB', methods=["GET"])
 def get_BLOB():
