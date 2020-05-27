@@ -17,12 +17,13 @@ def hello_world():
 @app.route('/login', methods=['POST', 'GET'])
 def login():
     if request.method == 'POST':
-        result, password, username = login_util(request)
+        result, password, username, wallet_address= login_util(request)
         if result:
             if result['password'] != password:
                 return render_template('access_denied.html', error_msg="Password doesn't match. Go back and re-renter the password")
 
             session['username'] = username
+            session['wallet_address'] = wallet_address
 
             res = get_profile(session['username'])
             if not res:
@@ -51,6 +52,7 @@ def signup():
 
         save_user(user_info)
         session['username'] = user_info['email']
+        session['wallet_address'] = user_info['wallet_address']
 
         res = get_profile(session['username'])
         if not res:
@@ -112,7 +114,8 @@ def add_post():
                 "bidding_person": [],
                 "first_bidding_time": "N/A",
                 "bidding_status": "open",
-                "date_time_added": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                "date_time_added": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                "transaction_hash": "N/A"
             }
 
             store_posts(post_info)

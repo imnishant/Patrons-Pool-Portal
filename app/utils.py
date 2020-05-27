@@ -23,7 +23,6 @@ def signup_util(obj):
     else:
         user_info['isSponsor'] = 0
 
-    user_info['transaction'] = []
 
     user_info['profile'] = {}
     user_info['profile']['fname'] = request.form['fname']
@@ -92,7 +91,7 @@ def login_util(request):
     result = user_exists(username)
     if result:
         session['name'] = result['profile']['fname'] + " " + result['profile']['lname']
-    return result, password, username
+    return result, password, username, result['wallet_address']
 
 
 def edit_basic_util(request):
