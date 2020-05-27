@@ -19,16 +19,21 @@
 	</style>
 </head>
 <body>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-
     <script>
-       if (window.web3) {
+		if (window.web3) {
             metamaskWeb3 = new Web3(web3.currentProvider)
+            console.log("metamaskweb3", metamaskWeb3);
+        }
+        else
+        {
+        	console.log("Download Metamask Please!");
         }
 
-        function sendETH(_from, _to, _value)
+		function sendETH(_from, _to)
         {
-        		web3.eth.sendTransaction({
+        	console.log(_from);
+        	console.log("HOLA");
+        	web3.eth.sendTransaction({
             	from: _from,
             	to: _to,
             	value: '100000'
@@ -36,7 +41,7 @@
             	    console.log("Hash", hash);
         	});
         }
-    </script>
+	</script>
 <!--<div class="se-pre-con"></div>-->
 <div class="theme-layout">
 	<div class="topbar sticky" style="position:fixed;width:100%;">
@@ -119,10 +124,7 @@
 														<h5>Sponser {{ post.bidding_persontat[-1] }} won the Bid at price {{ post.bid_price[-1] }}</h5>
 													{% endif %}
 												</form>
-													{% if post.bidding_status == 'closed' and post.bidding_person[-1] == session.username %}
-														<h5>You Won the Bid at Price:  {{post.bid_price[-1]}}
-														<button type="submit" onclick="sendETH({{session['wallet_address']}}, {{post['wallet_address']}});" class="btn btn-danger">Pay</button></h5>
-													{% endif %}
+
 											</center>
 
 													{% if post.post_type == 'audio' %}
@@ -189,7 +191,7 @@
 													</form>
 														{% if post.bidding_status == 'closed' and post.bidding_person[-1] == session.username %}
 															<h5>You Won the Bid at Price:  {{post.bid_price[-1]}}
-															<button type="submit" class="btn btn-danger">Pay</button></h5>
+															<button onclick="sendETH({{session['wallet_address'] | tojson}}, {{post['wallet_address'] | tojson}});" class="btn btn-danger">Pay</button></h5>
 														{% endif %}
 												</center>
 											</div>
