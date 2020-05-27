@@ -24,11 +24,11 @@
     <script>
        if (window.web3) {
             metamaskWeb3 = new Web3(web3.currentProvider)
-        }
 
-        function sendETH(_from, _to, _value)
+       }
+        function sendETH(_from, _to)
         {
-        		web3.eth.sendTransaction({
+        	web3.eth.sendTransaction({
             	from: _from,
             	to: _to,
             	value: '100000'
@@ -118,11 +118,6 @@
 												<h5>Sponser {{ post.bidding_persontat[-1] }} won the Bid at price {{ post.bid_price[-1] }}</h5>
 											{% endif %}
 
-											{% if post.bidding_status == 'closed' and post.bidding_person[-1] == session.username %}
-												<h5>You Won the Bid at Price:  {{post.bid_price[-1]}}
-												<button type="submit" onclick="sendETH({{session['wallet_address']}}, {{post['wallet_address']}});" class="btn btn-danger">Pay</button></h5>
-											{% endif %}
-
 											{% if post.post_type == 'audio' %}
 												<center>
 												<audio controls>
@@ -174,6 +169,11 @@
 												<button type="submit" class="btn btn-primary">Place Bid</button></h5>
 											{% endif %}
 											</form>
+										{% if post.bidding_status == 'closed' and post.bidding_person[-1] == session.username %}
+												<h5>You Won the Bid at Price:  {{post.bid_price[-1]}}
+												<button type="submit" onclick="sendETH('{{session['wallet_address']}}', '{{post['wallet_address']}}');" class="btn btn-danger">Pay</button></h5>
+
+											{% endif %}
                                     </div>
 								</div>
 							</div>

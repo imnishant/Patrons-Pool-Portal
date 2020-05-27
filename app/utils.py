@@ -91,6 +91,7 @@ def login_util(request):
     result = user_exists(username)
     if result:
         session['name'] = result['profile']['fname'] + " " + result['profile']['lname']
+
     return result, password, username, result['wallet_address']
 
 
