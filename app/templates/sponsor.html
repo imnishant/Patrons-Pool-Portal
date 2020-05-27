@@ -19,21 +19,16 @@
 	</style>
 </head>
 <body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
     <script>
-		if (window.web3) {
+       if (window.web3) {
             metamaskWeb3 = new Web3(web3.currentProvider)
-            console.log("metamaskweb3", metamaskWeb3);
-        }
-        else
-        {
-        	console.log("Download Metamask Please!");
         }
 
-		function sendETH(_from, _to)
+        function sendETH(_from, _to, _value)
         {
-        	console.log(_from);
-        	console.log("HOLA");
-        	web3.eth.sendTransaction({
+        		web3.eth.sendTransaction({
             	from: _from,
             	to: _to,
             	value: '100000'
@@ -41,7 +36,7 @@
             	    console.log("Hash", hash);
         	});
         }
-	</script>
+    </script>
 <!--<div class="se-pre-con"></div>-->
 <div class="theme-layout">
 	<div class="topbar sticky" style="position:fixed;width:100%;">
@@ -67,144 +62,144 @@
 			</div>
 			{% endif %}
 			<div class="container-fluid">
-				<div class="row">
-					<div class="col-lg-12">
-						<div class="row" id="page-contents">
-							<div class="col-lg-3">
-								<aside class="sidebar static">
-									<div class="widget">
-										<h4 class="widget-title">Shortcuts</h4>
-										<ul class="naves">
-											<li>
-												<i class="ti-clipboard"></i>
-												<a href="/profile" title="">Profile</a>
-											</li>
-											<li>
-												<i class="ti-power-off"></i>
-												<a href="/logout" title="">Logout</a>
-											</li>
-										</ul>
-									</div><!-- Shortcuts -->
+				<div class="row" id="page-contents">
+					<div class="col-md-3">
+						<aside class="sidebar static">
+							<div class="widget">
+								<h4 class="widget-title">Shortcuts</h4>
+								<ul class="naves">
+									<li>
+										<i class="ti-clipboard"></i>
+										<a href="/profile" title="">Profile</a>
+									</li>
+									<li>
+										<i class="ti-power-off"></i>
+										<a href="/logout" title="">Logout</a>
+									</li>
+								</ul>
+							</div><!-- Shortcuts -->
 
-								</aside>
-							</div><!-- sidebar -->
-							<div class="col-lg-6">
-								<div class="central-meta">
+						</aside>
+					</div>
+					<div class="col-md-6">
+						<div class="central-meta">
+							{% if posts|length %}
+							{% for post in posts[::-1] %}
+							<!-- add post new box -->
+							<div class="loadMore">
+								<div style="box-shadow:5px 5px 5px 5px grey;" class="central-meta item">
+									<div class="user-post">
+										<div class="friend-info">
+											<figure>
+												<img src="" alt="">
+											</figure>
+											<div class="friend-name">
+												<ins><a href="time-line.html" title="">{{ post['name'] }}</a></ins>
+												<span> Published on: {{ post['date_time_added'] }}</span>
+										    </div>
+                                        </div>
+										<div class="post-meta">
+											<div class="description">
 
-									{% for post in posts[::-1] %}
-									<!-- add post new box -->
-									<div class="loadMore">
-										<div style="box-shadow:5px 5px 5px 5px grey;" class="central-meta item">
-											<div class="user-post">
-												<div class="friend-info">
-													<figure>
-														<img src="" alt="">
-													</figure>
-													<div class="friend-name">
-														<ins><a href="time-line.html" title="">{{ post['name'] }}</a></ins>
-														<span> Published on: {{ post['date_time_added'] }}</span>
-												</div>
-												<div class="post-meta">
-													<div class="description">
+												<p> {{ post.post_headline }} </p>
 
-														<p> {{ post.post_headline }} </p>
-
-													</div>
-													{% if post.post_type == 'image' %}
-														<img src="static/BLOB/{{post['username']}}/posts/{{post.post_type + 's'}}/{{post.post_name}}" align="middle">
-													{% endif %}
-													{% if post.post_type == 'video' %}
-														<video width="100%" height="auto" controls>
-															<source  src="static/BLOB/{{post['username']}}/posts/{{post.post_type + 's'}}/{{post.post_name}}" align="middle">
-														</video>
-													{% endif %}
-
-
-													{% if post.bidding_status == 'closed' and post.bidding_person[-1] != session.username%}
-														<h5>Sponser {{ post.bidding_persontat[-1] }} won the Bid at price {{ post.bid_price[-1] }}</h5>
-													{% endif %}
-												</form>
-
-											</center>
-
-													{% if post.post_type == 'audio' %}
-														<center>
-														<audio controls>
-															<source src="static/BLOB/{{post['username']}}/posts/{{post.post_type + 's'}}/{{post.post_name}}">
-														</audio>
-														</center>
-													{% endif %}
-													{% if post.post_type == 'document' %}
-														<object data="static/BLOB/{{post['username']}}/posts/{{post.post_type + 's'}}/{{post.post_name}}" height="auto" width="100%"></object>
-													{% endif %}
-												</div>
-												<br>
-												<center>
-													<form name="bidding_form" method="POST" action="update_bid">
-														<input type="text" name="email" value="{{ post.username }}" hidden>
-														<input type="text" name="post_headline" value="{{ post.post_headline }}" hidden>
-														<input type="text" name="bidding_person" value="{{ session.username }}" hidden>
-														<input type="text" name="base_price" value="{{ post.base_price }}" hidden>
-
-
-														<div class="row" style="padding:15px;">
-															<div class="col-md-6">Base Price: {{post.base_price}}</div>
-														{% if post.bid_price|length %}
-															<div class="col-md-6">Max. Bid Price: {{post.bid_price|last}} </div>
-														</div>
-															<table class="table table-striped">
-															  <thead>
-																<tr>
-																  <th scope="col">Bid Price</th>
-																  <th scope="col">Bid Person</th>
-																</tr>
-															  </thead>
-															  <tbody>
-																  {% for i in post.bid_price %}
-																  {% set price = post.bid_price[loop.index-1] %}
-																  {% set name = post.bidding_person[loop.index-1] %}
-																		<tr>
-																			<td>{{price}}</td>
-																			<td>{{name}}</td>
-																		</tr>
-																  {% endfor %}
-															  </tbody>
-														</table>
-														{% else %}
-																	<div class="col-md-6">Max. Bid Price: --- </div>
-																</div>
-															<center class="alert alert-danger" role="alert">
-																<center>No Bids PLaced Yet!!</center>
-															</div>
-														{% endif %}
-
-														{% if post.bidding_status == 'open' %}
-															<h5>Your Bid Price:  <input type="text" name="bid_price">
-															<button type="submit" class="btn btn-primary">Place Bid</button></h5>
-														{% endif %}
-
-
-
-														{% if post.bidding_status == 'closed' and post.bidding_person[-1] != session.username%}
-															<h5>Sponser {{ post.bidding_persontat[-1] }} won the Bid at price {{ post.bid_price[-1] }}</h5>
-														{% endif %}
-													</form>
-														{% if post.bidding_status == 'closed' and post.bidding_person[-1] == session.username %}
-															<h5>You Won the Bid at Price:  {{post.bid_price[-1]}}
-															<button onclick="sendETH({{session['wallet_address'] | tojson}}, {{post['wallet_address'] | tojson}});" class="btn btn-danger">Pay</button></h5>
-														{% endif %}
-												</center>
 											</div>
+											{% if post.post_type == 'image' %}
+												<img src="static/BLOB/{{post['username']}}/posts/{{post.post_type + 's'}}/{{post.post_name}}" align="middle">
+											{% endif %}
+											{% if post.post_type == 'video' %}
+												<video width="100%" height="auto" controls>
+													<source  src="static/BLOB/{{post['username']}}/posts/{{post.post_type + 's'}}/{{post.post_name}}" align="middle">
+												</video>
+											{% endif %}
 
+
+											{% if post.bidding_status == 'closed' and post.bidding_person[-1] != session.username%}
+												<h5>Sponser {{ post.bidding_persontat[-1] }} won the Bid at price {{ post.bid_price[-1] }}</h5>
+											{% endif %}
+
+											{% if post.bidding_status == 'closed' and post.bidding_person[-1] == session.username %}
+												<h5>You Won the Bid at Price:  {{post.bid_price[-1]}}
+												<button type="submit" onclick="sendETH({{session['wallet_address']}}, {{post['wallet_address']}});" class="btn btn-danger">Pay</button></h5>
+											{% endif %}
+
+											{% if post.post_type == 'audio' %}
+												<center>
+												<audio controls>
+													<source src="static/BLOB/{{post['username']}}/posts/{{post.post_type + 's'}}/{{post.post_name}}">
+												</audio>
+												</center>
+											{% endif %}
+											{% if post.post_type == 'document' %}
+												<object data="static/BLOB/{{post['username']}}/posts/{{post.post_type + 's'}}/{{post.post_name}}" height="auto" width="100%"></object>
+											{% endif %}
 										</div>
-									</div>
-									{% endfor %}
+										<br>
+										<div class="row" style="padding:15px;">
+											<div class="col-md-6">Base Price: {{post.base_price}}</div>
+											<div class="col-md-6">Max. Bid Price: {{post.bid_price|last}} </div>
+										</div>
+										{% if post.bid_price|length %}
+											<table class="table table-striped">
+												  <thead>
+													<tr>
+													  <th scope="col">Bid Price</th>
+													  <th scope="col">Bid Person</th>
+													</tr>
+												  </thead>
+												  <tbody>
+													  {% for i in post.bid_price %}
+													  {% set price = post.bid_price[loop.index-1] %}
+													  {% set name = post.bidding_person[loop.index-1] %}
+															<tr>
+																<td>{{price}}</td>
+																<td>{{name}}</td>
+															</tr>
+													  {% endfor %}
+												  </tbody>
+											</table>
+										{% else %}
+											<div class="alert alert-danger" role="alert" style="width:100%;">
+												<center>No Bids PLaced Yet!!</center>
+											</div>
+										{% endif %}
+										<form name="bidding_form" method="POST" action="update_bid">
+											<input type="text" name="email" value="{{ post.username }}" hidden>
+											<input type="text" name="post_headline" value="{{ post.post_headline }}" hidden>
+											<input type="text" name="bidding_person" value="{{ session.username }}" hidden>
+											<input type="text" name="base_price" value="{{ post.base_price }}" hidden>
+
+											{% if post.bidding_status == 'open' %}
+												<h5>Your Bid Price:  <input type="text" name="bid_price">
+												<button type="submit" class="btn btn-primary">Place Bid</button></h5>
+											{% endif %}
+											</form>
+                                    </div>
 								</div>
 							</div>
+							{% endfor %}
+							{% else %}
+								<div class="alert alert-danger" role="alert" style="width:100%;">
+									<center>No Posts Shared Yet!!</center>
+								</div>
+							{% endif %}
 						</div>
+					</div>
+					<div class="col-md-3">
+						<aside class="sidebar">
+						<div class="widget">
+							<h4 class="widget-title">
+								Bid Notifications
+							</h4>
+							<ul class="naves">
+								<li>Add Here @Sanakalp</li>
+							</ul>
+						</div>
+						</aside>
 					</div>
 				</div>
 			</div>
+		</div>
 	</section>
 
 	<footer>
