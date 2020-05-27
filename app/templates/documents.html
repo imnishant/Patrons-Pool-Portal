@@ -1,11 +1,11 @@
 {% extends "layout.html" %}
 {% block content %}
 
-<div class="col-lg-6">
+<div class="col-lg-9">
 	<div class="central-meta">
 		{% if files|length %}
 			{% for file in files %}
-				<iframe data="static/BLOB/{{email}}/posts/documents/{{file}}" height="400" width="100%"></iframe><hr>
+				<object data="static/BLOB/{{email}}/posts/documents/{{file}}" height="400" width="100%"></object><hr>
 			{% endfor %}
 		{% else %}
 			<div class="alert alert-danger" role="alert">

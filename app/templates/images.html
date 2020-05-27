@@ -1,14 +1,16 @@
 {% extends "layout.html" %}
 {% block content %}
 
-<div class="col-lg-6">
+<div class="col-lg-9">
 	<div class="central-meta">
 		{% if files|length %}
 		<ul class="photos">
 			{% for file in files %}
 			<li>
+				<div style="margin-bottom:20px;border:1px solid gray;height:200px;padding:5px">
 				<a class="strip" href="../static/BLOB/{{email}}/posts/images/{{file}}" title="" data-strip-group="mygroup" data-strip-group-options="loop: false">
-					<img src="static/BLOB/{{email}}/posts/images/{{file}}" style="height:200px;">
+					<img src="static/BLOB/{{email}}/posts/images/{{file}}" style="height:190px;"></a>
+				</div>
 			</li>
 			{% endfor %}
 		</ul>
