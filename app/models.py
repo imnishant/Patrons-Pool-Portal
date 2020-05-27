@@ -57,6 +57,7 @@ def get_sponser_timeline():
             post['username'] = username
             post['name'] = user['profile']['fname'] + " " + user['profile']['lname']
             post['wallet_address'] = wallet_address
+            post['display'] = user['profile']['display']
 
             current_time = int(datetime.datetime.now().timestamp())
             window_in_seconds = 600

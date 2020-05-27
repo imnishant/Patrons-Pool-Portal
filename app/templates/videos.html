@@ -1,13 +1,13 @@
 {% extends "layout.html" %}
 {% block content %}
 
-<div class="col-lg-6">
+<div class="col-lg-9">
 	<div class="central-meta">
 		{% if files|length %}
 		<div class="row">
 			{% for file in files %}
 			<div class="col-md-6">
-				<video controls height="180" width="100%">
+				<video controls height="280" width="100%">
 					<source  src="static/BLOB/{{email}}/posts/videos/{{file}}">
 				</video>
 			</div>

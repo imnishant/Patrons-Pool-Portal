@@ -16,29 +16,32 @@
 		button:hover {
 			box-shadow: 5px 5px 5px 5px grey;
 		}
+		.logo {
+			padding-top:10px;
+			margin-left:5%;
+		}
+		.navbar {
+			padding: 0px;
+		}
 	</style>
 </head>
 <body>
 <!--<div class="se-pre-con"></div>-->
 <div class="theme-layout">
 	
-	<div class="topbar stick">
-		<div class="logo">
-			<img src="../static/images/Icon.jpeg" alt="">
-		</div>
-		
-		<div class="top-area">
-			<div class="login-form">
-				<form method="POST" action="/login">
-					<input type="text" name="email" placeholder="Email" required>
-					<input type="password" name="pass" placeholder="Password" required>
-					<button type="submit">Login</button>
-				</form>
-			</div>
-		</div>
-	</div><!-- topbar with logout -->
-	
-	<section>
+	<nav class="navbar navbar-expand-lg navbar-light  bg-light fixed-top">
+	  <a class="navbar-brand logo" href="#"><img src="../static/images/Icon.jpeg"></a>
+	  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+		<span class="navbar-toggler-icon"></span>
+	  </button>
+		<form action="/login" style="margin-left:60%;margin-right:2%;">
+			<button type="submit" class="btn btn-primary">Login</button>
+		</form>
+		<form action="/signup">
+			<button type="submit" class="btn btn-primary">Register</button>
+		</form>
+	</nav>
+	<section style="margin-top:60px;">
 		<div class="feature-photo">
 			<figure><img alt="" src="../static/images/resources/logout.jpg" style="height:300px;"></figure>
 		</div>

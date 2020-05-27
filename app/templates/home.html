@@ -16,28 +16,67 @@
 		button:hover {
 			box-shadow: 5px 5px 5px 5px grey;
 		}
+		.nav-item {
+			margin:0% 1%;
+			font-size:18px;
+		}
+		.logo {
+			padding-top:10px;
+			margin-left:5%;
+		}
+		.navbar {
+			padding: 0px;
+		}
 	</style>
 </head>
 <body>
 <!--<div class="se-pre-con"></div>-->
 <div class="theme-layout">
-	<div class="topbar sticky" style="position:fixed;width:100%;">
-		<span class="logo"> <img src="../static/images/Icon.jpeg" alt="">
-		</span>
-	</div><!-- topbar -->
-
-	<section style="margin-top:30px;">
+	<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+	  <a class="navbar-brand logo" href="#"><img src="../static/images/Icon.jpeg"></a>
+	  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+		<span class="navbar-toggler-icon"></span>
+	  </button>
+	  <div class="collapse navbar-collapse" id="navbarNav" style="margin-left:5%;">
+		<ul class="navbar-nav">
+		  <li class="nav-item">
+			<a class="nav-link" href="/home">Home</a>
+		  </li>
+		  <li class="nav-item">
+			<a class="nav-link" href="/profile">Profile</a>
+		  </li>
+		  <li class="nav-item">
+			<a class="nav-link" href="/images">Images</a>
+		  </li>
+		  <li class="nav-item">
+			<a class="nav-link" href="/audios">Audio</a>
+		  </li>
+		  <li class="nav-item">
+			<a class="nav-link" href="/videos">Video</a>
+		  </li>
+		  <li class="nav-item">
+			<a class="nav-link" href="/documents">Documents</a>
+		  </li>
+		</ul>
+	  </div>
+		  <form class="form-inline my-2 my-lg-0" style="margin-right:5%;">
+		  <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+		  <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+		</form>
+		<button class="btn btn-primary" style="margin-right:2%;"><a href="/logout">Logout</a></button>
+	</nav>
+	<section style="margin-top:60px;">
 		<div class="gap gray-bg">
 			<div class="container">
 				<div class="row">
 					<div class="col-md-3"></div>
 					<div class="col-md-6">
 					{% if msg %}
-					<div class="alert alert-warning alert-dismissible fade show" role="alert">
+					<div class="alert alert-warning alert-dismissible fade show" id="alert" role="alert">
 						<h5>{{msg}}</h5>
-						<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+						<button type="button" class="close" onclick="alert()">
 						<span aria-hidden="true">&times;</span>
-					  </button>
+					  	</button>
 					</div>
 					{% endif %}
 					</div>
@@ -264,13 +303,14 @@
 </div>	
 
 	<script type="text/javascript">
-		document.getElementsByClassName('alert').alert();
+		function alert() {
+			document.getElementById('alert').style.display = "none";
+		}
 	</script>
 	<script data-cfasync="false" src="../../cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="js/main.min.js"></script>
 	<script src="../static/js/script.js"></script>
 	<script src="../static/js/map-init.js"></script>
 	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA8c55_YHLvDHGACkQscgbGLtLRdxBDCfI"></script>
-
 </body>	
 
 </html>

@@ -29,9 +29,11 @@ def login():
             if not res:
                 return render_template('access_denied.html', error_msg="Error Occured while fetching Profile Details")
             if result['isSponsor'] == 1:
+                session['isSponsor'] = 1
                 posts = get_sponser_timeline()
                 return render_template('sponsor.html', posts=posts)
             else:
+                session['isSponsor'] = 0
                 posts = get_posts(username)
                 return render_template('home.html', posts=posts, profile=res)
         return render_template('access_denied.html', error_msg="Mail Doesn't exists!")
@@ -60,9 +62,11 @@ def signup():
         #session['useremail'] = user_info['email']
         posts = get_posts(session['username'])
         if user_info['isSponsor'] == 1:
+            session['isSponsor'] = 1
             posts = get_sponser_timeline()
             return render_template('sponsor.html', posts=posts)
         else:
+            session['isSponsor'] = 0
             posts = get_posts(session['username'])
             return render_template('home.html', posts=posts, profile=res)
 
@@ -128,18 +132,22 @@ def add_post():
             return render_template("home.html", posts = posts, profile=res, msg='Allowed file types are mp4, mp3, png, jpg, jpeg, gif')
     return render_template("home.html", posts = posts, profile=res, msg='Added Successfully Bro! :-D')
 
+
 @app.route('/logout')
 def logout():
     session.clear()
     return render_template('logout.html')
 
-@app.route('/home')
+
+@app.route('/home', methods=['GET', 'POST'])
 def home():
-    posts = get_posts(session['username'])
-    res = get_profile(session['username'])
-    if not res:
-        return render_template('access_denied.html', error_msg="Error Occured while fetching Profile Details")
-    return render_template('home.html', posts = posts, profile=res)
+    if session['isSponsor'] == 1:
+        posts = get_sponser_timeline()
+        return render_template('sponsor.html', posts=posts)
+    else:
+        res = get_profile(session['username'])
+        posts = get_posts(session['username'])
+        return render_template('home.html', posts=posts, profile=res)
 
 @app.route('/profile', methods=['GET', 'POST'])
 def profile():
@@ -315,7 +323,7 @@ def delete_post():
         res = get_profile(session['username'])
         if not res:
             return render_template('access_denied.html', error_msg="Error Occured while fetching Profile Details")
-        return render_template('home.html', posts=posts, profile=res)
+        return render_template('home.html', posts=posts, profile=res, msg="Post Successfully deleted!")
     return render_template('access_denied.html', error_msg="Delete Post Method is not POST")
 
 @app.route('/update_bid', methods=["POST"])
