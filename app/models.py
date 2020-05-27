@@ -51,10 +51,12 @@ def get_sponser_timeline():
 
     for user in users:
         username = user['email']
+        wallet_address = user['wallet_address']
         userposts = user['posts']
         for post in userposts:
             post['username'] = username
             post['name'] = user['profile']['fname'] + " " + user['profile']['lname']
+            post['wallet_address'] = wallet_address
 
             current_time = int(datetime.datetime.now().timestamp())
             window_in_seconds = 600
@@ -69,7 +71,7 @@ def get_sponser_timeline():
             else:
                 post['bidding_status'] = "closed"
 
-            set_new_bid_update_status(post['username'], post['post_headline'], post['bidding_status'])
+            #set_new_bid_update_status(post['username'], post['post_headline'], post['bidding_status'])
 
             posts.append(post)
 
