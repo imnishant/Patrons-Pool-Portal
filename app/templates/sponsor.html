@@ -45,7 +45,12 @@
             	value: _value,
             	}, function(error, hash){
             	    console.log("Hash", hash);
+            	    var obj = document.getElementById("pay");
+        			obj.remove();
+        			document.getElementById('pay_message').innerHTML= "You Bought the Idea at Price:";
         	});
+
+
         }
         function alert() {
 			document.getElementById('alert').style.display = "none";
@@ -200,8 +205,15 @@
 											{% endif %}
 											</form>
 										{% if post.bidding_status == 'closed' and post.bidding_person[-1] == session.username %}
-												<h5>You Won the Bid at Price:  {{post.bid_price[-1]}}
-												<button type="submit" onclick="sendETH('{{session['wallet_address']}}', '{{post['wallet_address']}}', {{post.bid_price[-1]}});" class="btn btn-danger">Pay</button></h5>
+												<center>
+												<div style="clear: both">
+													<h5 id="pay_message">You Won the Bid at Price:</h5>
+													<h5>{{post.bid_price[-1]}}</h5>
+												</div>
+												<hr />
+													<button id="pay" type="submit" onclick="sendETH('{{session['wallet_address']}}', '{{post['wallet_address']}}', {{post.bid_price[-1]}});" class="btn btn-danger">Pay</button>
+												</center>
+
 
 											{% endif %}
                                     </div>
