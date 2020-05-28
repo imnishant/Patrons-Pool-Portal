@@ -37,7 +37,14 @@
             metamaskWeb3 = new Web3(web3.currentProvider)
 
        }
-        function sendETH(_from, _to, _value)
+       function sleep(milliseconds) {
+  			const date = Date.now();
+  			let currentDate = null;
+  			do {
+    			currentDate = Date.now();
+  			} while (currentDate - date < milliseconds);
+		}
+        function sendETH(_from, _to, _value, _headline, _username)
         {
         	web3.eth.sendTransaction({
             	from: _from,
@@ -45,13 +52,19 @@
             	value: _value,
             	}, function(error, hash){
             	    console.log("Hash", hash);
+            	    console.log("Error", error);
             	    var obj = document.getElementById("pay");
         			obj.remove();
         			document.getElementById('pay_message').innerHTML= "You Bought the Idea at Price:";
+					var val = hash;
+        			document.getElementById('hash_value').value = val;
+					document.getElementById('cur_headline').value = _headline;
+					document.getElementById('post_username').value = _username;
+					document.getElementById('update_hash_form').submit();
         	});
-
-
         }
+
+
         function alert() {
 			document.getElementById('alert').style.display = "none";
 		}
@@ -150,7 +163,7 @@
 
 
 											{% if post.bidding_status == 'closed' and post.bidding_person[-1] != session.username%}
-												<h5>Sponser {{ post.bidding_persontat[-1] }} won the Bid at price {{ post.bid_price[-1] }}</h5>
+												<h5>Sponser {{ post.bidding_person[-1] }} won the Bid at price {{ post.bid_price[-1] }}</h5>
 											{% endif %}
 
 											{% if post.post_type == 'audio' %}
@@ -204,18 +217,31 @@
 												<button type="submit" class="btn btn-primary">Place Bid</button></h5>
 											{% endif %}
 											</form>
-										{% if post.bidding_status == 'closed' and post.bidding_person[-1] == session.username %}
+										{% if post.bidding_status == 'closed' and post.bidding_person[-1] == session.username  and post.transaction_hash == 'N/A'%}
 												<center>
 												<div style="clear: both">
 													<h5 id="pay_message">You Won the Bid at Price:</h5>
 													<h5>{{post.bid_price[-1]}}</h5>
 												</div>
 												<hr />
-													<button id="pay" type="submit" onclick="sendETH('{{session['wallet_address']}}', '{{post['wallet_address']}}', {{post.bid_price[-1]}});" class="btn btn-danger">Pay</button>
+													<button id="pay" type="submit" onclick="sendETH('{{session['wallet_address']}}', '{{post['wallet_address']}}', {{post.bid_price[-1]}}, '{{post.post_headline}}', '{{post.username}}');" class="btn btn-danger">Pay</button>
 												</center>
-
-
+												<form action="update_transaction" method="POST" id="update_hash_form">
+													<input type="text" name="hash" id="hash_value" hidden>
+													<input type="text" name="headline" id="cur_headline" hidden>
+													<input type="text" name="username" id="post_username" hidden>
+												</form>
 											{% endif %}
+										{% if post.transaction_hash != 'N/A' %}
+												<center>
+												<div style="clear: both">
+													<h5>You Bought this Idea at Price:</h5>
+													<h5>{{post.bid_price[-1]}}</h5>
+												</div>
+												<hr />
+
+												</center>
+										{% endif %}
                                     </div>
 								</div>
 							</div>

@@ -14,6 +14,21 @@ my_path = os.path.abspath(os.path.dirname(__file__))
 def hello_world():
     return render_template('landing.html')
 
+@app.route('/update_transaction', methods=['POST'])
+def update_transaction():
+    if request.method == 'POST':
+        hash_value = request.form['hash']
+
+        query = {"email": request.form['username'], "posts.post_headline": request.form['headline']}
+        result = db['user'].find_one(query)
+        if bool(result):
+            res = db['user'].update_one(query, {"$set": {"posts.$.transaction_hash": hash_value}})
+        else:
+            return render_template('access_denied.html', error_msg="Some Error is there!")
+
+        posts = get_sponser_timeline()
+        return render_template('sponsor.html', posts=posts)
+    return render_template('access_denied.html', error_msg="Method is not get")
 @app.route('/login', methods=['POST', 'GET'])
 def login():
     if request.method == 'POST':
