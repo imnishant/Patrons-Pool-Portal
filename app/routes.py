@@ -81,7 +81,6 @@ def signup():
         #return redirect(url_for('two_factor_setup'))
         session['username'] = user_info['email']
         return render_template('two-factor-setup.html')
-
     return render_template('signup.html')
 
 
