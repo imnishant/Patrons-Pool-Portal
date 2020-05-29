@@ -5,7 +5,7 @@ from werkzeug.exceptions import abort
 
 from pygments import BytesIO
 
-from app.models import user_exists, save_user, store_posts, get_profile, update_basic, update_work, update_password, get_password, update_language, update_interest, get_posts, get_sponser_timeline, prof_img_upd, mail_sponsers_when_a_post_is_added, email_bid_status_to_other_sponsers
+from app.models import user_exists, save_user, store_posts, get_profile, update_basic, update_work, update_password, get_password, update_language, update_interest, get_posts, get_sponser_timeline, prof_img_upd, mail_sponsers_when_a_post_is_added, email_bid_status_to_other_sponsers, get_otp_secret
 
 from app import app, BLOB, db
 from app.utils import signup_util, login_util, allowed_file, edit_basic_util, edit_work_util, edit_pass_util, \
@@ -15,9 +15,11 @@ import datetime
 
 my_path = os.path.abspath(os.path.dirname(__file__))
 
+
 @app.route('/', methods=['POST', 'GET'])
 def hello_world():
     return render_template('landing.html')
+
 
 @app.route('/update_transaction', methods=['POST'])
 def update_transaction():
@@ -34,12 +36,15 @@ def update_transaction():
         posts = get_sponser_timeline()
         return render_template('sponsor.html', posts=posts)
     return render_template('access_denied.html', error_msg="Method is not get")
+
+
 @app.route('/login', methods=['POST', 'GET'])
 def login():
     if request.method == 'POST':
         result, password, username, wallet_address= login_util(request)
         if result:
-            if result['password'] != password or not verify_totp(request.form['token']):
+            otp_secret = get_otp_secret(username)
+            if result['password'] != password or not verify_totp(request.form['token'], otp_secret):
                 return render_template('access_denied.html', error_msg="Password doesn't match. Go back and re-renter the password")
 
             session['username'] = username
@@ -59,10 +64,10 @@ def login():
         return render_template('access_denied.html', error_msg="Mail Doesn't exists!")
     return render_template('landing.html')
 
+
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     if request.method == 'POST':
-        user_info = {}
         user_info, password2 = signup_util(request)
 
         if user_exists(user_info['email']):
@@ -73,64 +78,29 @@ def signup():
                                    error_msg="Password doesn't match. Go back and re-renter the password")
 
         save_user(user_info)
+        #return redirect(url_for('two_factor_setup'))
         session['username'] = user_info['email']
-        session['wallet_address'] = user_info['wallet_address']
-        session['otp_secret'] = user_info['otp_secret']
-
-        # Redirect the user to configure the Multi-Factor Authentication
-        if session['otp_secret']:
-            return redirect(url_for('two_factor_setup'))
-
-        res = get_profile(session['username'])
-        if not res:
-            return render_template('access_denied.html', error_msg="Error Occured while fetching Profile Details")
-        #session['useremail'] = user_info['email']
-        posts = get_posts(session['username'])
-        if user_info['isSponsor'] == 1:
-            session['isSponsor'] = 1
-            posts = get_sponser_timeline()
-            return render_template('sponsor.html', posts=posts)
-        else:
-            session['isSponsor'] = 0
-            posts = get_posts(session['username'])
-            return render_template('home.html', posts=posts, profile=res)
+        return render_template('two-factor-setup.html')
 
     return render_template('signup.html')
 
 
-@app.route('/twofactor')
-def two_factor_setup():
-    if 'username' not in session:
-        return redirect(url_for('index'))
-    user = get_profile(session['username'])
-    # since this page contains the sensitive qrcode, make sure the browser
-    # does not cache it
-    return render_template('two-factor-setup.html'), 200, {
-        'Cache-Control': 'no-cache, no-store, must-revalidate',
-        'Pragma': 'no-cache',
-        'Expires': '0'}
-
-
 @app.route('/qrcode')
 def qrcode():
-    """if 'username' not in session:
-        abort(404)
-    user = get_profile(session['username'])
-    if user['username'] is None:
-        abort(404)
-"""
-    # for added security, remove username from session
-    # del session['username']
-
     # render qrcode for FreeTOTP
-    url = pyqrcode.create(get_totp_uri())
+    otp_secret = get_otp_secret(session['username'])
+    url = pyqrcode.create(get_totp_uri(session['username'], otp_secret))
     stream = BytesIO()
     url.svg(stream, scale=5)
-    return stream.getvalue(), 200, {
-        'Content-Type': 'image/svg+xml',
-        'Cache-Control': 'no-cache, no-store, must-revalidate',
-        'Pragma': 'no-cache',
-        'Expires': '0'}
+    del session['username']
+    session.clear()
+
+    return stream.getvalue(), 200, {'Content-Type': 'image/svg+xml'}
+
+       # , {'Content-Type': 'image/svg+xml',
+       # 'Cache-Control': 'no-cache, no-store, must-revalidate',
+       # 'Pragma': 'no-cache',
+       # 'Expires': '0'}
 
 
 @app.route('/addpost', methods=["POST"])
@@ -210,12 +180,14 @@ def home():
         posts = get_posts(session['username'])
         return render_template('home.html', posts=posts, profile=res)
 
+
 @app.route('/profile', methods=['GET', 'POST'])
 def profile():
     res = get_profile(session['username'])
     if not res:
         return render_template('access_denied.html', error_msg="Error Occured while fetching Profile Details")
     return render_template('profile.html',profile=res)
+
 
 @app.route('/edit_basic', methods=['GET', 'POST'])
 def edit_basic():
@@ -232,6 +204,7 @@ def edit_basic():
         return render_template('edit-profile-basic.html',profile=res)
     return render_template('access_denied.html', error_msg="wrong method invocaton")
 
+
 @app.route('/edit_work', methods=['GET', 'POST'])
 def edit_work():
     if request.method == 'POST':
@@ -246,6 +219,7 @@ def edit_work():
             return render_template('access_denied.html', error_msg="Error Occured while fetching Profile Details")
         return render_template('edit-work-education.html',profile=res)
     return render_template('access_denied.html', error_msg="wrong method invocaton")
+
 
 @app.route('/edit_interest', methods=['GET', 'POST'])
 def edit_interest():
@@ -262,6 +236,7 @@ def edit_interest():
         return render_template('edit-interest.html', profile=res)
     return render_template('access_denied.html', error_msg="wrong method invocaton")
 
+
 @app.route('/edit_language', methods=['GET', 'POST'])
 def edit_language():
     if request.method == 'POST':
@@ -276,6 +251,7 @@ def edit_language():
             return render_template('access_denied.html', error_msg="Error Occured while fetching Profile Details")
         return render_template('edit-language.html',profile=res)
     return render_template('access_denied.html', error_msg="wrong method invocaton")
+
 
 @app.route('/edit_password', methods=['GET', 'POST'])
 def edit_password():
@@ -352,10 +328,12 @@ def documents():
         return render_template('documents.html', profile=res, title="Documents", files=files, email=session['username'])
     return render_template('access_denied.html', error_msg="wrong method invocaton")
 
+
 @app.route('/get_BLOB', methods=["GET"])
 def get_BLOB():
     if request.method == 'GET':
         return send_from_directory(my_path, request.get.args('filename'))
+
 
 @app.route('/delete_post', methods=["POST"])
 def delete_post():
@@ -386,6 +364,7 @@ def delete_post():
             return render_template('access_denied.html', error_msg="Error Occured while fetching Profile Details")
         return render_template('home.html', posts=posts, profile=res, msg="Post Successfully deleted!")
     return render_template('access_denied.html', error_msg="Delete Post Method is not POST")
+
 
 @app.route('/update_bid', methods=["POST"])
 def update_bid():
@@ -457,6 +436,7 @@ def update_bid():
             return render_template('access_denied.html', error_msg="File does not exist in mongodb database")
     return render_template('access_denied.html', error_msg="Delete Post Method is not POST")
 
+
 @app.route('/add_profile_photos', methods=['POST'] )
 def add_profile_photos():
     multimedia = ''
@@ -487,13 +467,16 @@ def add_profile_photos():
 
     return redirect(url_for('profile'))
 
+
 @app.errorhandler(404)
 def not_found():
     return render_template('access_denied.html', error_msg="Page Not Found")
 
+
 @app.errorhandler(400)
 def bad_request():
     return render_template('access_denied.html', error_msg="Bad Request")
+
 
 @app.errorhandler(500)
 def server_error():

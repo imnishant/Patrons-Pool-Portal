@@ -90,12 +90,12 @@ def signup_util(obj):
     return user_info, password2
 
 
-def get_totp_uri():
-    return 'otpauth://totp/MFA-Code:{0}?secret={1}&issuer=Patrons Pool'.format(session['username'], session['otp_secret'])
+def get_totp_uri(email, otp_secret):
+    return 'otpauth://totp/MFA-Code:{0}?secret={1}&issuer=Patrons Pool'.format(email, otp_secret)
 
 
-def verify_totp(token):
-    return onetimepass.valid_totp(token, session['otp_secret'])
+def verify_totp(token, otp_secret):
+    return onetimepass.valid_totp(token, otp_secret)
 
 
 def login_util(request):

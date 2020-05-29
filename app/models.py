@@ -35,6 +35,14 @@ def get_profile(email):
     return False
 
 
+def get_otp_secret(email):
+    query = {"email": email}
+    result = db['user'].find_one(query)
+
+    if bool(result):
+        return result['otp_secret']
+    return False
+
 def get_posts(email):
    query = {"email": email}
    result = db['user'].find_one(query)
