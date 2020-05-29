@@ -1,10 +1,15 @@
+import pyqrcode as pyqrcode
 from flask import Flask, send_from_directory, render_template, request, render_template, redirect, url_for, session, flash, make_response
 import os
+from werkzeug.exceptions import abort
+
+from pygments import BytesIO
 
 from app.models import user_exists, save_user, store_posts, get_profile, update_basic, update_work, update_password, get_password, update_language, update_interest, get_posts, get_sponser_timeline, prof_img_upd, mail_sponsers_when_a_post_is_added, email_bid_status_to_other_sponsers
 
 from app import app, BLOB, db
-from app.utils import signup_util, login_util, allowed_file, edit_basic_util, edit_work_util, edit_pass_util, edit_lan_int_util
+from app.utils import signup_util, login_util, allowed_file, edit_basic_util, edit_work_util, edit_pass_util, \
+    edit_lan_int_util, get_totp_uri, verify_totp
 from werkzeug.utils import secure_filename
 import datetime
 
@@ -34,7 +39,7 @@ def login():
     if request.method == 'POST':
         result, password, username, wallet_address= login_util(request)
         if result:
-            if result['password'] != password:
+            if result['password'] != password or not verify_totp(request.form['token']):
                 return render_template('access_denied.html', error_msg="Password doesn't match. Go back and re-renter the password")
 
             session['username'] = username
@@ -70,6 +75,11 @@ def signup():
         save_user(user_info)
         session['username'] = user_info['email']
         session['wallet_address'] = user_info['wallet_address']
+        session['otp_secret'] = user_info['otp_secret']
+
+        # Redirect the user to configure the Multi-Factor Authentication
+        if session['otp_secret']:
+            return redirect(url_for('two_factor_setup'))
 
         res = get_profile(session['username'])
         if not res:
@@ -86,6 +96,42 @@ def signup():
             return render_template('home.html', posts=posts, profile=res)
 
     return render_template('signup.html')
+
+
+@app.route('/twofactor')
+def two_factor_setup():
+    if 'username' not in session:
+        return redirect(url_for('index'))
+    user = get_profile(session['username'])
+    # since this page contains the sensitive qrcode, make sure the browser
+    # does not cache it
+    return render_template('two-factor-setup.html'), 200, {
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        'Pragma': 'no-cache',
+        'Expires': '0'}
+
+
+@app.route('/qrcode')
+def qrcode():
+    """if 'username' not in session:
+        abort(404)
+    user = get_profile(session['username'])
+    if user['username'] is None:
+        abort(404)
+"""
+    # for added security, remove username from session
+    # del session['username']
+
+    # render qrcode for FreeTOTP
+    url = pyqrcode.create(get_totp_uri())
+    stream = BytesIO()
+    url.svg(stream, scale=5)
+    return stream.getvalue(), 200, {
+        'Content-Type': 'image/svg+xml',
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        'Pragma': 'no-cache',
+        'Expires': '0'}
+
 
 @app.route('/addpost', methods=["POST"])
 def add_post():

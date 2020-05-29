@@ -2,6 +2,8 @@ from app.models import user_exists
 import os
 import shutil
 from flask import request, session
+import base64
+import onetimepass
 
 ALLOWED_EXTENSIONS = {'mpeg', 'mp4', 'mp3', 'm4a', 'png', 'jpg', 'jpeg', 'gif', 'pdf', 'xls', 'xlsx', 'txt', 'mkv', 'x-matroska', 'webm', 'wav', 'avi', 'flv', 'doc', 'docx', 'odt', 'wpd'}
 
@@ -18,6 +20,8 @@ def signup_util(obj):
     user_info['email'] = request.form['email']
     user_info['password'] = request.form['password1']
     user_info['wallet_address'] = request.form['wallet_address']
+    user_info['otp_secret'] = base64.b32encode(os.urandom(10)).decode('utf-8')
+
     if (request.form['isSponsor'] == 'sponsor'):
         user_info['isSponsor'] = 1
     else:
@@ -84,6 +88,15 @@ def signup_util(obj):
     shutil.copy(os.path.join(my_path, 'static/images/resources/display.png'), os.path.join(my_path, 'static/BLOB', user_info['email'], 'images', 'display.png'))
 
     return user_info, password2
+
+
+def get_totp_uri():
+    return 'otpauth://totp/MFA-Code:{0}?secret={1}&issuer=Patrons Pool'.format(session['username'], session['otp_secret'])
+
+
+def verify_totp(token):
+    return onetimepass.valid_totp(token, session['otp_secret'])
+
 
 def login_util(request):
     username = request.form['email']
