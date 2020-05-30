@@ -106,7 +106,10 @@ def login_util(request):
     result = user_exists(username)
     if result:
         session['name'] = result['profile']['fname'] + " " + result['profile']['lname']
-
+        if result['isSponsor'] == 0:
+            session['isSponser'] = 0
+        else:
+            session['isSponser'] = 1
     return result, password, username, result['wallet_address']
 
 

@@ -49,6 +49,15 @@ def get_posts(email):
    return False
 
 
+def get_details_using_search(query):
+    mongo_query = {"$text": {"$search": query}}
+    cursor = db['user'].find(mongo_query)
+    result = []
+    for doc in cursor:
+        result.append(doc)
+    return result
+
+
 def get_sponser_timeline():
     query = {"isSponsor" : 0}
     users = list(db['user'].find(query))

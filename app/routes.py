@@ -4,7 +4,7 @@ import os
 
 from pygments import BytesIO
 
-from app.models import user_exists, save_user, store_posts, get_profile, update_basic, update_work, update_password, get_password, update_language, update_interest, get_posts, get_sponser_timeline, prof_img_upd, mail_sponsers_when_a_post_is_added, email_bid_status_to_other_sponsers, get_otp_secret
+from app.models import user_exists, save_user, store_posts, get_profile, update_basic, update_work, update_password, get_password, update_language, update_interest, get_posts, get_sponser_timeline, prof_img_upd, mail_sponsers_when_a_post_is_added, email_bid_status_to_other_sponsers, get_otp_secret, get_details_using_search
 
 from app import app, BLOB, db
 from app.utils import signup_util, login_util, allowed_file, edit_basic_util, edit_work_util, edit_pass_util, \
@@ -460,6 +460,24 @@ def add_profile_photos():
 
     return redirect(url_for('profile'))
 
+
+@app.route('/search', methods=["GET"])
+def search():
+    query = request.args.get('query')
+    # We'll get a result object
+    result = get_details_using_search(query)
+
+    if session['isSponser'] == 0:
+        if not result:
+            return render_template('search-home.html', error_msg="Oops! No Search Result Found for Query: ", found="no", username="None", query=query)
+        return render_template('search-home.html', result=result, found="yes", msg='Search result for Query: ', query=query)
+
+    if session['isSponser'] == 1:
+        posts = get_sponser_timeline()
+        if not result:
+            return render_template('search-sponser.html', error_msg="Oops! No Search Result Found for Query: ", found="no", username="None", query=query, posts=posts)
+        return render_template('search-sponser.html', result=result, found="yes", msg='Search result for Query: ', query=query, posts=posts)
+    return
 
 @app.errorhandler(404)
 def not_found():

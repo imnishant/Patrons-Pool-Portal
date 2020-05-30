@@ -27,6 +27,9 @@ client = MongoClient()
 db = client['FYP']
 mail = Mail(app)
 
+# The below command in the database to enable the search functionality
+db['user'].create_index([('email', 'text'), ('isSponsor', 'text'), ('posts.post_type', 'text'), ('posts.post_headline', 'text'), ('posts.base_price', 'text')])
+
 # running the Flask App in debugging mode
 #if __name__ == "__main__":
    # app.run(debug=True)
