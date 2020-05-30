@@ -74,7 +74,7 @@ def get_sponser_timeline():
             post['display'] = user['profile']['display']
 
             current_time = int(datetime.datetime.now().timestamp())
-            window_in_seconds = 600
+            window_in_seconds = 120
 
             first_bidding_time = post['first_bidding_time']
             if first_bidding_time == "N/A":
