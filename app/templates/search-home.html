@@ -195,7 +195,7 @@
                                                     {% endif %}
                                                     <br>
                                                 </div>
-
+												{% if post.bid_price == [] %}
                                                 <center>
                                                     <form action="delete_post" method="POST">
                                                         <input type="text" name="filename" value="{{ post.post_name }}" hidden>
@@ -205,6 +205,7 @@
                                                         <button type="submit">Delete</button>
                                                     </form>
                                                 </center>
+												{% endif %}
                                             </div>
 
                                         </div>
