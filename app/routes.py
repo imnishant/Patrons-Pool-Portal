@@ -372,7 +372,7 @@ def update_bid():
 
         # 600 seconds means 10 minutes bidding time
         # if you update window time here than also update in models.py get_sponser_timeline()
-        window_in_seconds = 600
+        window_in_seconds = 120
         current_bid_time = int(datetime.datetime.now().timestamp())
 
         query = {"email": request.form['email']}
