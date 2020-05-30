@@ -4,10 +4,10 @@ from app import db, mail
 from flask import session
 import datetime
 
+
 def user_exists(email):
     query = {"email": email}
     result = db['user'].find_one(query)
-    
     if bool(result):
         return result
     return False
@@ -20,7 +20,6 @@ def save_user(user_info):
 def get_password(email):
     query = {"email": email}
     result = db['user'].find_one(query)
-    
     if bool(result):
         return result['password']
     return False
@@ -29,7 +28,6 @@ def get_password(email):
 def get_profile(email):
     query = {"email": email}
     result = db['user'].find_one(query)
-    
     if bool(result):
         return result['profile']
     return False
@@ -38,15 +36,14 @@ def get_profile(email):
 def get_otp_secret(email):
     query = {"email": email}
     result = db['user'].find_one(query)
-
     if bool(result):
         return result['otp_secret']
     return False
 
+
 def get_posts(email):
    query = {"email": email}
    result = db['user'].find_one(query)
-
    if bool(result):
        return result['posts']
    return False
@@ -73,17 +70,13 @@ def get_sponser_timeline():
             first_bidding_time = post['first_bidding_time']
             if first_bidding_time == "N/A":
                 post['bidding_status'] = "open"
-
             elif current_time - int(first_bidding_time) < window_in_seconds:
                 post['bidding_status'] = "open"
-
             else:
                 post['bidding_status'] = "closed"
 
             #set_new_bid_update_status(post['username'], post['post_headline'], post['bidding_status'])
-
             posts.append(post)
-
     print(posts)
     #  return result
     return posts

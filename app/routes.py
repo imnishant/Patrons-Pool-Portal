@@ -1,7 +1,6 @@
 import pyqrcode as pyqrcode
 from flask import Flask, send_from_directory, render_template, request, render_template, redirect, url_for, session, flash, make_response
 import os
-from werkzeug.exceptions import abort
 
 from pygments import BytesIO
 
@@ -29,7 +28,7 @@ def update_transaction():
         query = {"email": request.form['username'], "posts.post_headline": request.form['headline']}
         result = db['user'].find_one(query)
         if bool(result):
-            res = db['user'].update_one(query, {"$set": {"posts.$.transaction_hash": hash_value}})
+            db['user'].update_one(query, {"$set": {"posts.$.transaction_hash": hash_value}})
         else:
             return render_template('access_denied.html', error_msg="Some Error is there!")
 
@@ -44,15 +43,18 @@ def login():
         result, password, username, wallet_address= login_util(request)
         if result:
             otp_secret = get_otp_secret(username)
-            if result['password'] != password or not verify_totp(request.form['token'], otp_secret):
-                return render_template('access_denied.html', error_msg="Password doesn't match. Go back and re-renter the password")
+            if result['password'] != password:
+                return render_template('access_denied.html', error_msg="Password doesn't match. Please go back and re-enter the password!")
+
+            if not verify_totp(request.form['token'], otp_secret):
+                return render_template('access_denied.html', error_msg="MFA Failed, Please go back and Retry!")
 
             session['username'] = username
             session['wallet_address'] = wallet_address
 
             res = get_profile(session['username'])
             if not res:
-                return render_template('access_denied.html', error_msg="Error Occured while fetching Profile Details")
+                return render_template('access_denied.html', error_msg="Error occurred while fetching Profile Details")
             if result['isSponsor'] == 1:
                 session['isSponsor'] = 1
                 posts = get_sponser_timeline()
@@ -74,14 +76,11 @@ def signup():
             return render_template('access_denied.html', error_msg="Username already exist")
 
         if user_info['password'] != password2:
-            return render_template('access_denied.html',
-                                   error_msg="Password doesn't match. Go back and re-renter the password")
+            return render_template('access_denied.html', error_msg="Password doesn't match. Please go back and re-enter the password!")
 
         save_user(user_info)
-        #return redirect(url_for('two_factor_setup'))
         session['username'] = user_info['email']
         return render_template('two-factor-setup.html')
-
     return render_template('signup.html')
 
 
@@ -94,13 +93,7 @@ def qrcode():
     url.svg(stream, scale=5)
     del session['username']
     session.clear()
-
     return stream.getvalue(), 200, {'Content-Type': 'image/svg+xml'}
-
-       # , {'Content-Type': 'image/svg+xml',
-       # 'Cache-Control': 'no-cache, no-store, must-revalidate',
-       # 'Pragma': 'no-cache',
-       # 'Expires': '0'}
 
 
 @app.route('/addpost', methods=["POST"])

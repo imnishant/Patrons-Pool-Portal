@@ -9,16 +9,19 @@ ALLOWED_EXTENSIONS = {'mpeg', 'mp4', 'mp3', 'm4a', 'png', 'jpg', 'jpeg', 'gif', 
 
 my_path = os.path.abspath(os.path.dirname(__file__))
 
+
 def allowed_file(filetype):
     for allowed_ext in ALLOWED_EXTENSIONS:
         if allowed_ext in filetype.lower():
             return True
     return False
 
+
 def signup_util(obj):
     user_info = {}
     user_info['email'] = request.form['email']
-    user_info['password'] = request.form['password1']
+    password = request.form['password1']
+    user_info['password'] = base64.b64encode(password.encode('ascii')).decode('ascii')
     user_info['wallet_address'] = request.form['wallet_address']
     user_info['otp_secret'] = base64.b32encode(os.urandom(10)).decode('utf-8')
 
@@ -54,7 +57,7 @@ def signup_util(obj):
 
     user_info['posts'] = []
 
-    password2 = request.form['password2']
+    password2 = base64.b64encode((request.form['password2']).encode('ascii')).decode('ascii')
 
     #Creating a directory for the user so that his/her posts will be available
     directory_path = os.path.join(my_path, 'static/BLOB', obj.form['email'])
@@ -86,7 +89,6 @@ def signup_util(obj):
         os.mkdir(posts_path)
     shutil.copy(os.path.join(my_path, 'static/images/resources/cover.jpg'), os.path.join(my_path, 'static/BLOB', user_info['email'], 'images', 'cover.jpg'))
     shutil.copy(os.path.join(my_path, 'static/images/resources/display.png'), os.path.join(my_path, 'static/BLOB', user_info['email'], 'images', 'display.png'))
-
     return user_info, password2
 
 
@@ -100,7 +102,7 @@ def verify_totp(token, otp_secret):
 
 def login_util(request):
     username = request.form['email']
-    password = request.form['pass']
+    password = base64.b64encode((request.form['pass']).encode('ascii')).decode('ascii')
     result = user_exists(username)
     if result:
         session['name'] = result['profile']['fname'] + " " + result['profile']['lname']
@@ -120,6 +122,7 @@ def edit_basic_util(request):
     prof['about'] = request.form['about']
     return prof
 
+
 def edit_work_util(request):
     prof = {}
     prof['course'] = request.form['course']
@@ -128,12 +131,14 @@ def edit_work_util(request):
     prof['organization'] = request.form['organization']
     return prof
 
+
 def edit_pass_util(request):
     prof = {}
     prof['new_pass'] = request.form['new_pass']
     prof['con_pass'] = request.form['con_pass']
     prof['cur_pass'] = request.form['cur_pass']
     return prof    
+
 
 def edit_lan_int_util(request):
     string = request.form['arrval']
