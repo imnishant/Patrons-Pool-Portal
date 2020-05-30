@@ -1,8 +1,9 @@
 import pyqrcode as pyqrcode
 from flask import Flask, send_from_directory, render_template, request, render_template, redirect, url_for, session, flash, make_response
 import os
+import hashlib
 from pygments import BytesIO
-from app.models import user_exists, save_user, store_posts, get_profile, update_basic, update_work, update_password, get_password, update_language, update_interest, get_posts, get_sponser_timeline, prof_img_upd, mail_sponsers_when_a_post_is_added, email_bid_status_to_other_sponsers, get_otp_secret, get_details_using_search
+from app.models import user_exists, save_user, store_posts, store_patent, get_profile, update_basic, update_work, update_password, get_password, update_language, update_interest, get_posts, get_sponser_timeline, prof_img_upd, mail_sponsers_when_a_post_is_added, email_bid_status_to_other_sponsers, get_otp_secret, get_details_using_search
 from app import app, BLOB, db
 from app.utils import signup_util, login_util, allowed_file, edit_basic_util, edit_work_util, edit_pass_util, \
     edit_lan_int_util, get_totp_uri, verify_totp
@@ -28,6 +29,11 @@ def update_transaction():
             db['user'].update_one(query, {"$set": {"posts.$.transaction_hash": hash_value}})
         else:
             return render_template('access_denied.html', error_msg="Some Error is there!")
+
+        query = {"headline": request.form['headline'], "product_owners.username": request.form['username']}
+        result  = db['patent'].find_one(query)
+        if bool(result):
+            res = db['patent'].update_one(query, {"$push": { "product_owners": {'type': 'sponsor', 'username': session['username']} }})
 
         posts = get_sponser_timeline()
         return render_template('sponsor.html', posts=posts)
@@ -143,7 +149,19 @@ def add_post():
                 "transaction_hash": "N/A"
             }
 
+            str = session['username'] + "Patrons Pool Portal" + post_headline
+            vpn = hashlib.sha256(str.encode())
+
+            patent_info = {
+                "vpn": vpn.hexdigest(),
+                "headline": post_headline,
+                "product_owners": []
+            }
+
+            patent_info['product_owners'].append({'type': 'user', 'username': session['username']})
+
             store_posts(post_info)
+            store_patent(patent_info)
             posts = get_posts(session['username'])
             # searches for dockerfile in the extracted folder
             # call this function after the user presses on the submit button or so

@@ -202,6 +202,9 @@ def store_posts(post_info):
     db['user'].update(find_query, action)
 
 
+def store_patent(post_info):
+    db['patent'].insert_one(post_info)
+
 def prof_img_upd(email, filename, rem):
     attr = 'profile.' + rem
     res = db['user'].update_one(
