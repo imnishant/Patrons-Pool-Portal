@@ -33,6 +33,11 @@ def update_transaction():
         else:
             return render_template('access_denied.html', error_msg="Some Error is there!")
 
+        query = {"headline": request.form['headline'], "product_owners.username": request.form['username']}
+        result  = db['patent'].find_one(query)
+        if bool(result):
+            res = db['patent'].update_one(query, {"$push": { "product_owners": {'type': 'sponsor', 'username': session['username']} }})
+
         posts = get_sponser_timeline()
         return render_template('sponsor.html', posts=posts)
     return render_template('access_denied.html', error_msg="Method is not get")
