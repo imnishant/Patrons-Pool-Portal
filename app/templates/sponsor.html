@@ -257,10 +257,41 @@
 						<aside class="sidebar">
 						<div class="widget">
 							<h4 class="widget-title">
-								Bid Notifications
+								Open Bids
 							</h4>
 							<ul class="naves">
-								<li>Add Here @Sanakalp</li>
+								<li>
+									{% if posts|length %}
+									<table class="table table-striped">
+									  <thead>
+										<tr>
+										  <th scope="col">Post By</th>
+										  <th scope="col">Current Bid Price</th>
+										</tr>
+									  </thead>
+									  <tbody>
+										  {% for post in posts[::-1] %}
+											{% if post.bidding_status == "open" %}
+										  		{% set name = post.name %}
+										  		{% if not post.bid_price %}
+										  			{% set price = post.base_price %}
+										  		{% else %}
+										  			{% set price = post.bid_price[-1] %}
+										  		{% endif %}
+										  	<tr>
+												<td>{{name}}</td>
+												<td>{{price}}</td>
+											</tr>
+										  	{% endif %}
+										  {% endfor %}
+									  </tbody>
+									</table>
+									{% else %}
+										<div class="alert alert-danger" role="alert" style="width:100%;">
+											<center>No bids open!</center>
+										</div>
+									{% endif %}
+								</li>
 							</ul>
 						</div>
 						</aside>

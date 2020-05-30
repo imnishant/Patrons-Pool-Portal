@@ -5,8 +5,8 @@ MAINTAINER Sankalp Saxena "sankalp.saxena.sta@gmail.com"
 WORKDIR /home/Final-Year-Project
 COPY . /home/Final-Year-Project
 
-RUN python -m venv venv
-RUN venv/bin/pip install -r requirements.txt
+RUN python3 -m venv venv
+RUN venv/bin/pip3 install -r requirements.txt
 
 
 # environment variables required by flask
