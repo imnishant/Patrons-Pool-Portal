@@ -28,7 +28,7 @@ def update_transaction():
         if bool(result):
             db['user'].update_one(query, {"$set": {"posts.$.transaction_hash": hash_value}})
         else:
-            return render_template('access_denied.html', error_msg="Some Error is there!")
+            return render_template('access_denied.html', error_msg="Some Error is there!", title="Error")
 
         query = {"headline": request.form['headline'], "product_owners.username": request.form['username']}
         result  = db['patent'].find_one(query)
@@ -36,8 +36,9 @@ def update_transaction():
             res = db['patent'].update_one(query, {"$push": { "product_owners": {'type': 'sponsor', 'username': session['username']} }})
 
         posts = get_sponser_timeline()
-        return render_template('sponsor.html', search=False, posts=posts)
-    return render_template('access_denied.html', error_msg="Method is not get")
+
+        return render_template('sponsor.html', search=False, posts=posts, title="Home")
+    return render_template('access_denied.html', error_msg="Method is not get", title="Error")
 
 
 @app.route('/login', methods=['POST', 'GET'])
@@ -47,27 +48,28 @@ def login():
         if result:
             otp_secret = get_otp_secret(username)
             if result['password'] != password:
-                return render_template('access_denied.html', error_msg="Password doesn't match. Please go back and re-enter the password!")
+                return render_template('access_denied.html', error_msg="Password doesn't match. Please go back and re-enter the password!", title="Error")
 
             if not verify_totp(request.form['token'], otp_secret):
-                return render_template('access_denied.html', error_msg="MFA Failed, Please go back and Retry!")
+                return render_template('access_denied.html', error_msg="MFA Failed, Please go back and Retry!", title="Error")
 
             session['username'] = username
             session['wallet_address'] = wallet_address
 
             res = get_profile(session['username'])
             if not res:
-                return render_template('access_denied.html', error_msg="Error occurred while fetching Profile Details")
+                return render_template('access_denied.html', error_msg="Error occurred while fetching Profile Details", title="Error")
             if result['isSponsor'] == 1:
                 session['isSponsor'] = 1
                 posts = get_sponser_timeline()
-                return render_template('sponsor.html', search=False, posts=posts)
+                return render_template('sponsor.html', search=False, posts=posts, title="Home")
             else:
                 session['isSponsor'] = 0
                 posts = get_posts(username)
                 return render_template('home.html', posts=posts, profile=res, search=False)
-        return render_template('access_denied.html', error_msg="Mail Doesn't exists!")
-    return render_template('landing.html')
+        return render_template('access_denied.html', error_msg="Mail Doesn't exists!", title="Error")
+    return render_template('landing.html', title="Login Page")
+
 
 
 @app.route('/signup', methods=['GET', 'POST'])
@@ -76,15 +78,15 @@ def signup():
         user_info, password2 = signup_util(request)
 
         if user_exists(user_info['email']):
-            return render_template('access_denied.html', error_msg="Username already exist")
+            return render_template('access_denied.html', error_msg="Username already exist", title="Error")
 
         if user_info['password'] != password2:
-            return render_template('access_denied.html', error_msg="Password doesn't match. Please go back and re-enter the password!")
+            return render_template('access_denied.html', error_msg="Password doesn't match. Please go back and re-enter the password!", title="Error")
 
         save_user(user_info)
         session['username'] = user_info['email']
-        return render_template('two-factor-setup.html')
-    return render_template('signup.html')
+        return render_template('two-factor-setup.html', title="MFA Authentication")
+    return render_template('signup.html', title="Signup Page")
 
 
 @app.route('/qrcode')
@@ -103,7 +105,7 @@ def qrcode():
 def add_post():
     res = get_profile(session['username'])
     if not res:
-        return render_template('access_denied.html', error_msg="Error Occured while fetching Profile Details")
+        return render_template('access_denied.html', error_msg="Error Occurred while fetching Profile Details", title="Error")
     if request.method == 'POST':
         # check if the post request has the file part
         post_headline = request.form.get('headline')
@@ -168,33 +170,35 @@ def add_post():
             #mail_sponsers_when_a_post_is_added()
             
         else:
-            return render_template("home.html", search=False, posts=posts, profile=res, msg='Allowed file types are mp4, mp3, png, jpg, jpeg, gif')
-    return render_template("home.html", search=False, posts=posts, profile=res, msg='Added Successfully Bro! :-D')
+            return render_template("home.html", search=False, posts=posts, profile=res, msg='Allowed file types are mp4, mp3, png, jpg, jpeg, gif', title="Home")
+    return render_template("home.html", search=False, posts=posts, profile=res, msg='Added Successfully Bro! :-D', title="Home")
 
 
 @app.route('/logout')
 def logout():
     session.clear()
-    return render_template('logout.html')
+    return render_template('logout.html', title="Logout")
 
 
 @app.route('/home', methods=['GET', 'POST'])
 def home():
     if session['isSponsor'] == 1:
         posts = get_sponser_timeline()
-        return render_template('sponsor.html', search=False, posts=posts)
+        return render_template('sponsor.html', search=False, posts=posts, title="Home")
     else:
         res = get_profile(session['username'])
         posts = get_posts(session['username'])
-        return render_template('home.html', posts=posts, profile=res, search=False)
+        return render_template('home.html', posts=posts, profile=res, search=False, title="Home")
+
 
 
 @app.route('/profile', methods=['GET', 'POST'])
 def profile():
     res = get_profile(session['username'])
     if not res:
-        return render_template('access_denied.html', error_msg="Error Occured while fetching Profile Details")
-    return render_template('profile.html', profile=res)
+        return render_template('access_denied.html', error_msg="Error Occured while fetching Profile Details", title="Error")
+    return render_template('profile.html', profile=res, title="Profile")
+
 
 
 @app.route('/edit_basic', methods=['GET', 'POST'])
@@ -204,13 +208,13 @@ def edit_basic():
         if update_basic(session['username'],prof):
             return redirect(url_for('profile'))
         else:
-            return render_template('access_denied.html', error_msg="Error Occured while updating Profile Details")
+            return render_template('access_denied.html', error_msg="Error Occurred while updating Profile Details", title="Error")
     if request.method == 'GET':
         res = get_profile(session['username'])
         if not res:
-            return render_template('access_denied.html', error_msg="Error Occured while fetching Profile Details")
-        return render_template('edit-profile-basic.html',profile=res)
-    return render_template('access_denied.html', error_msg="wrong method invocaton")
+            return render_template('access_denied.html', error_msg="Error Occurred while fetching Profile Details", title="Error")
+        return render_template('edit-profile-basic.html',profile=res, title="Edit Profile")
+    return render_template('access_denied.html', error_msg="wrong method Invocation", title="Error")
 
 
 @app.route('/edit_work', methods=['GET', 'POST'])
@@ -220,13 +224,13 @@ def edit_work():
         if update_work(session['username'],prof):
             return redirect(url_for('profile'))
         else:
-            return render_template('access_denied.html', error_msg="Error Occured while updating Profile Details")
+            return render_template('access_denied.html', error_msg="Error Occurred while updating Profile Details", title="Error")
     if request.method == 'GET':
         res = get_profile(session['username'])
         if not res:
-            return render_template('access_denied.html', error_msg="Error Occured while fetching Profile Details")
-        return render_template('edit-work-education.html',profile=res)
-    return render_template('access_denied.html', error_msg="wrong method invocaton")
+            return render_template('access_denied.html', error_msg="Error Occurred while fetching Profile Details", title="Error")
+        return render_template('edit-work-education.html',profile=res, title="Edit Profile")
+    return render_template('access_denied.html', error_msg="wrong method Invocation", title="Error")
 
 
 @app.route('/edit_interest', methods=['GET', 'POST'])
@@ -236,13 +240,14 @@ def edit_interest():
         if update_interest(session['username'],interest):
             return redirect(url_for('profile'))
         else:
-            return render_template('access_denied.html', error_msg="Error Occured while updating Interests")
+            return render_template('access_denied.html', error_msg="Error Occurred while updating Interests", title="Error")
     if request.method == 'GET':
         res = get_profile(session['username'])
         if not res:
-            return render_template('access_denied.html', error_msg="Error Occured while fetching Profile Details")
-        return render_template('edit-interest.html', profile=res)
-    return render_template('access_denied.html', error_msg="wrong method invocation")
+            return render_template('access_denied.html', error_msg="Error Occured while fetching Profile Details", title="Error")
+        return render_template('edit-interest.html', profile=res, title="Edit Profile")
+    return render_template('access_denied.html', error_msg="wrong method invocation", title="Error")
+
 
 
 @app.route('/edit_language', methods=['GET', 'POST'])
@@ -252,13 +257,13 @@ def edit_language():
         if update_language(session['username'],lan):
             return redirect(url_for('profile'))
         else:
-            return render_template('access_denied.html', error_msg="Error Occured while updating Languages")
+            return render_template('access_denied.html', error_msg="Error Occurred while updating Languages", title="Error")
     if request.method == 'GET':
         res = get_profile(session['username'])
         if not res:
-            return render_template('access_denied.html', error_msg="Error Occured while fetching Profile Details")
-        return render_template('edit-language.html',profile=res)
-    return render_template('access_denied.html', error_msg="wrong method invocaton")
+            return render_template('access_denied.html', error_msg="Error Occurred while fetching Profile Details", title="Error")
+        return render_template('edit-language.html',profile=res, title="Edit Profile")
+    return render_template('access_denied.html', error_msg="wrong method Invocation", title="Error")
 
 
 @app.route('/edit_password', methods=['GET', 'POST'])
@@ -266,19 +271,19 @@ def edit_password():
     if request.method == 'POST':
         prof = edit_pass_util(request)
         if prof['new_pass'] != prof['con_pass']:
-            return render_template('access_denied.html', error_msg="Passwords Don't match!")
+            return render_template('access_denied.html', error_msg="Passwords Don't match!", title="Error")
         if prof['cur_pass'] != get_password(session['username']):
-            return render_template('access_denied.html', error_msg="Current Password entered is wrong!")
+            return render_template('access_denied.html', error_msg="Current Password entered is wrong!", title="Error")
         if update_password(session['username'],prof['new_pass']):
             return redirect(url_for('profile'))
         else:
-            return render_template('access_denied.html', error_msg="Error Occured while updating Password")
+            return render_template('access_denied.html', error_msg="Error Occurred while updating Password", title="Error")
     if request.method == 'GET':
         res = get_profile(session['username'])
         if not res:
-            return render_template('access_denied.html', error_msg="Error Occured while fetching Profile Details")
-        return render_template('edit-password.html',profile=res)
-    return render_template('access_denied.html', error_msg="wrong method invocaton")
+            return render_template('access_denied.html', error_msg="Error Occurred while fetching Profile Details", title="Error")
+        return render_template('edit-password.html',profile=res, title="Edit Profile")
+    return render_template('access_denied.html', error_msg="wrong method Invocation", title="Error")
 
 
 @app.route('/images', methods=['GET'])
@@ -286,13 +291,13 @@ def images():
     if request.method == 'GET':
         res = get_profile(session['username'])
         if not res:
-            return render_template('access_denied.html', error_msg="Error Occured while fetching Profile Details")
+            return render_template('access_denied.html', error_msg="Error Occurred while fetching Profile Details", title="Error")
         if os.path.exists(os.path.join(BLOB, session['username'], 'posts', 'images')):
             files = os.listdir(os.path.join(BLOB, session['username'], 'posts', 'images'))
         else:
             files = []
         return render_template('images.html', profile=res, title="Images", files=files, email=session['username'])
-    return render_template('access_denied.html', error_msg="wrong method invocaton")
+    return render_template('access_denied.html', error_msg="wrong method Invocation", title="Error")
 
 
 @app.route('/videos', methods=['GET'])
@@ -300,13 +305,13 @@ def videos():
     if request.method == 'GET':
         res = get_profile(session['username'])
         if not res:
-            return render_template('access_denied.html', error_msg="Error Occured while fetching Profile Details")
+            return render_template('access_denied.html', error_msg="Error Occurred while fetching Profile Details", title="Error")
         if os.path.exists(os.path.join(BLOB, session['username'], 'posts', 'videos')):
             files = os.listdir(os.path.join(BLOB, session['username'], 'posts', 'videos'))
         else:
             files = []
         return render_template('videos.html', profile=res, title="Videos", files=files, email=session['username'])
-    return render_template('access_denied.html', error_msg="wrong method invocaton")
+    return render_template('access_denied.html', error_msg="wrong method Invocation", title="Error")
 
 
 @app.route('/audios', methods=['GET'])
@@ -314,13 +319,13 @@ def audios():
     if request.method == 'GET':
         res = get_profile(session['username'])
         if not res:
-            return render_template('access_denied.html', error_msg="Error Occured while fetching Profile Details")
+            return render_template('access_denied.html', error_msg="Error Occurred while fetching Profile Details", title="Error")
         if os.path.exists(os.path.join(BLOB, session['username'], 'posts', 'audios')):
             files = os.listdir(os.path.join(BLOB, session['username'], 'posts', 'audios'))
         else:
             files = []
         return render_template('audios.html', profile=res, title="Audios", files=files, email=session['username'])
-    return render_template('access_denied.html', error_msg="wrong method invocaton")
+    return render_template('access_denied.html', error_msg="wrong method Invocation", title="Error")
 
 
 @app.route('/documents', methods=['GET'])
@@ -328,13 +333,13 @@ def documents():
     if request.method == 'GET':
         res = get_profile(session['username'])
         if not res:
-            return render_template('access_denied.html', error_msg="Error Occured while fetching Profile Details")
+            return render_template('access_denied.html', error_msg="Error Occurred while fetching Profile Details", title="Error")
         if os.path.exists(os.path.join(BLOB, session['username'], 'posts', 'documents')):
             files = os.listdir(os.path.join(BLOB, session['username'], 'posts', 'documents'))
         else:
             files = []
         return render_template('documents.html', profile=res, title="Documents", files=files, email=session['username'])
-    return render_template('access_denied.html', error_msg="wrong method invocaton")
+    return render_template('access_denied.html', error_msg="wrong method Invocation", title="Error")
 
 
 @app.route('/get_BLOB', methods=["GET"])
@@ -352,7 +357,7 @@ def delete_post():
         if os.path.exists(os.path.join(BLOB, session['username'], 'posts', folder + 's', filename)):
             os.remove(os.path.join(BLOB, session['username'], 'posts', folder + 's', filename))
         else:
-            return render_template('access_denied.html', error_msg="File does not exist locally")
+            return render_template('access_denied.html', error_msg="File does not exist locally", title="Error")
 
         query = {"email": session['username']}
         result = db['user'].find_one(query)
@@ -363,15 +368,16 @@ def delete_post():
                 {"$pull": {"posts": {'post_name': filename}}}
             )
         else:
-            return render_template('access_denied.html', error_msg="File does not exist in mongodb database")
+            return render_template('access_denied.html', error_msg="File does not exist in mongodb database", title="Error")
 
         posts = get_posts(session['username'])
 
         res = get_profile(session['username'])
         if not res:
-            return render_template('access_denied.html', error_msg="Error Occured while fetching Profile Details")
-        return render_template('home.html', posts=posts, profile=res, msg="Post Successfully deleted!", search=False)
-    return render_template('access_denied.html', error_msg="Delete Post Method is not POST")
+            return render_template('access_denied.html', error_msg="Error Occured while fetching Profile Details", title="Error")
+        return render_template('home.html', posts=posts, profile=res, msg="Post Successfully deleted!", search=False, title="Home")
+    return render_template('access_denied.html', error_msg="Delete Post Method is not POST", title="Error")
+
 
 
 @app.route('/update_bid', methods=["POST"])
@@ -430,18 +436,19 @@ def update_bid():
 
             elif int(new_sponser_bid_price) <= earlier_bid_price:
                 posts = get_sponser_timeline()
-                return render_template("sponsor.html", search=False, posts=posts,msg='Please enter amount greater than the current bid amount!')
+                return render_template("sponsor.html", search=False, posts=posts,msg='Please enter amount greater than the current bid amount!', title="Home")
 
             else:
                 # display time window is over you cannot bid anymore
                 posts = get_sponser_timeline()
-                return render_template("sponsor.html", search=False, posts=posts, msg='You cannot bid anymore because Bidding Time is Over')
+
+                return render_template("sponsor.html", search=False, posts=posts, msg='You cannot bid anymore because Bidding Time is Over', title="Home")
 
             posts = get_sponser_timeline()
-            return render_template("sponsor.html", search=False, posts=posts, msg='Your Bid Placed Successfully Bro! ATB! :)')
+            return render_template("sponsor.html", search=False, posts=posts, msg='Your Bid Placed Successfully Bro! ATB! :)', title="Home")
         else:
-            return render_template('access_denied.html', error_msg="File does not exist in mongodb database")
-    return render_template('access_denied.html', error_msg="Delete Post Method is not POST")
+            return render_template('access_denied.html', error_msg="File does not exist in mongodb database", title="Error")
+    return render_template('access_denied.html', error_msg="Delete Post Method is not POST", title="Error")
 
 
 @app.route('/add_profile_photos', methods=['POST'] )
@@ -457,7 +464,7 @@ def add_profile_photos():
         rem = 'display'
 
     else:
-        return render_template('access_denied.html', error_msg="Error Occured!")
+        return render_template('access_denied.html', error_msg="Error Occurred!", title="Error")
 
     file = request.files[multimedia]
     extension = file.filename.split('.')[-1]
@@ -470,7 +477,7 @@ def add_profile_photos():
             os.remove(os.path.join(BLOB, session['username'], 'images', prof[rem]))
         res = prof_img_upd(session['username'], filename, rem)
         if not res:
-            return render_template('access_denied.html', error_msg="Error Occured!")
+            return render_template('access_denied.html', error_msg="Error Occurred!", title="Error")
 
     return redirect(url_for('profile'))
 
@@ -484,28 +491,29 @@ def search():
 
     if session['isSponser'] == 0:
         if not result:
-            return render_template('home.html', search=True, error_msg="Oops! No Search Result Found for Query: ", found="no", username="None", query=query)
-        return render_template('home.html', search=True, result=result, found="yes", msg=msg)
+            return render_template('home.html', search=True, error_msg="Oops! No Search Result Found for Query: ", found="no", username="None", query=query, title="Search")
+        return render_template('home.html', search=True, result=result, found="yes", msg=msg, title="Search")
 
     if session['isSponser'] == 1:
         posts = get_sponser_timeline()
         if not result:
-            return render_template('sponsor.html', posts=posts, search=True, error_msg="Oops! No Search Result Found for Query: ", found="no", username="None", query=query)
-        return render_template('sponsor.html', posts=posts, search=True, result=result, found="yes", msg=msg)
+            return render_template('sponsor.html', posts=posts, search=True, error_msg="Oops! No Search Result Found for Query: ", found="no", username="None", query=query, title="Search")
+        return render_template('sponsor.html', posts=posts, search=True, result=result, found="yes", msg=msg, title="Search")
     return
+
 
 @app.errorhandler(404)
 def not_found():
-    return render_template('access_denied.html', error_msg="Page Not Found")
+    return render_template('access_denied.html', error_msg="Page Not Found", title="Not Found")
 
 
 @app.errorhandler(400)
 def bad_request():
-    return render_template('access_denied.html', error_msg="Bad Request")
+    return render_template('access_denied.html', error_msg="Bad Request", title="Bad Request")
 
 
 @app.errorhandler(500)
 def server_error():
-    return render_template('access_denied.html', error_msg="Internal Server Error")
+    return render_template('access_denied.html', error_msg="Internal Server Error", title="Internal Server Error")
 
 
