@@ -1,4 +1,4 @@
-# Patron Hunter
+# Patrons Pool Portal
 
 ## Run these below commands in the terminal to build and run the project
 
