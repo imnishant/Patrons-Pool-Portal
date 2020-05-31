@@ -36,7 +36,7 @@ def update_transaction():
             res = db['patent'].update_one(query, {"$push": { "product_owners": {'type': 'sponsor', 'username': session['username']} }})
 
         posts = get_sponser_timeline()
-        return render_template('sponsor.html', posts=posts)
+        return render_template('sponsor.html', search=False, posts=posts)
     return render_template('access_denied.html', error_msg="Method is not get")
 
 
@@ -61,11 +61,11 @@ def login():
             if result['isSponsor'] == 1:
                 session['isSponsor'] = 1
                 posts = get_sponser_timeline()
-                return render_template('sponsor.html', posts=posts)
+                return render_template('sponsor.html', search=False, posts=posts)
             else:
                 session['isSponsor'] = 0
                 posts = get_posts(username)
-                return render_template('home.html', posts=posts, profile=res)
+                return render_template('home.html', posts=posts, profile=res, search=False)
         return render_template('access_denied.html', error_msg="Mail Doesn't exists!")
     return render_template('landing.html')
 
@@ -168,8 +168,8 @@ def add_post():
             #mail_sponsers_when_a_post_is_added()
             
         else:
-            return render_template("home.html", posts = posts, profile=res, msg='Allowed file types are mp4, mp3, png, jpg, jpeg, gif')
-    return render_template("home.html", posts = posts, profile=res, msg='Added Successfully Bro! :-D')
+            return render_template("home.html", search=False, posts=posts, profile=res, msg='Allowed file types are mp4, mp3, png, jpg, jpeg, gif')
+    return render_template("home.html", search=False, posts=posts, profile=res, msg='Added Successfully Bro! :-D')
 
 
 @app.route('/logout')
@@ -182,11 +182,11 @@ def logout():
 def home():
     if session['isSponsor'] == 1:
         posts = get_sponser_timeline()
-        return render_template('sponsor.html', posts=posts)
+        return render_template('sponsor.html', search=False, posts=posts)
     else:
         res = get_profile(session['username'])
         posts = get_posts(session['username'])
-        return render_template('home.html', posts=posts, profile=res)
+        return render_template('home.html', posts=posts, profile=res, search=False)
 
 
 @app.route('/profile', methods=['GET', 'POST'])
@@ -194,7 +194,7 @@ def profile():
     res = get_profile(session['username'])
     if not res:
         return render_template('access_denied.html', error_msg="Error Occured while fetching Profile Details")
-    return render_template('profile.html',profile=res)
+    return render_template('profile.html', profile=res)
 
 
 @app.route('/edit_basic', methods=['GET', 'POST'])
@@ -242,7 +242,7 @@ def edit_interest():
         if not res:
             return render_template('access_denied.html', error_msg="Error Occured while fetching Profile Details")
         return render_template('edit-interest.html', profile=res)
-    return render_template('access_denied.html', error_msg="wrong method invocaton")
+    return render_template('access_denied.html', error_msg="wrong method invocation")
 
 
 @app.route('/edit_language', methods=['GET', 'POST'])
@@ -370,7 +370,7 @@ def delete_post():
         res = get_profile(session['username'])
         if not res:
             return render_template('access_denied.html', error_msg="Error Occured while fetching Profile Details")
-        return render_template('home.html', posts=posts, profile=res, msg="Post Successfully deleted!")
+        return render_template('home.html', posts=posts, profile=res, msg="Post Successfully deleted!", search=False)
     return render_template('access_denied.html', error_msg="Delete Post Method is not POST")
 
 
@@ -430,16 +430,15 @@ def update_bid():
 
             elif int(new_sponser_bid_price) <= earlier_bid_price:
                 posts = get_sponser_timeline()
-                return render_template("sponsor.html", posts=posts,msg='Please enter amount greater than the current bid amount!')
+                return render_template("sponsor.html", search=False, posts=posts,msg='Please enter amount greater than the current bid amount!')
 
             else:
                 # display time window is over you cannot bid anymore
                 posts = get_sponser_timeline()
-                return render_template("sponsor.html", posts=posts,
-                                       msg='You cannot bid anymore because Bidding Time is Over')
+                return render_template("sponsor.html", search=False, posts=posts, msg='You cannot bid anymore because Bidding Time is Over')
 
             posts = get_sponser_timeline()
-            return render_template("sponsor.html", posts=posts, msg='Your Bid Placed Successfully Bro! ATB! :)')
+            return render_template("sponsor.html", search=False, posts=posts, msg='Your Bid Placed Successfully Bro! ATB! :)')
         else:
             return render_template('access_denied.html', error_msg="File does not exist in mongodb database")
     return render_template('access_denied.html', error_msg="Delete Post Method is not POST")
@@ -481,17 +480,18 @@ def search():
     query = request.args.get('query')
     # We'll get a result object
     result = get_details_using_search(query)
+    msg = 'Search results for Query: ' + query
 
     if session['isSponser'] == 0:
         if not result:
-            return render_template('search-home.html', error_msg="Oops! No Search Result Found for Query: ", found="no", username="None", query=query)
-        return render_template('search-home.html', result=result, found="yes", msg='Search result for Query: ', query=query)
+            return render_template('home.html', search=True, error_msg="Oops! No Search Result Found for Query: ", found="no", username="None", query=query)
+        return render_template('home.html', search=True, result=result, found="yes", msg=msg)
 
     if session['isSponser'] == 1:
         posts = get_sponser_timeline()
         if not result:
-            return render_template('search-sponser.html', error_msg="Oops! No Search Result Found for Query: ", found="no", username="None", query=query, posts=posts)
-        return render_template('search-sponser.html', result=result, found="yes", msg='Search result for Query: ', query=query, posts=posts)
+            return render_template('sponsor.html', posts=posts, search=True, error_msg="Oops! No Search Result Found for Query: ", found="no", username="None", query=query)
+        return render_template('sponsor.html', posts=posts, search=True, result=result, found="yes", msg=msg)
     return
 
 @app.errorhandler(404)

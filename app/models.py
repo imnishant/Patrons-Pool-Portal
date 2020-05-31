@@ -53,8 +53,9 @@ def get_details_using_search(query):
     mongo_query = {"$text": {"$search": query}}
     cursor = db['user'].find(mongo_query)
     result = []
-    for doc in cursor:
-        result.append(doc)
+    if cursor:
+        for doc in cursor:
+            result.append(doc)
     return result
 
 

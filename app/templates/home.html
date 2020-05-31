@@ -55,139 +55,246 @@
 								</aside>
 							</div><!-- sidebar -->
 							<div class="col-lg-6">
-								<div class="central-meta">
-									<div class="new-postbox">
-										<figure>
-											<img src="static/BLOB/{{profile['email']}}/images/{{profile['display']}}" alt="">
-										</figure>
-										<div class="newpst-input">
-											<form action="/addpost" method="post" enctype="multipart/form-data">
-												<textarea rows="3" name="headline" placeholder="write something" required></textarea>
-												<div class="attachments">
-													<ul>
-														<li>
-															<i class="fa fa-music"></i>
-															<label class="fileContainer">
-																<input type="file" name="audio" accept="audio/*">
-															</label>
-														</li>
-														<li>
-															<i class="fa fa-image"></i>
-															<label class="fileContainer">
-																<input type="file" name="image" accept="image/*">
-															</label>
-														</li>
-														<li>
-															<i class="fa fa-video-camera"></i>
-															<label class="fileContainer">
-																<input type="file" name="video" accept="video/*">
-															</label>
-														</li>
-														<li>
-															<i class="fa fa-file"></i>
-															<label class="fileContainer">
-																<input type="file" name="document" accept=".pdf">
-															</label>
-														</li>
-														<li>
-															<button type="submit" name="submit">Post</button>
-														</li>
-													</ul>
-												</div>
-												<br>
-												Base Price:  <input type="number" name="base_price" required>
-											</form>
-										</div>
-									</div>
-								</div>
 
-								{% for post in posts[::-1] %}
-								<!-- add post new box -->
-								<div class="loadMore">
-								<div class="central-meta item" style="box-shadow:5px 5px 5px 5px grey;">
-									<div class="user-post">
-										<div class="friend-info">
-											<figure>
-												<img src="static/BLOB/{{profile['email']}}/images/{{profile['display']}}" alt="">
-											</figure>
-											<div class="friend-name">
-												<ins><a href="time-line.html" title="">{{ session['name'] }}</a></ins>
-												<span> Published on: {{ post['date_time_added'] }}</span>
-											</div>
-											<div class="post-meta">
-												<div class="description">
-													
-													<p> {{ post.post_headline }} </p>
+								{% if search == True %}
 
-												</div>
-												{% if post.post_type == 'image' %}
-													<img src="static/BLOB/{{session['username']}}/posts/{{post.post_type + 's'}}/{{post.post_name}}" align="middle">
-												{% endif %}
-												{% if post.post_type == 'video' %}
-													<video width="100%" height="auto" controls>
-														<source  src="static/BLOB/{{session['username']}}/posts/{{post.post_type + 's'}}/{{post.post_name}}" align="middle">
-													</video>
-												{% endif %}
-												{% if post.post_type == 'audio' %}
-													<center>
-													<audio controls>
-														<source src="static/BLOB/{{session['username']}}/posts/{{post.post_type + 's'}}/{{post.post_name}}">
-													</audio>
-													</center>
-												{% endif %}
-												{% if post.post_type == 'document' %}
-													<object data="static/BLOB/{{session['username']}}/posts/{{post.post_type + 's'}}/{{post.post_name}}" height="auto" width="100%"></object>
-												{% endif %}
-												<br>
-												<div class="row" style="padding:10px;">
-													<div class="col-md-6">Base Price: {{post.base_price}}</div>
-												{% if post.bid_price|length %}
-													<div class="col-md-6">Max. Bid Price: {{post.bid_price|last}} </div>
-												</div>
-													<table class="table table-striped">
-													  <thead>
-														<tr>
-														  <th scope="col">Bid Price</th>
-														  <th scope="col">Bid Person</th>
-														</tr>
-													  </thead>
-													  <tbody>
-														  {% for i in post.bid_price %}
-														  {% set price = post.bid_price[loop.index-1] %}
-														  {% set name = post.bidding_person[loop.index-1] %}
-																<tr>
-																	<td>{{price}}</td>
-																	<td>{{name}}</td>
-																</tr>
-														  {% endfor %}
-													  </tbody>
-												</table>
-												{% else %}
-															<div class="col-md-6">Max. Bid Price: --- </div>
+											{% if found == "yes" %}
+												{% for user_details in result %}
+													{% set username = user_details.email %}
+														{% for post in user_details.posts %}
+														<!-- add post new box -->
+														<div class="loadMore">
+															<div class="central-meta item" style="box-shadow:5px 5px 5px 5px grey;">
+																<div class="user-post">
+																	<div class="friend-info">
+																		<figure>
+																			<img src="static/BLOB/{{ username }}/images/{{user_details['profile']['display']}}" alt="">
+																		</figure>
+																		<div class="friend-name">
+																			<ins><a href="time-line.html" title="">{{ user_details['profile']['fname'] + " " + user_details['profile']['lname'] }}</a></ins>
+																			<span> Published on: {{ post['date_time_added'] }}</span>
+																		</div>
+																		<div class="post-meta">
+																			<div class="description">
+
+																				<p> {{ post.post_headline }} </p>
+
+																			</div>
+																			{% if post.post_type == 'image' %}
+																			<img src="static/BLOB/{{ username }}/posts/{{post.post_type + 's'}}/{{post.post_name}}" align="middle">
+																			{% endif %}
+																			{% if post.post_type == 'video' %}
+																			<video width="100%" height="auto" controls>
+																				<source  src="static/BLOB/{{ username }}/posts/{{post.post_type + 's'}}/{{post.post_name}}" align="middle">
+																			</video>
+																			{% endif %}
+																			{% if post.post_type == 'audio' %}
+																			<center>
+																				<audio controls>
+																					<source src="static/BLOB/{{ username }}/posts/{{post.post_type + 's'}}/{{post.post_name}}">
+																				</audio>
+																			</center>
+																			{% endif %}
+																			{% if post.post_type == 'document' %}
+																			<object data="static/BLOB/{{ username }}/posts/{{post.post_type + 's'}}/{{post.post_name}}" height="auto" width="100%"></object>
+																			{% endif %}
+																			<br>
+																			<div class="row" style="padding:10px;">
+																				<div class="col-md-6">Base Price: {{post.base_price}}</div>
+																				{% if post.bid_price|length %}
+																				<div class="col-md-6">Max. Bid Price: {{post.bid_price|last}} </div>
+																			</div>
+																			<table class="table table-striped">
+																				<thead>
+																				<tr>
+																					<th scope="col">Bid Price</th>
+																					<th scope="col">Bid Person</th>
+																				</tr>
+																				</thead>
+																				<tbody>
+																				{% for i in post.bid_price %}
+																				{% set price = post.bid_price[loop.index-1] %}
+																				{% set name = post.bidding_person[loop.index-1] %}
+																				<tr>
+																					<td>{{price}}</td>
+																					<td>{{name}}</td>
+																				</tr>
+																				{% endfor %}
+																				</tbody>
+																			</table>
+																			{% else %}
+																			<div class="col-md-6">Max. Bid Price: --- </div>
+																		</div>
+																		<center class="alert alert-danger" role="alert">
+																			<center>No Bids PLaced Yet!!</center>
+																	</div>
+																	{% endif %}
+																	<br>
+																</div>
+																{% if post.bid_price == [] %}
+																<center>
+																	<form action="delete_post" method="POST">
+																		<input type="text" name="filename" value="{{ post.post_name }}" hidden>
+																		<input type="text" name="folder" value="{{ post.post_type }}" hidden>
+																		<input type="text" name="date_time" value="{{ post.date_time_added }}" hidden>
+																		<input type="text" name="headline" value="{{ post.post_headline }}" hidden>
+																		<button type="submit">Delete</button>
+																	</form>
+																</center>
+																{% endif %}
+																</div>
+
+															</div>
 														</div>
-													<center class="alert alert-danger" role="alert">
-														<center>No Bids PLaced Yet!!</center>
+
+														{% endfor %}
+													{% endfor %}
+												{% else %}
+													<div class="alert alert-danger" role="alert" style="width:100%;">
+														<center>{{ error_msg }} {{query}}</center>
 													</div>
-												{% endif %}
-												<br>
-											</div>
-											{% if post.bid_price == [] %}
-											<center>
-												<form action="delete_post" method="POST">
-													<input type="text" name="filename" value="{{ post.post_name }}" hidden>
-													<input type="text" name="folder" value="{{ post.post_type }}" hidden>
-													<input type="text" name="date_time" value="{{ post.date_time_added }}" hidden>
-													<input type="text" name="headline" value="{{ post.post_headline }}" hidden>
-													<button type="submit">Delete</button>
-												</form>
-											</center>
 											{% endif %}
+
+
+								{% else %}
+
+										<div class="central-meta">
+											<div class="new-postbox">
+												<figure>
+													<img src="static/BLOB/{{profile['email']}}/images/{{profile['display']}}" alt="">
+												</figure>
+												<div class="newpst-input">
+													<form action="/addpost" method="post" enctype="multipart/form-data">
+														<textarea rows="3" name="headline" placeholder="write something" required></textarea>
+														<div class="attachments">
+															<ul>
+																<li>
+																	<i class="fa fa-music"></i>
+																	<label class="fileContainer">
+																		<input type="file" name="audio" accept="audio/*">
+																	</label>
+																</li>
+																<li>
+																	<i class="fa fa-image"></i>
+																	<label class="fileContainer">
+																		<input type="file" name="image" accept="image/*">
+																	</label>
+																</li>
+																<li>
+																	<i class="fa fa-video-camera"></i>
+																	<label class="fileContainer">
+																		<input type="file" name="video" accept="video/*">
+																	</label>
+																</li>
+																<li>
+																	<i class="fa fa-file"></i>
+																	<label class="fileContainer">
+																		<input type="file" name="document" accept=".pdf">
+																	</label>
+																</li>
+																<li>
+																	<button type="submit" name="submit">Post</button>
+																</li>
+															</ul>
+														</div>
+														<br>
+														Base Price:  <input type="number" name="base_price" required>
+													</form>
+												</div>
+											</div>
 										</div>
 
-									</div>
-								</div>
+										{% for post in posts[::-1] %}
+										<!-- add post new box -->
+										<div class="loadMore">
+										<div class="central-meta item" style="box-shadow:5px 5px 5px 5px grey;">
+											<div class="user-post">
+												<div class="friend-info">
+													<figure>
+														<img src="static/BLOB/{{profile['email']}}/images/{{profile['display']}}" alt="">
+													</figure>
+													<div class="friend-name">
+														<ins><a href="time-line.html" title="">{{ session['name'] }}</a></ins>
+														<span> Published on: {{ post['date_time_added'] }}</span>
+													</div>
+													<div class="post-meta">
+														<div class="description">
 
-								{% endfor %}
+															<p> {{ post.post_headline }} </p>
+
+														</div>
+														{% if post.post_type == 'image' %}
+															<img src="static/BLOB/{{session['username']}}/posts/{{post.post_type + 's'}}/{{post.post_name}}" align="middle">
+														{% endif %}
+														{% if post.post_type == 'video' %}
+															<video width="100%" height="auto" controls>
+																<source  src="static/BLOB/{{session['username']}}/posts/{{post.post_type + 's'}}/{{post.post_name}}" align="middle">
+															</video>
+														{% endif %}
+														{% if post.post_type == 'audio' %}
+															<center>
+															<audio controls>
+																<source src="static/BLOB/{{session['username']}}/posts/{{post.post_type + 's'}}/{{post.post_name}}">
+															</audio>
+															</center>
+														{% endif %}
+														{% if post.post_type == 'document' %}
+															<object data="static/BLOB/{{session['username']}}/posts/{{post.post_type + 's'}}/{{post.post_name}}" height="auto" width="100%"></object>
+														{% endif %}
+														<br>
+														<div class="row" style="padding:10px;">
+															<div class="col-md-6">Base Price: {{post.base_price}}</div>
+														{% if post.bid_price|length %}
+															<div class="col-md-6">Max. Bid Price: {{post.bid_price|last}} </div>
+														</div>
+															<table class="table table-striped">
+															  <thead>
+																<tr>
+																  <th scope="col">Bid Price</th>
+																  <th scope="col">Bid Person</th>
+																</tr>
+															  </thead>
+															  <tbody>
+																  {% for i in post.bid_price %}
+																  {% set price = post.bid_price[loop.index-1] %}
+																  {% set name = post.bidding_person[loop.index-1] %}
+																		<tr>
+																			<td>{{price}}</td>
+																			<td>{{name}}</td>
+																		</tr>
+																  {% endfor %}
+															  </tbody>
+														</table>
+														{% else %}
+																	<div class="col-md-6">Max. Bid Price: --- </div>
+																</div>
+															<center class="alert alert-danger" role="alert">
+																<center>No Bids PLaced Yet!!</center>
+															</div>
+														{% endif %}
+														<br>
+													</div>
+													{% if post.bid_price == [] %}
+													<center>
+														<form action="delete_post" method="POST">
+															<input type="text" name="filename" value="{{ post.post_name }}" hidden>
+															<input type="text" name="folder" value="{{ post.post_type }}" hidden>
+															<input type="text" name="date_time" value="{{ post.date_time_added }}" hidden>
+															<input type="text" name="headline" value="{{ post.post_headline }}" hidden>
+															<button type="submit">Delete</button>
+														</form>
+													</center>
+													{% endif %}
+												</div>
+
+											</div>
+										</div>
+
+										{% endfor %}
+
+								{% endif %}
+
+
 						</div>
 					</div>
 				</div>
