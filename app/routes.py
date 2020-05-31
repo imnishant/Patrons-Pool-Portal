@@ -291,7 +291,7 @@ def images():
             files = os.listdir(os.path.join(BLOB, session['username'], 'posts', 'images'))
         else:
             files = []
-        return render_template('images.html', profile=res, title="Images", files=files, email=session['username'], title="Images")
+        return render_template('images.html', profile=res, title="Images", files=files, email=session['username'])
     return render_template('access_denied.html', error_msg="wrong method Invocation", title="Error")
 
 
@@ -305,7 +305,7 @@ def videos():
             files = os.listdir(os.path.join(BLOB, session['username'], 'posts', 'videos'))
         else:
             files = []
-        return render_template('videos.html', profile=res, title="Videos", files=files, email=session['username'], title="Videos")
+        return render_template('videos.html', profile=res, title="Videos", files=files, email=session['username'])
     return render_template('access_denied.html', error_msg="wrong method Invocation", title="Error")
 
 
@@ -319,7 +319,7 @@ def audios():
             files = os.listdir(os.path.join(BLOB, session['username'], 'posts', 'audios'))
         else:
             files = []
-        return render_template('audios.html', profile=res, title="Audios", files=files, email=session['username'], title="Audios")
+        return render_template('audios.html', profile=res, title="Audios", files=files, email=session['username'])
     return render_template('access_denied.html', error_msg="wrong method Invocation", title="Error")
 
 
@@ -333,7 +333,7 @@ def documents():
             files = os.listdir(os.path.join(BLOB, session['username'], 'posts', 'documents'))
         else:
             files = []
-        return render_template('documents.html', profile=res, title="Documents", files=files, email=session['username'], title="Documents")
+        return render_template('documents.html', profile=res, title="Documents", files=files, email=session['username'])
     return render_template('access_denied.html', error_msg="wrong method Invocation", title="Error")
 
 
