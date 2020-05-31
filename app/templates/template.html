@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+	<title>{{title}}</title>
+
+    <link rel="stylesheet" href="../static/css/main.min.css">
+    <link rel="stylesheet" href="../static/css/style.css">
+    <link rel="stylesheet" href="../static/css/color.css">
+    <link rel="stylesheet" href="../static/css/responsive.css">
+	<style type="text/css">
+		button:hover {
+			box-shadow: 5px 5px 5px 5px grey;
+		}
+		.logo {
+			padding-top:10px;
+			margin-left:5%;
+		}
+		.navbar {
+			padding: 0px;
+		}
+	</style>
+</head>
+<body>
+
+    {% block content %}{% endblock %}
+	<script src="../static/js/main.min.js"></script>
+	<script src="../static/js/script.js"></script>
+	<script src="../static/js/map-init.js"></script>
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA8c55_YHLvDHGACkQscgbGLtLRdxBDCfI"></script>
+
+</body>
+
+</html>

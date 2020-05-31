@@ -60,6 +60,10 @@ def signup_util(obj):
     password2 = base64.b64encode((request.form['password2']).encode('ascii')).decode('ascii')
 
     #Creating a directory for the user so that his/her posts will be available
+    directory_path = os.path.join(my_path, 'static/BLOB')
+    if not os.path.exists(directory_path):
+        os.mkdir(directory_path)
+
     directory_path = os.path.join(my_path, 'static/BLOB', obj.form['email'])
     if not os.path.exists(directory_path):
         os.mkdir(directory_path)
