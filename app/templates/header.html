@@ -22,16 +22,15 @@
 		button:hover {
 			box-shadow: 5px 5px 5px 5px grey;
 		}
+		.icon {
+			width:20%;
+			height:auto;
+		}
+		.right {
+			margin-right:5%;
+		}
 		.nav-item {
-			margin:0% 5%;
 			font-size:18px;
-		}
-		.logo {
-			padding-top:10px;
-			margin-left:5%;
-		}
-		.navbar {
-			padding: 0px;
 		}
 	</style>
 </head>
@@ -39,25 +38,53 @@
 <!--<div class="se-pre-con"></div>-->
 <div class="theme-layout">
 	<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
-	  <a class="navbar-brand logo" href="#"><img src="../static/images/Icon.jpeg"></a>
-	  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+	  <img src="../static/images/Icon.jpeg" class="icon">
+	  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 		<span class="navbar-toggler-icon"></span>
 	  </button>
-	  <div class="collapse navbar-collapse" id="navbarNav" style="margin-left:25%;">
-		<ul class="navbar-nav">
-		  <li class="nav-item">
-			<a class="nav-link" href="/home">Home</a>
-		  </li>
-		  <li class="nav-item">
-			<a class="nav-link" href="/profile">Profile</a>
-		  </li>
-		</ul>
-	  </div>
 
-		<form class="form-inline my-2 my-lg-0" method="GET" action="search" style="margin-right:5%;">
+	  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+		  <ul class="navbar-nav mr-auto" style="margin:0 auto;">
+			  <li class="nav-item">
+				<a class="nav-link" href="/home">Home</a>
+			  </li>
+			  <li class="nav-item">
+				<a class="nav-link" href="/profile">Profile</a>
+			  </li>
+			  {% if session['isSponsor'] == 0 %}
+			  <li class="nav-item dropdown">
+				<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					Uploads
+				</a>
+				<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+				  <a class="dropdown-item" href="/images">Images</a>
+				  <a class="dropdown-item" href="/audios">Audios</a>
+					<a class="dropdown-item" href="/videos">Videos</a>
+				  <a class="dropdown-item" href="/documents">Documents</a>
+				</div>
+			  </li>
+			  {% endif %}
+			  {% if search is defined %}
+				<li class="nav-item dropdown">
+				<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown1" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					Filter Posts By
+				</a>
+				<div class="dropdown-menu" aria-labelledby="navbarDropdown1">
+				  <a class="dropdown-item" href="url_for('/filters',val=0)">All</a>
+					<a class="dropdown-item" href="url_for('/filters',val=1)">Images</a>
+				  <a class="dropdown-item" href="url_for('/filters',val=2)">Audios</a>
+					<a class="dropdown-item" href="url_for('/filters',val=3)">Videos</a>
+				  <a class="dropdown-item" href="url_for('/filters',val=4)">Documents</a>
+				</div>
+			  </li>
+			  {% endif %}
+			</ul>
+
+
+		<form class="form-inline my-2 my-lg-0 right" method="GET" action="search">
 		  <input class="form-control mr-sm-2" name="query" type="search" placeholder="Search" aria-label="Search">
 		  <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
 		</form>
-
-		<button class="btn btn-primary" style="margin-right:2%;"><a href="/logout">Logout</a></button>
+		<button class="btn btn-primary"><a href="/logout">Logout</a></button>
+	  </div>
 	</nav>

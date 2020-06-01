@@ -206,6 +206,9 @@
 
 										{% for post in posts[::-1] %}
 										<!-- add post new box -->
+										{% if filter is defined and filter == 1 and post.post_type != 'images' %}
+
+										{% endif %}
 										<div class="loadMore">
 										<div class="central-meta item" style="box-shadow:5px 5px 5px 5px grey;">
 											<div class="user-post">
