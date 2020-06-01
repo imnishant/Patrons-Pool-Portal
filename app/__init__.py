@@ -1,7 +1,6 @@
 import os.path
 
 from flask import Flask
-from pymongo import MongoClient
 from flask_pymongo import PyMongo
 from flask_mail import Mail
 
