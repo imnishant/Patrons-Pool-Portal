@@ -191,6 +191,17 @@ def home():
         return render_template('home.html', posts=posts, profile=res, search=False, title="Home")
 
 
+@app.route('/filters/<int:val>', methods=['GET','POST'])
+def filters(val):
+    if session['isSponsor'] == 1:
+        posts = get_sponser_timeline()
+        return render_template('sponsor.html', search=False, posts=posts, title="Home", filter=val)
+    else:
+        res = get_profile(session['username'])
+        posts = get_posts(session['username'])
+        return render_template('home.html', posts=posts, profile=res, search=False, title="Home", filter=val)
+
+
 
 @app.route('/profile', methods=['GET', 'POST'])
 def profile():
