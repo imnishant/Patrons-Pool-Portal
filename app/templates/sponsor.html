@@ -182,6 +182,18 @@
 									{% if posts|length %}
 									{% for post in posts[::-1] %}
 									<!-- add post new box -->
+									{% if filters is defined and filters == 'Images' and post.post_type != 'image' %}
+										{% continue %}
+									{% endif %}
+									{% if filters is defined and filters == 'Audios' and post.post_type != 'audio' %}
+										{% continue %}
+									{% endif %}
+									{% if filters is defined and filters == 'Videos' and post.post_type != 'video' %}
+										{% continue %}
+									{% endif %}
+									{% if filters is defined and filters == 'Documents' and post.post_type != 'document' %}
+										{% continue %}
+									{% endif %}
 									<div class="loadMore" id="{{post.post_headline}}">
 										<div style="box-shadow:5px 5px 5px 5px grey;" class="central-meta item">
 											<div class="user-post">
