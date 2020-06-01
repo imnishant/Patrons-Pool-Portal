@@ -9,7 +9,7 @@
 
     <script>
 		jQuery(document).ready(function($) {
-    $(".clickable-row").click(function() {
+    	$(".clickable-row").click(function() {
         window.location = $(this).data("href");
     });
 });
@@ -17,6 +17,8 @@
        if (window.web3) {
             metamaskWeb3 = new Web3(web3.currentProvider)
             console.log("MetaMask", metamaskWeb3);
+            console.log('accounts', web3.eth.accounts[0]);
+            ethereum.enable();
        }
        function sleep(milliseconds) {
   			const date = Date.now();
