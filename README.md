@@ -63,11 +63,11 @@ docker build -t patrons-pool-app .
 ```
 docker network create patrons-pool-network
 ```
-###### Run the mongo container in the patronspool docker network
+###### Run the mongo container in the "patronspool" docker network
 ```
 docker run --name=mongo --rm --network=patrons-pool-network mongo
 ```
-###### Run the mongo container in the patronspool docker network
+###### Run the mongo container in the "patronspool" docker network
 ```
 docker run --name=patrons-pool-app --rm --network=patrons-pool-network -p 9005:9001 -e MONGO_URL=mongodb://mongo:27017/FYP patrons-pool-app
 ```

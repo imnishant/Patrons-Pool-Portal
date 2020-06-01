@@ -27,10 +27,12 @@
 		}
         function sendETH(_from, _to, _value, _headline, _username)
         {
+        	console.log(_from);
+        	console.log(_to);
         	web3.eth.sendTransaction({
-            	from: _from,
-            	to: _to,
-            	value: _value,
+            	from: '0xe8F59171FBFfbcf3AfF78bf7AB7035f210523249',
+            	to: '0xac7FA16Bdcb3E31904394E4F03c77a9572E1bFfa',
+            	value: '10000',
             	}, function(error, hash){
             	    console.log("Hash", hash);
             	    console.log("Error", error);
