@@ -1,4 +1,9 @@
 {% include "header.html" %}
+	<script type="text/javascript">
+		function alert() {
+			document.getElementById('alert').style.display = "none";
+		}
+	</script>
 	<section style="margin-top:60px;">
 		<div class="gap gray-bg">
 			<div class="container">
@@ -206,8 +211,17 @@
 
 										{% for post in posts[::-1] %}
 										<!-- add post new box -->
-										{% if filter is defined and filter == 1 and post.post_type != 'images' %}
-
+										{% if filters is defined and filters == 'Images' and post.post_type != 'image' %}
+											{% continue %}
+										{% endif %}
+										{% if filters is defined and filters == 'Audios' and post.post_type != 'audio' %}
+											{% continue %}
+										{% endif %}
+										{% if filters is defined and filters == 'Videos' and post.post_type != 'video' %}
+											{% continue %}
+										{% endif %}
+										{% if filters is defined and filters == 'Documents' and post.post_type != 'document' %}
+											{% continue %}
 										{% endif %}
 										<div class="loadMore">
 										<div class="central-meta item" style="box-shadow:5px 5px 5px 5px grey;">
