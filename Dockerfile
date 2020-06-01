@@ -1,28 +1,17 @@
-FROM python:3.6-alpine
-
+FROM python:3.7.1
 MAINTAINER Sankalp Saxena "sankalp.saxena.sta@gmail.com"
 
-WORKDIR /home/Final-Year-Project
-COPY . /home/Final-Year-Project
+ADD . /PatronsPool
+WORKDIR /PatronsPool
 
-RUN python3 -m venv venv
-RUN venv/bin/pip3 install -r requirements.txt
+RUN pip install --upgrade pip
+RUN pip3 install -r requirements.txt
 
+EXPOSE 9001
+ENTRYPOINT ["python3"]
+CMD ["main.py"]
 
-# environment variables required by flask
-ENV FLASK_APP "main.py"
-ENV FLASK_ENV "development"
-
-
-RUN "source /venv/bin/activate"
-#CMD . venv/bin/activate && pip3 install -r requirements.txt && flask db init && flask db migrate && flask db upgrade
-
-
-CMD ["flask", "run"]
-
-
-EXPOSE 5000
-
-
-# mongodb still has to be added
-# docker compose file still needs to be created
+# When creating the docker image do the following mentioned below:
+# Remove the pkg-resources==0.0.0 from the requirements.txt
+# Replace PyYAML==3.12 with PyYAML==3.13 in the requirements.txt
+# Uncomment the line in the __init__.py files under the app folder.
