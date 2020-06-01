@@ -11,6 +11,7 @@ from werkzeug.utils import secure_filename
 import datetime
 
 my_path = os.path.abspath(os.path.dirname(__file__))
+app.jinja_env.add_extension('jinja2.ext.loopcontrols')
 
 
 @app.route('/', methods=['POST', 'GET'])
@@ -191,16 +192,16 @@ def home():
         return render_template('home.html', posts=posts, profile=res, search=False, title="Home")
 
 
-@app.route('/filters/<int:val>', methods=['GET','POST'])
-def filters(val):
+@app.route('/filters', methods=['GET', 'POST'])
+def filters():
+    val = request.args.get('val')
     if session['isSponsor'] == 1:
         posts = get_sponser_timeline()
-        return render_template('sponsor.html', search=False, posts=posts, title="Home", filter=val)
+        return render_template('sponsor.html', search=False, posts=posts, title="Home", filters=val)
     else:
         res = get_profile(session['username'])
         posts = get_posts(session['username'])
-        return render_template('home.html', posts=posts, profile=res, search=False, title="Home", filter=val)
-
+        return render_template('home.html', posts=posts, profile=res, search=False, title="Home", filters=val)
 
 
 @app.route('/profile', methods=['GET', 'POST'])
@@ -209,7 +210,6 @@ def profile():
     if not res:
         return render_template('access_denied.html', error_msg="Error Occured while fetching Profile Details", title="Error")
     return render_template('profile.html', profile=res, title="Profile")
-
 
 
 @app.route('/edit_basic', methods=['GET', 'POST'])
