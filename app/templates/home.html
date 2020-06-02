@@ -302,6 +302,16 @@
 														</form>
 													</center>
 													{% endif %}
+													{% if post.transaction_hash != 'N/A' %}
+														<center>
+														<div style="clear: both">
+															<h5>Your Idea sold to {{post.bidding_person[-1]}} at Price:</h5>
+															<h5>{{post.bid_price[-1]}}</h5>
+														</div>
+														<hr />
+
+														</center>
+												{% endif %}
 												</div>
 
 											</div>
