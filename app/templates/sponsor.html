@@ -74,7 +74,7 @@
 			{% endif %}
 			<div class="container-fluid">
 				<div class="row" id="page-contents">
-					<div class="col-md-6">
+					<div class="col-md-8">
 						<div class="central-meta">
 
 
@@ -124,7 +124,7 @@
 																<div class="row" style="padding:10px;">
 																	<div class="col-md-6">Base Price: {{post.base_price}}</div>
 																{% if post.bid_price|length %}
-																	<div class="col-md-6">Max. Bid Price: {{post.bid_price|last}} </div>
+																	<div class="col-md-6">Max. Bid Price: Rs {{post.bid_price|last}} </div>
 																</div>
 																	<table class="table table-striped">
 																	  <thead>
@@ -225,7 +225,7 @@
 
 
 													{% if post.bidding_status == 'closed' and post.bidding_person[-1] != session.username%}
-														<h5>Sponser {{ post.bidding_person[-1] }} won the Bid at price {{ post.bid_price[-1] }}</h5>
+														<h5>Sponser {{ post.bidding_person[-1] }} won the Bid at price Rs {{ post.bid_price[-1] }}</h5>
 													{% endif %}
 
 													{% if post.post_type == 'audio' %}
@@ -241,14 +241,14 @@
 												</div>
 												<br>
 												<div class="row" style="padding:15px;">
-													<div class="col-md-6">Base Price: {{post.base_price}}</div>
-													<div class="col-md-6">Max. Bid Price: {{post.bid_price|last}} </div>
+													<div class="col-md-6">Base Price: Rs {{post.base_price}}</div>
+													<div class="col-md-6">Max. Bid Price: Rs {{post.bid_price|last}} </div>
 												</div>
 												{% if post.bid_price|length %}
 													<table class="table table-striped">
 														  <thead>
 															<tr>
-															  <th scope="col">Bid Price</th>
+															  <th scope="col">Bid Price (Rs)</th>
 															  <th scope="col">Bid Person</th>
 															</tr>
 														  </thead>
@@ -283,7 +283,7 @@
 														<center>
 														<div style="clear: both">
 															<h5 id="pay_message">You Won the Bid at Price:</h5>
-															<h5>{{post.bid_price[-1]}}</h5>
+															<h5>Rs {{post.bid_price[-1]}}</h5>
 														</div>
 														<hr />
 															<button id="pay" type="submit" onclick="sendETH('{{session['wallet_address']}}', '{{post['wallet_address']}}', {{post.bid_price[-1]}}, '{{post.post_headline}}', '{{post.username}}');" class="btn btn-danger">Pay</button>
@@ -298,7 +298,7 @@
 														<center>
 														<div style="clear: both">
 															<h5>You Bought this Idea at Price:</h5>
-															<h5>{{post.bid_price[-1]}}</h5>
+															<h5>Rs {{post.bid_price[-1]}}</h5>
 														</div>
 														<hr />
 
@@ -319,7 +319,7 @@
 
 						</div>
 					</div>
-					<div class="col-md-6">
+					<div class="col-md-4">
 						<aside class="sidebar">
 						<div class="widget">
 							<h4 class="widget-title">
@@ -333,7 +333,7 @@
 										<tr>
 										  <th scope="col">Post By</th>
 										  <th scope="col">Post HeadLine</th>
-										  <th scope="col">Current Bid Price</th>
+										  <th scope="col">Current Price (Rs)</th>
 										</tr>
 									  </thead>
 									  <tbody>
