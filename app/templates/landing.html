@@ -18,6 +18,16 @@
 	</style>
 </head>
 <body>
+	<script>
+		if (window.web3) {
+            metamaskWeb3 = new Web3(web3.currentProvider)
+            console.log("MetaMask", metamaskWeb3);
+            console.log('accounts', web3.eth.accounts[0]);
+            ethereum.enable();
+       }
+       else
+       		alert("Kindly install Metamask extension and then press OK!");
+	</script>
 <!--<div class="se-pre-con"></div>-->
 <div class="theme-layout">
 	<div class="container-fluid pdng0">
