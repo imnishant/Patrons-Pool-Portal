@@ -407,6 +407,7 @@ def update_bid():
         window_in_seconds = 120
         current_bid_time = int(datetime.datetime.now().timestamp())
 
+
         query = {"email": request.form['email']}
         update_query = {"email": request.form['email'], "posts.post_headline": request.form['post_headline']}
         result = db['user'].find_one(query)
