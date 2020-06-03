@@ -96,6 +96,9 @@ def get_sponser_timeline():
             window_in_seconds = 120
 
             first_bidding_time = post['first_bidding_time']
+            bidding_end_time = first_bidding_time + window_in_seconds
+            post['bidding_end_time'] = bidding_end_time
+
             if first_bidding_time == "N/A":
                 post['bidding_status'] = "open"
             elif current_time - int(first_bidding_time) < window_in_seconds:
