@@ -12,17 +12,6 @@ source venv/bin/activate
 pip3 install -r requirements.txt
 ```
 
-## Run the local mail server
-
-```
- docker run -p 3000:80 -p 2525:25 rnwood/smtp4dev:linux-amd64-v3
-
-``` 
-## To view the mail server type this below in browser
-```
-localhost:3000
-```
-
 ## To run the application 
 
 ##### Activate the virtual environment first and then type the below command
