@@ -101,11 +101,9 @@
 										<div style="box-shadow:5px 5px 5px 5px grey;" class="central-meta item">
 											<div class="user-post">
 												<div class="friend-info">
-													<a href="/display_profile?username={{username}}">
 													<figure>
 														<img src="static/BLOB/{{username}}/images/{{post['display']}}" >
 													</figure>
-													</a>
 													<div class="friend-name">
 														<ins><a href="/display_profile?username={{username}}" title="">{{ user_details['profile']['fname'] + " " + user_details['profile']['lname'] }}</a></ins>
 														<span> Published on: {{ post['date_time_added'] }}</span>
@@ -216,13 +214,11 @@
 										<div style="box-shadow:5px 5px 5px 5px grey;" class="central-meta item">
 											<div class="user-post">
 												<div class="friend-info">
-													<a href="/display_profile?username={{username}}">
 													<figure>
 														<img src="static/BLOB/{{post['username']}}/images/{{post['display']}}" >
 													</figure>
-													</a>
 													<div class="friend-name">
-														<ins><a href="/display_profile?username={{username}}" title="">{{ post['name'] }}</a></ins>
+														<ins><a href="/display_profile?username={{post['username']}}" title="">{{ post['name'] }}</a></ins>
 														<span> Published on: {{ post['date_time_added'] }}</span>
 														<span> VPN: {{ post['vpn'] }}</span>
 													</div>
@@ -248,7 +244,7 @@
 														<h5>Sponser {{ post.bidding_person[-1] }} won the Bid at price Rs {{ post.bid_price[-1] }}</h5>
 													{% endif %}
 
-													{% if post.post_type == 'audio' %}
+														{% if post.post_type == 'audio' %}
 														<center>
 														<audio controls>
 															<source src="static/BLOB/{{post['username']}}/posts/{{post.post_type + 's'}}/{{post.post_name}}">
