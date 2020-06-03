@@ -1,5 +1,3 @@
-from threading import Thread
-
 from flask_mail import Message
 from app import db, mail, app
 from flask import session
@@ -93,11 +91,16 @@ def get_sponser_timeline():
                 post['vpn'] = 'N/A'
 
             current_time = int(datetime.datetime.now().timestamp())
-            window_in_seconds = 120
+            window_in_seconds = 0
 
             first_bidding_time = post['first_bidding_time']
-            bidding_end_time = first_bidding_time + window_in_seconds
-            post['bidding_end_time'] = bidding_end_time
+
+            #if post[first_bidding_time] == "N/A":
+            #    bidding_end_time = "N/A"
+            #else:
+            #    bidding_end_time = first_bidding_time + window_in_seconds
+
+            #post['bidding_end_time'] = bidding_end_time
 
             if first_bidding_time == "N/A":
                 post['bidding_status'] = "open"
@@ -201,6 +204,7 @@ def store_posts(post_info):
 def store_patent(post_info):
     db['patent'].insert_one(post_info)
 
+
 def prof_img_upd(email, filename, rem):
     attr = 'profile.' + rem
     res = db['user'].update_one(
@@ -212,6 +216,20 @@ def prof_img_upd(email, filename, rem):
         }
     )
     return res.matched_count > 0
+
+
+def get_transactions(email):
+    query = {"email": email}
+    result = db['user'].find_one(query)
+    if bool(result):
+        return result['transactions']
+    return False
+
+
+def update_transaction_table(email, new_transaction):
+    find_query = {'email': email}
+    action = {"$addToSet": {"transactions": {"$each": [new_transaction]}}}
+    db['user'].update(find_query, action)
 
 
 def email_bid_status_to_other_sponsers(app, email, headline, session_user_email):

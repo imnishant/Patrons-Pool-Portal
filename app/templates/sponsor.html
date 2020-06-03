@@ -8,30 +8,6 @@
 </style>
 
 
-<script>
-function timer_status(status, bidding_end_time) {
-
-	if(status == "Open") {
-		var deadline = bidding_end_time;
-		console.log(deadline);
-		var x = setInterval(function() {
-		var now = new Date().getTime();
-		var t = deadline - now;
-		var minutes = Math.floor((t % (1000 * 60 * 60)) / (1000 * 60));
-		var seconds = Math.floor((t % (1000 * 60)) / 1000);
-		document.getElementById("timer").innerHTML =  minutes + "m " + seconds + "s ";
-			if (t < 0) {
-				clearInterval(x);
-				document.getElementById("timer").innerHTML = "Closed!";
-			}
-		}, 1000);
-	}
-}
-</script>
-
-
-
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
 <script>
@@ -61,7 +37,7 @@ function timer_status(status, bidding_end_time) {
 		}
         function sendETH(_from, _to, _value, _headline, _username)
         {
-        	_value = Math.round(_value * 0.000054 * 100000);
+        	_value = Math.round(_value * 0.000055 * 100000);
         	_value = BigInt(_value) * BigInt(10000000000000);
 			console.log(_value);
         	web3.eth.sendTransaction({
@@ -81,7 +57,6 @@ function timer_status(status, bidding_end_time) {
 						document.getElementById('cur_headline').value = _headline;
 						document.getElementById('post_username').value = _username;
 						document.getElementById('update_hash_form').submit();
-						sleep(20000);
 					}
 					else
 						alert("There is some issue in Metamask!");
@@ -246,7 +221,6 @@ function timer_status(status, bidding_end_time) {
 														<ins><a href="time-line.html" title="">{{ post['name'] }}</a></ins>
 														<span> Published on: {{ post['date_time_added'] }}</span>
 														<span> VPN: {{ post['vpn'] }}</span>
-														<span>Timer: <p id="timer">N/A</p></span>
 													</div>
 
 												</div>
@@ -322,7 +296,7 @@ function timer_status(status, bidding_end_time) {
 
 													{% if post.bidding_status == 'open' %}
 														<h5>Your Bid Price:  <input type="text" name="bid_price">
-														<button type="submit" onclick="timer_status('Open', {{post['bidding_end_time']}});" class="btn btn-primary">Place Bid</button></h5>
+														<button type="submit" class="btn btn-primary">Place Bid</button></h5>
 													{% endif %}
 													</form>
 												{% if post.bidding_status == 'closed' and post.bidding_person[-1] == session.username  and post.transaction_hash == 'N/A'%}

@@ -57,6 +57,8 @@ def signup_util(obj):
 
     user_info['posts'] = []
 
+    user_info['transactions'] = []
+
     password2 = base64.b64encode((request.form['password2']).encode('ascii')).decode('ascii')
 
     #Creating a directory for the user so that his/her posts will be available

@@ -5,7 +5,7 @@ from flask import Flask, send_from_directory, render_template, request, render_t
 import os
 import hashlib
 from pygments import BytesIO
-from app.models import user_exists, save_user, store_posts, store_patent, get_profile, update_basic, update_work, update_password, get_password, update_language, update_interest, get_posts, get_sponser_timeline, prof_img_upd, mail_sponsers_when_a_post_is_added, email_bid_status_to_other_sponsers, get_otp_secret, get_details_using_search
+from app.models import user_exists, save_user, store_posts, store_patent, get_profile, update_basic, update_work, update_password, get_password, update_language, update_interest, get_posts, get_sponser_timeline, prof_img_upd, mail_sponsers_when_a_post_is_added, email_bid_status_to_other_sponsers, get_otp_secret, get_details_using_search, update_transaction_table, get_transactions
 from app import app, BLOB, db
 from app.utils import signup_util, login_util, allowed_file, edit_basic_util, edit_work_util, edit_pass_util, \
     edit_lan_int_util, get_totp_uri, verify_totp, get_password_util
@@ -29,13 +29,42 @@ def update_transaction():
 
         query = {"email": request.form['username'], "posts.post_headline": request.form['headline']}
         result = db['user'].find_one(query)
+        wallet_address = result['wallet_address']
         if bool(result):
             db['user'].update_one(query, {"$set": {"posts.$.transaction_hash": hash_value}})
         else:
             return render_template('access_denied.html', error_msg="Some Error is there!", title="Error")
 
+        amount = 0
+        for post in result['posts']:
+            if post['post_headline'] == request.form['headline']:
+                amount = post['bid_price'][-1]
+                break
+
+        url = "https://ropsten.etherscan.io/tx/" + hash_value
+        user_transaction = {
+            "idea": request.form['headline'],
+            "amount": amount,
+            "received_from": session['wallet_address'],
+            "transaction_url": url
+
+        }
+
+        sponsor_transaction = {
+            "idea": request.form['headline'],
+            "amount": amount,
+            "paid_to": wallet_address,
+            "transaction_url": url
+        }
+
+        # update the transaction table for the user
+        update_transaction_table(request.form['username'], user_transaction)
+
+        # update the transaction table for the sponsoe
+        update_transaction_table(session['username'], sponsor_transaction)
+
         query = {"headline": request.form['headline'], "product_owners.username": request.form['username']}
-        result  = db['patent'].find_one(query)
+        result = db['patent'].find_one(query)
         if bool(result):
             res = db['patent'].update_one(query, {"$push": { "product_owners": {'type': 'sponsor', 'username': session['username']} }})
 
@@ -404,7 +433,7 @@ def update_bid():
 
         # 600 seconds means 10 minutes bidding time
         # if you update window time here than also update in models.py get_sponser_timeline()
-        window_in_seconds = 120
+        window_in_seconds = 0
         current_bid_time = int(datetime.datetime.now().timestamp())
 
 
@@ -526,7 +555,8 @@ def search():
 
 @app.route('/transaction', methods=['GET', 'POST'])
 def transaction():
-    return render_template('transaction.html', title="Transaction")
+    transactions = get_transactions(session['username'])
+    return render_template('transaction.html', title="Transaction", transactions=transactions)
 
 
 @app.route('/forgot_password', methods=['GET', 'POST'])

@@ -36,23 +36,32 @@
                                                 <table class="table table-striped table-dark">
                                                 <thead>
                                                 <tr>
-                                                  <th scope="col" style="width:40%">Idea Timeline</th>
+                                                  <th scope="col" style="width:30%">Idea Timeline</th>
                                                   <th scope="col" style="width:10%">Amount</th>
+                                                  <th scope="col" style="width:10%">Ether</th>
                                                     {% if session['isSponsor'] == 1 %}
-                                                  <th scope="col" style="width:25%">Paid To</th>
+                                                  <th scope="col" style="width:30%">Recipient Wallet Address</th>
                                                     {% else %}
-                                                    <th scope="col" style="width:25%">Recieved From</th>
+                                                  <th scope="col" style="width:30%">Sender Wallet Address</th>
                                                     {% endif %}
-                                                  <th scope="col" style="width:25%">Url</th>
+                                                  <th scope="col" style="width:20%">EtherScan</th>
                                                 </tr>
                                               </thead>
                                               <tbody>
-                                                <tr>
-                                                  <td>1</td>
-                                                  <td>Mark</td>
-                                                  <td>Otto</td>
-                                                  <td>@mdo</td>
-                                                </tr>
+                                                {% for transaction in transactions %}
+                                                {% set ether = 0.000055 * transaction['amount'] %}
+                                                    <tr>
+                                                      <td>{{ transaction['idea'] }}</td>
+                                                      <td>{{ transaction['amount'] }}</td>
+                                                      <td>{{ ether }}</td>
+                                                        {% if session['isSponsor'] == 1 %}
+                                                      <td>{{ transaction['paid_to'] }}</td>
+                                                        {% else %}
+                                                      <td>{{ transaction['received_from'] }}</td>
+                                                        {% endif %}
+                                                      <td><a href="{{ transaction['transaction_url'] }}">View Details</a></td>
+                                                    </tr>
+                                                {% endfor %}
                                               </tbody>
                                             </table>
                                             </div>
