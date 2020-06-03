@@ -1,6 +1,7 @@
-from flask_mail import Message
+from threading import Thread
 
-from app import db, mail
+from flask_mail import Message
+from app import db, mail, app
 from flask import session
 import datetime
 
@@ -95,32 +96,6 @@ def get_sponser_timeline():
 def set_new_bid_update_status(email, headline, get_new_update):
     update_query = {"email": email, "posts.post_headline": headline}
     db['user'].update_one(update_query, {"$set": {"posts.$.bidding_status": get_new_update}})
-    return
-
-
-def email_bid_status_to_other_sponsers(email, headline):
-    query = {"email": email, "posts.post_headline": headline}
-    result = db['user'].find_one(query)
-    bidding_status = ""
-    bidding_person_emails = []
-
-    for post in result["posts"]:
-        if post['post_headline'] == headline:
-            bidding_status = post['bidding_status']
-            bidding_person_emails = post['bidding_person']
-
-    # remove the email of the current person which placed the bid earlier
-    try:
-        while True:
-            bidding_person_emails.remove(session['username'])
-    except ValueError:
-        pass
-
-    if bidding_status == 'open':
-        msg = Message('Bid Update', sender='bid-update@patronspool.com', recipients=bidding_person_emails)
-        msg.body = "The sponser " + session['username'] + " placed a higher bid for the idea for which you bid earlier. Place more amount to win the bid before the bidding time gets over! "
-        mail.send(msg)
-
     return
 
 
@@ -219,17 +194,123 @@ def prof_img_upd(email, filename, rem):
     return res.matched_count > 0
 
 
-def mail_sponsers_when_a_post_is_added():
-    query = {"isSponsor": 1}
-    sponsers = list(db['user'].find(query))
-    email_ids = []
+def email_bid_status_to_other_sponsers(app, email, headline, session_user_email):
+    with app.app_context():
+        query = {"email": email, "posts.post_headline": headline}
+        result = db['user'].find_one(query)
+        bidding_status = ""
+        bidding_person_emails = []
 
-    if sponsers:
-        for sponser in sponsers:
-            email_ids.append(sponser['email'])
+        for post in result["posts"]:
+            if post['post_headline'] == headline:
+                bidding_status = post['bidding_status']
+                bidding_person_emails = post['bidding_person']
 
-        msg = Message('New Post Added', sender='post-update@patronspool.com', recipients=email_ids)
-        msg.body = session['username'] + " posted a new idea. Log in to the portal to view more about it and check if you would like to sponser for it!"
-        mail.send(msg)
-        return
-    return
+        # remove the email of the current person which placed the bid earlier
+        try:
+            while True:
+                bidding_person_emails.remove(session['username'])
+        except ValueError:
+            pass
+        try:
+            if bidding_status == 'open':
+                msg = Message('[Bid Update] Hike in the Bid Price!', sender=app.config['MAIL_DEFAULT_SENDER'], recipients=bidding_person_emails)
+                msg.html = EMAIL_BID_UPDATE_TEMPLATE.format(email_address=session_user_email)
+                mail.send(msg)
+        except:
+            return
+
+
+
+def mail_sponsers_when_a_post_is_added(app, email):
+    with app.app_context():
+        query = {"isSponsor": 1}
+        sponsers = list(db['user'].find(query))
+        email_ids = []
+
+        try:
+            if sponsers:
+                for sponser in sponsers:
+                    email_ids.append(sponser['email'])
+
+                msg = Message('[Post] Seeking for a Patron!', sender=app.config['MAIL_DEFAULT_SENDER'], recipients=email_ids)
+                msg.html = GENERAL_EMAIL_POST_NOTIFICATION_TEMPLATE.format(email_address=email)
+                mail.send(msg)
+            return
+        except:
+            return
+
+
+# WARNING: DO NOT DELETE THE BELOW EMAIL TEMPLATES!
+GENERAL_EMAIL_POST_NOTIFICATION_TEMPLATE = """
+<!DOCTYPE html>
+<html>
+<head>
+<title>Page Title</title>
+</head>
+<body>
+<h1 style="color:red;font-size:40px;">Hello Patron!</h1>
+<p style="font-family:Helvetica, Arial, sans-serif; font-size:20px; color:#4d4d4e;"> {email_address} is on a hunt for a Patron for his new million dollar idea. Do check it out and bid for the same if that idea mesmerizes you!</p>
+<table border="0" cellpadding="0" cellspacing="0" width="500">
+  <tbody>
+
+    <tr>
+      <td height="64" style="font-family:Helvetica, Arial, sans-serif; font-size:18px; font-style:bold;">
+        <strong>The Patrons Pool</strong>
+        <br>
+        <em style="font-size:17px; font-weight:400;">Where Seekers meets Patrons</em>
+      </td>
+    </tr>
+    <tr>
+      <td height="58" style="font-family:Helvetica, Arial, sans-serif; font-size:16px; color:#4d4d4e;">
+        Dr. Vishnuvardhana Road Post, Channasandra, RR Nagar 
+        <br> Bengaluru, Karnataka 560098
+      </td>
+    </tr>  
+    <tr>
+      <td height="70">
+        <small style="font-family:Helvetica, Arial, sans-serif; font-size:10px; color:#4d4d4e;">This is an auto-generated mail sent by the Patrons Pool Portal whenever a new seeker posts an idea.</small>
+      </td>
+    </tr>
+  </tbody>
+</table>
+</body>
+</html>
+"""
+
+
+
+EMAIL_BID_UPDATE_TEMPLATE = """
+<html>
+<head>
+<title>Page Title</title>
+</head>
+<body>
+<h1 style="color:red;font-size:40px;">Hello Patron!</h1>
+<p style="font-family:Helvetica, Arial, sans-serif; font-size:20px; color:#4d4d4e;">Patron {email_address} placed a higher amount for idea that you bid earlier. Kindly, quickly update the bid price to win this bid before the bidding time gets over!<br/></p>
+<table border="0" cellpadding="0" cellspacing="0" width="500">
+  <tbody>
+    
+    <tr>
+      <td height="64" style="font-family:Helvetica, Arial, sans-serif; font-size:18px; font-style:bold;">
+        <strong>The Patrons Pool</strong>
+        <br>
+        <em style="font-size:17px; font-weight:400;">Where Seekers meets Patrons</em>
+      </td>
+    </tr>
+    <tr>
+      <td height="58" style="font-family:Helvetica, Arial, sans-serif; font-size:16px; color:#4d4d4e;">
+        Dr. Vishnuvardhana Road Post, Channasandra, RR Nagar 
+        <br> Bengaluru, Karnataka 560098
+      </td>
+    </tr>  
+    <tr>
+      <td height="70">
+        <small style="font-family:Helvetica, Arial, sans-serif; font-size:10px; color:#4d4d4e;">This is an auto-generated mail sent by the Patrons Pool Portal whenever a new seeker posts an idea.</small>
+      </td>
+    </tr>
+  </tbody>
+</table>
+</body>
+</html>
+"""

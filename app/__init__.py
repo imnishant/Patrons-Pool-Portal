@@ -19,8 +19,12 @@ def create_app(config_name):
     app.secret_key = 'hello'
     app.config.from_object(app_config[config_name])
     app.config.from_pyfile(os.path.join(my_path, '../config.py'))
-    app.config['MAIL_SERVER'] = 'localhost'
-    app.config['MAIL_PORT'] = 2525
+    app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+    app.config['MAIL_PORT'] = 465
+    app.config["MAIL_USE_SSL"] = True
+    app.config['MAIL_USERNAME'] = 'patronspoolupdates@gmail.com'
+    app.config['MAIL_DEFAULT_SENDER'] = 'patronspoolupdates@gmail.com'
+    app.config['MAIL_PASSWORD'] = 'hcmrrkqbdqyoyolf'
     return app
 
 

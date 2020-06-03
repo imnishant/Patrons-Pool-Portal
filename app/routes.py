@@ -1,3 +1,5 @@
+from threading import Thread
+
 import pyqrcode as pyqrcode
 from flask import Flask, send_from_directory, render_template, request, render_template, redirect, url_for, session, flash, make_response
 import os
@@ -9,6 +11,7 @@ from app.utils import signup_util, login_util, allowed_file, edit_basic_util, ed
     edit_lan_int_util, get_totp_uri, verify_totp
 from werkzeug.utils import secure_filename
 import datetime
+
 
 my_path = os.path.abspath(os.path.dirname(__file__))
 app.jinja_env.add_extension('jinja2.ext.loopcontrols')
@@ -168,11 +171,15 @@ def add_post():
             posts = get_posts(session['username'])
             # searches for dockerfile in the extracted folder
             # call this function after the user presses on the submit button or so
-            #mail_sponsers_when_a_post_is_added()
+
+            # The below mentioned is the mailing functionality, Creates a separate thread and triggers the emails to all the sponsors
+            thread = Thread(target=mail_sponsers_when_a_post_is_added, args=[app, session['username']])
+            thread.start()
             
         else:
             return render_template("home.html", search=False, posts=posts, profile=res, msg='Allowed file types are mp4, mp3, png, jpg, jpeg, gif', title="Home")
     return render_template("home.html", search=False, posts=posts, profile=res, msg='Added Successfully Bro! :-D', title="Home")
+
 
 
 @app.route('/logout')
@@ -442,8 +449,11 @@ def update_bid():
                 bidding_person.append(request.form['bidding_person'])
                 db['user'].update_one(update_query, {"$set": {"posts.$.bid_price": bid_price, "posts.$.bidding_person": bidding_person}})
 
-                #Uncomment it to resume message functionality
-                #email_bid_status_to_other_sponsers(request.form['email'], request.form['post_headline'])
+                # Uncomment it to resume message functionality
+                # The below mentioned is the mailing functionality, Creates a separate thread and triggers the emails to all the sponsors participating in the bid
+                thread = Thread(target=email_bid_status_to_other_sponsers, args=[app, request.form['email'], request.form['post_headline'], session['username']])
+                thread.start()
+
 
             elif int(new_sponser_bid_price) <= earlier_bid_price:
                 posts = get_sponser_timeline()
