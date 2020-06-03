@@ -50,7 +50,7 @@
 						<h2 class="log-title">Register</h2>
 						<form method="POST" action="/signup">
 							<div class="form-group">	
-                                <input type="text" name="email" required="required"/>
+                                <input type="email" name="email" required="required"/>
                                 <label class="control-label" for="input"><a href="https://wpkixx.com/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="6c29010d05002c">Email</a></label><i class="mtrl-select"></i>
                             </div>
 							<div class="form-group">	
@@ -78,11 +78,11 @@
                                 <label class="control-label" for="input">Age</label><i class="mtrl-select"></i>
                             </div>
 							<div class="form-group">	
-                                <input type="password" name="password1" required="required"/>
-                                <label class="control-label" for="input">Password</label><i class="mtrl-select"></i>
+                                <input type="password" name="password1" required="required" minlength="8" maxlength="15" />
+                                <label class="control-label" for="input" >Password</label><i class="mtrl-select"></i>
                             </div>
 							<div class="form-group">	
-                                <input type="password" name="password2" required="required"/>
+                                <input type="password" name="password2" required="required" minlength="8" maxlength="15"/>
                                 <label class="control-label" for="input">Confirm Password</label><i class="mtrl-select"></i>
                             </div>
 							<div class="form-group">	

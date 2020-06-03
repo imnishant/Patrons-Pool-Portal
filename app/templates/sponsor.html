@@ -1,5 +1,11 @@
 {% include "header.html" %}
-
+<style type="text/css">
+	.breaks {
+		word-wrap:break-word;
+		word-break: break-all;
+	    white-space: normal;
+	}
+</style>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
@@ -129,7 +135,11 @@
 												<br>
 												<div class="row" style="padding:15px;">
 													<div class="col-md-6">Base Price: Rs {{post.base_price}}</div>
-													<div class="col-md-6">Max. Bid Price: Rs {{post.bid_price|last}} </div>
+													{% if post.bid_price|length %}
+														<div class="col-md-6">Max. Bid Price: Rs {{post.bid_price|last}} </div>
+													{% else %}
+														<div class="col-md-6">Max. Bid Price: --- </div>
+													{% endif %}
 												</div>
 												{% if post.bid_price|length %}
 													<table class="table table-striped">
@@ -236,7 +246,11 @@
 												<br>
 												<div class="row" style="padding:15px;">
 													<div class="col-md-6">Base Price: Rs {{post.base_price}}</div>
-													<div class="col-md-6">Max. Bid Price: Rs {{post.bid_price|last}} </div>
+													{% if post.bid_price|length %}
+														<div class="col-md-6">Max. Bid Price: Rs {{post.bid_price|last}} </div>
+													{% else %}
+														<div class="col-md-6">Max. Bid Price: --- </div>
+													{% endif %}
 												</div>
 												{% if post.bid_price|length %}
 													<table class="table table-striped">
@@ -326,7 +340,7 @@
 									  <thead>
 										<tr>
 										  <th scope="col">Post By</th>
-										  <th scope="col">Post HeadLine</th>
+										  <th scope="col" >Post HeadLine</th>
 										  <th scope="col">Current Price (Rs)</th>
 										</tr>
 									  </thead>
@@ -343,7 +357,7 @@
 										  	{% set cur_link = '#' +  post.post_headline %}
 										  	<tr class="clickable-row" data-href="{{cur_link}}">
 												<td>{{name}}</td>
-												<td>{{post.post_headline}}</td>
+												<td class="breaks">{{post.post_headline[:60]}}</td>
 												<td>{{price}}</td>
 											</tr>
 

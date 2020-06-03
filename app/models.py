@@ -45,6 +45,10 @@ def get_otp_secret(email):
 def get_posts(email):
    query = {"email": email}
    result = db['user'].find_one(query)
+
+   for res in result:
+       query = {'product_owners': {'type': 'user', 'username': email}}
+
    if bool(result):
        return result['posts']
    return False
