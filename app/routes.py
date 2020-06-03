@@ -586,6 +586,18 @@ def change_password():
         return render_template('access_denied.html', error_msg="Error Occurred while updating Password", title="Error")
 
 
+@app.route('/display_profile', methods=['GET', 'POST'])
+def display_profile():
+    username = request.args.get('username')
+    res = get_profile(username)
+    msg = "User Profile: " + username
+    res['interest'] = ', '.join(res['interest'])
+    res['language'] = ', '.join(res['language'])
+    if not res:
+        return render_template('access_denied.html', error_msg="Error Occurred while fetching Profile Details", title="Error")
+    return render_template('display_profile.html', profile=res, title="Display Profile", msg=msg)
+
+
 @app.errorhandler(404)
 def not_found():
     return render_template('access_denied.html', error_msg="Page Not Found", title="Not Found")
