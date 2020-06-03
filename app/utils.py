@@ -117,6 +117,15 @@ def login_util(request):
     return result, password, username, result['wallet_address']
 
 
+def get_password_util(request):
+    username = request.form['email']
+    password = base64.b64encode((request.form['pass']).encode('ascii')).decode('ascii')
+    password1 = base64.b64encode((request.form['pass1']).encode('ascii')).decode('ascii')
+    if password != password1:
+        return username, 0
+    return username, password
+
+
 def edit_basic_util(request):
     prof = {}
     prof['fname'] = request.form['fname']

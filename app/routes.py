@@ -8,7 +8,7 @@ from pygments import BytesIO
 from app.models import user_exists, save_user, store_posts, store_patent, get_profile, update_basic, update_work, update_password, get_password, update_language, update_interest, get_posts, get_sponser_timeline, prof_img_upd, mail_sponsers_when_a_post_is_added, email_bid_status_to_other_sponsers, get_otp_secret, get_details_using_search
 from app import app, BLOB, db
 from app.utils import signup_util, login_util, allowed_file, edit_basic_util, edit_work_util, edit_pass_util, \
-    edit_lan_int_util, get_totp_uri, verify_totp
+    edit_lan_int_util, get_totp_uri, verify_totp, get_password_util
 from werkzeug.utils import secure_filename
 import datetime
 
@@ -522,6 +522,36 @@ def search():
             return render_template('sponsor.html', posts=posts, search=True, error_msg="Oops! No Search Result Found for Query: ", found="no", username="None", query=query, title="Search")
         return render_template('sponsor.html', posts=posts, search=True, result=result, found="yes", msg=msg, title="Search")
     return
+
+
+@app.route('/transaction', methods=['GET', 'POST'])
+def transaction():
+    return render_template('transaction.html', title="Transaction")
+
+
+@app.route('/forgot_password', methods=['GET', 'POST'])
+def forgot_password():
+    return render_template('password.html', title="Forgot Password")
+
+
+@app.route('/forgot_password_check', methods=['GET', 'POST'])
+def forgot_password_check():
+    username = request.form['email']
+    otp_secret = get_otp_secret(username)
+    if not verify_totp(request.form['token'], otp_secret):
+        return render_template('access_denied.html', error_msg="MFA Failed, Please go back and Retry!", title="Error")
+    return render_template('change_password.html', title="Forgot Password", email=username)
+
+
+@app.route('/change_password', methods=['GET', 'POST'])
+def change_password():
+    username, password = get_password_util(request)
+    if password == 0:
+        return render_template('access_denied.html', error_msg="Passwords Don't Match", title="Error")
+    if update_password(username, password):
+        return redirect(url_for('hello_world'))
+    else:
+        return render_template('access_denied.html', error_msg="Error Occurred while updating Password", title="Error")
 
 
 @app.errorhandler(404)
