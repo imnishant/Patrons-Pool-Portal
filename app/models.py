@@ -46,8 +46,14 @@ def get_posts(email):
    query = {"email": email}
    result = db['user'].find_one(query)
 
-   for res in result:
-       query = {'product_owners': {'type': 'user', 'username': email}}
+   if len(result['posts']) > 0:
+        for res in result['posts']:
+            query = {'headline': res['post_headline'], 'product_owners': {'type': 'user', 'username': email}}
+            temp = db['patent'].find_one(query)
+            if len(temp['product_owners']) > 1:
+                res['vpn'] = 'N/A'
+            else:
+                res['vpn'] = temp['vpn']
 
    if bool(result):
        return result['posts']
@@ -78,6 +84,13 @@ def get_sponser_timeline():
             post['name'] = user['profile']['fname'] + " " + user['profile']['lname']
             post['wallet_address'] = wallet_address
             post['display'] = user['profile']['display']
+
+            query = {'headline': post['post_headline'], 'product_owners': {'type': 'user', 'username': username}}
+            temp = db['patent'].find_one(query)
+            if len(temp['product_owners']) > 1:
+                post['vpn'] = temp['vpn']
+            else:
+                post['vpn'] = 'N/A'
 
             current_time = int(datetime.datetime.now().timestamp())
             window_in_seconds = 120

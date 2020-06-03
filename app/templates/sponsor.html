@@ -33,7 +33,7 @@
 		}
         function sendETH(_from, _to, _value, _headline, _username)
         {
-        	_value = _value * 0.000054 * 100000;
+        	_value = Math.round(_value * 0.000054 * 100000);
         	_value = BigInt(_value) * BigInt(10000000000000);
 			console.log(_value);
         	web3.eth.sendTransaction({
@@ -41,17 +41,22 @@
             	to: _to,
             	value: _value,
             	}, function(error, hash){
-            	    console.log("Hash", hash);
+            		console.log("Hash", hash);
             	    console.log("Error", error);
-            	    var obj = document.getElementById("pay");
-        			obj.remove();
-        			document.getElementById('pay_message').innerHTML= "You Bought the Idea at Price:";
-					var val = hash;
-        			document.getElementById('hash_value').value = val;
-					document.getElementById('cur_headline').value = _headline;
-					document.getElementById('post_username').value = _username;
-					document.getElementById('update_hash_form').submit();
-					sleep(20000);
+            		if(hash != null)
+            		{
+            	    	var obj = document.getElementById("pay");
+        				obj.remove();
+        				document.getElementById('pay_message').innerHTML= "You Bought the Idea at Price:";
+						var val = hash;
+        				document.getElementById('hash_value').value = val;
+						document.getElementById('cur_headline').value = _headline;
+						document.getElementById('post_username').value = _username;
+						document.getElementById('update_hash_form').submit();
+						sleep(20000);
+					}
+					else
+						alert("There is some issue in Metamask!");
         	});
         }
 
@@ -99,6 +104,7 @@
 													<div class="friend-name">
 														<ins><a href="time-line.html" title="">{{ user_details['profile']['fname'] + " " + user_details['profile']['lname'] }}</a></ins>
 														<span> Published on: {{ post['date_time_added'] }}</span>
+														<span> VPN: {{ post['vpn'] }}</span>
 													</div>
 												</div>
 												<div class="post-meta">
