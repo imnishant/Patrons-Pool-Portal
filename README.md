@@ -58,5 +58,5 @@ docker run -d --restart unless-stopped --name=mongo --network=patrons-pool-netwo
 ```
 ###### Run the mongo container in the "patronspool" docker network
 ```
-docker run -d --restart unless-stopped --name=patrons-pool-app --rm --network=patrons-pool-network -p 9005:9001 -e MONGO_URL=mongodb://mongo:27017/FYP patrons-pool-app
+docker run -d --restart unless-stopped --name=patrons-pool-app --network=patrons-pool-network -p 9005:9001 -e MONGO_URL=mongodb://mongo:27017/FYP patrons-pool-app
 ```
