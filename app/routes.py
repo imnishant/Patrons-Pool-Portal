@@ -523,6 +523,11 @@ def search():
     return
 
 
+@app.route('/transaction', methods=['GET', 'POST'])
+def transaction():
+    return render_template('transaction.html', title="Transaction")
+
+
 @app.errorhandler(404)
 def not_found():
     return render_template('access_denied.html', error_msg="Page Not Found", title="Not Found")
