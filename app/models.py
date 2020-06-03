@@ -91,7 +91,7 @@ def get_sponser_timeline():
                 post['vpn'] = 'N/A'
 
             current_time = int(datetime.datetime.now().timestamp())
-            window_in_seconds = 0
+            window_in_seconds = 120
 
             first_bidding_time = post['first_bidding_time']
 

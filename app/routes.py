@@ -207,7 +207,7 @@ def add_post():
             
         else:
             return render_template("home.html", search=False, posts=posts, profile=res, msg='Allowed file types are mp4, mp3, png, jpg, jpeg, gif', title="Home")
-    return render_template("home.html", search=False, posts=posts, profile=res, msg='Added Successfully Bro! :-D', title="Home")
+    return render_template("home.html", search=False, posts=posts, profile=res, msg='Added Successfully! :-D', title="Home")
 
 
 
@@ -433,7 +433,7 @@ def update_bid():
 
         # 600 seconds means 10 minutes bidding time
         # if you update window time here than also update in models.py get_sponser_timeline()
-        window_in_seconds = 0
+        window_in_seconds = 120
         current_bid_time = int(datetime.datetime.now().timestamp())
 
 
@@ -496,7 +496,7 @@ def update_bid():
                 return render_template("sponsor.html", search=False, posts=posts, msg='You cannot bid anymore because Bidding Time is Over', title="Home")
 
             posts = get_sponser_timeline()
-            return render_template("sponsor.html", search=False, posts=posts, msg='Your Bid Placed Successfully Bro! ATB! :)', title="Home")
+            return render_template("sponsor.html", search=False, posts=posts, msg='Your Bid Placed Successfully ! ATB! :)', title="Home")
         else:
             return render_template('access_denied.html', error_msg="File does not exist in mongodb database", title="Error")
     return render_template('access_denied.html', error_msg="Delete Post Method is not POST", title="Error")
@@ -556,6 +556,8 @@ def search():
 @app.route('/transaction', methods=['GET', 'POST'])
 def transaction():
     transactions = get_transactions(session['username'])
+    if transactions == []:
+        return render_template('transaction.html', title="Transaction", msg="No Transactions done yet!")
     return render_template('transaction.html', title="Transaction", transactions=transactions)
 
 
