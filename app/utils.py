@@ -25,7 +25,7 @@ def signup_util(obj):
     user_info['wallet_address'] = request.form['wallet_address']
     user_info['otp_secret'] = base64.b32encode(os.urandom(10)).decode('utf-8')
 
-    if (request.form['isSponsor'] == 'sponsor'):
+    if request.form['isSponsor'] == 'sponsor':
         user_info['isSponsor'] = 1
     else:
         user_info['isSponsor'] = 0
@@ -61,7 +61,7 @@ def signup_util(obj):
 
     password2 = base64.b64encode((request.form['password2']).encode('ascii')).decode('ascii')
 
-    #Creating a directory for the user so that his/her posts will be available
+    # Creating a directory for the user so that his/her posts will be available
     directory_path = os.path.join(my_path, 'static/BLOB')
     if not os.path.exists(directory_path):
         os.mkdir(directory_path)

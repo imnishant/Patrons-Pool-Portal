@@ -4,6 +4,7 @@ import pyqrcode as pyqrcode
 from flask import Flask, send_from_directory, render_template, request, render_template, redirect, url_for, session, flash, make_response
 import os
 import hashlib
+import time
 from pygments import BytesIO
 from app.models import user_exists, save_user, store_posts, store_patent, get_profile, update_basic, update_work, update_password, get_password, update_language, update_interest, get_posts, get_sponser_timeline, prof_img_upd, mail_sponsers_when_a_post_is_added, email_bid_status_to_other_sponsers, get_otp_secret, get_details_using_search, update_transaction_table, get_transactions
 from app import app, BLOB, db
@@ -124,7 +125,8 @@ def signup():
 
 @app.route('/qrcode')
 def qrcode():
-    # render qrcode for FreeTOTP
+    # render qrcode for Google Authenticator
+    time.sleep(2)
     otp_secret = get_otp_secret(session['username'])
     url = pyqrcode.create(get_totp_uri(session['username'], otp_secret))
     stream = BytesIO()
