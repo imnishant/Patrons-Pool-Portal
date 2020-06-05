@@ -126,7 +126,7 @@ def signup():
 @app.route('/qrcode')
 def qrcode():
     # render qrcode for Google Authenticator
-    time.sleep(2)
+    time.sleep(1)
     otp_secret = get_otp_secret(session['username'])
     url = pyqrcode.create(get_totp_uri(session['username'], otp_secret))
     stream = BytesIO()
