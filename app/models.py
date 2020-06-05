@@ -72,11 +72,13 @@ def get_sponser_timeline():
     query = {"isSponsor" : 0}
     users = list(db['user'].find(query))
     posts = []
-
+    timer = []
+    count = 1
     for user in users:
         username = user['email']
         wallet_address = user['wallet_address']
         userposts = user['posts']
+
         for post in userposts:
             post['username'] = username
             post['name'] = user['profile']['fname'] + " " + user['profile']['lname']
@@ -91,29 +93,39 @@ def get_sponser_timeline():
                 post['vpn'] = 'N/A'
 
             current_time = int(datetime.datetime.now().timestamp())
-            window_in_seconds = 120
+            window_in_seconds = 600
 
             first_bidding_time = post['first_bidding_time']
 
-            #if post[first_bidding_time] == "N/A":
-            #    bidding_end_time = "N/A"
-            #else:
-            #    bidding_end_time = first_bidding_time + window_in_seconds
+            if first_bidding_time == "N/A":
+                bidding_end_time = "N/A"
+            else:
+                bidding_end_time = first_bidding_time + window_in_seconds
 
-            #post['bidding_end_time'] = bidding_end_time
+            post['bidding_end_time'] = bidding_end_time
+            obj = {}
 
             if first_bidding_time == "N/A":
                 post['bidding_status'] = "open"
+                obj['bidding_end_time'] = 'N/A'
             elif current_time - int(first_bidding_time) < window_in_seconds:
                 post['bidding_status'] = "open"
+                obj['bidding_end_time'] = (window_in_seconds - (current_time - first_bidding_time)) / 60
             else:
+                obj['bidding_end_time'] = 'N/A'
                 post['bidding_status'] = "closed"
+
+
+            obj['tag_id'] = post['username'] + " " + post['post_headline']
+            obj['num'] = count
+            count = count + 1
+            timer.append(obj)
 
             #set_new_bid_update_status(post['username'], post['post_headline'], post['bidding_status'])
             posts.append(post)
     print(posts)
     #  return result
-    return posts
+    return posts, timer
 
 
 def set_new_bid_update_status(email, headline, get_new_update):

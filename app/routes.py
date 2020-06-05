@@ -68,9 +68,9 @@ def update_transaction():
         if bool(result):
             res = db['patent'].update_one(query, {"$push": { "product_owners": {'type': 'sponsor', 'username': session['username']} }})
 
-        posts = get_sponser_timeline()
+        posts, timer = get_sponser_timeline()
 
-        return render_template('sponsor.html', search=False, posts=posts, title="Home")
+        return render_template('sponsor.html', search=False, posts=posts, title="Home", timer=timer)
     return render_template('access_denied.html', error_msg="Method is not get", title="Error")
 
 
@@ -94,8 +94,8 @@ def login():
                 return render_template('access_denied.html', error_msg="Error occurred while fetching Profile Details", title="Error")
             if result['isSponsor'] == 1:
                 session['isSponsor'] = 1
-                posts = get_sponser_timeline()
-                return render_template('sponsor.html', search=False, posts=posts, title="Home")
+                posts, timer = get_sponser_timeline()
+                return render_template('sponsor.html', search=False, posts=posts, title="Home", timer=timer)
             else:
                 session['isSponsor'] = 0
                 posts = get_posts(username)
@@ -220,8 +220,8 @@ def logout():
 @app.route('/home', methods=['GET', 'POST'])
 def home():
     if session['isSponsor'] == 1:
-        posts = get_sponser_timeline()
-        return render_template('sponsor.html', search=False, posts=posts, title="Home")
+        posts, timer = get_sponser_timeline()
+        return render_template('sponsor.html', search=False, posts=posts, title="Home", timer=timer)
     else:
         res = get_profile(session['username'])
         posts = get_posts(session['username'])
@@ -232,8 +232,8 @@ def home():
 def filters():
     val = request.args.get('val')
     if session['isSponsor'] == 1:
-        posts = get_sponser_timeline()
-        return render_template('sponsor.html', search=False, posts=posts, title="Home", filters=val)
+        posts, timer = get_sponser_timeline()
+        return render_template('sponsor.html', search=False, posts=posts, title="Home", filters=val, timer=timer)
     else:
         res = get_profile(session['username'])
         posts = get_posts(session['username'])
@@ -433,7 +433,7 @@ def update_bid():
 
         # 600 seconds means 10 minutes bidding time
         # if you update window time here than also update in models.py get_sponser_timeline()
-        window_in_seconds = 120
+        window_in_seconds = 600
         current_bid_time = int(datetime.datetime.now().timestamp())
 
 
@@ -486,17 +486,17 @@ def update_bid():
 
 
             elif int(new_sponser_bid_price) <= earlier_bid_price:
-                posts = get_sponser_timeline()
-                return render_template("sponsor.html", search=False, posts=posts,msg='Please enter amount greater than the current bid amount!', title="Home")
+                posts, timer = get_sponser_timeline()
+                return render_template("sponsor.html", search=False, posts=posts,msg='Please enter amount greater than the current bid amount!', title="Home", timer=timer)
 
             else:
                 # display time window is over you cannot bid anymore
-                posts = get_sponser_timeline()
+                posts, timer = get_sponser_timeline()
 
-                return render_template("sponsor.html", search=False, posts=posts, msg='You cannot bid anymore because Bidding Time is Over', title="Home")
+                return render_template("sponsor.html", search=False, posts=posts, msg='You cannot bid anymore because Bidding Time is Over', title="Home", timer=timer)
 
-            posts = get_sponser_timeline()
-            return render_template("sponsor.html", search=False, posts=posts, msg='Your Bid Placed Successfully ! ATB! :)', title="Home")
+            posts, timer = get_sponser_timeline()
+            return render_template("sponsor.html", search=False, posts=posts, msg='Your Bid Placed Successfully ! ATB! :)', title="Home", timer=timer)
         else:
             return render_template('access_denied.html', error_msg="File does not exist in mongodb database", title="Error")
     return render_template('access_denied.html', error_msg="Delete Post Method is not POST", title="Error")
@@ -546,10 +546,10 @@ def search():
         return render_template('home.html', search=True, result=result, found="yes", msg=msg, title="Search")
 
     if session['isSponser'] == 1:
-        posts = get_sponser_timeline()
+        posts, timer = get_sponser_timeline()
         if not result:
-            return render_template('sponsor.html', posts=posts, search=True, error_msg="Oops! No Search Result Found for Query: ", found="no", username="None", query=query, title="Search")
-        return render_template('sponsor.html', posts=posts, search=True, result=result, found="yes", msg=msg, title="Search")
+            return render_template('sponsor.html', posts=posts, search=True, error_msg="Oops! No Search Result Found for Query: ", found="no", username="None", query=query, title="Search", timer=timer)
+        return render_template('sponsor.html', posts=posts, search=True, result=result, found="yes", msg=msg, title="Search", timer=timer)
     return
 
 

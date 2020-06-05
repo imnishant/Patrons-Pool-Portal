@@ -11,8 +11,13 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
 <script>
-
-
+function sleep(milliseconds) {
+  			const date = Date.now();
+  			let currentDate = null;
+  			do {
+    			currentDate = Date.now();
+  			} while (currentDate - date < milliseconds);
+		}
 
 		jQuery(document).ready(function($) {
     	$(".clickable-row").click(function() {
@@ -28,13 +33,7 @@
        }
        else
        		alert("Kindly install Metamask extension and then press OK!");
-       function sleep(milliseconds) {
-  			const date = Date.now();
-  			let currentDate = null;
-  			do {
-    			currentDate = Date.now();
-  			} while (currentDate - date < milliseconds);
-		}
+
         function sendETH(_from, _to, _value, _headline, _username)
         {
         	_value = Math.round(_value * 0.000055 * 100000);
@@ -221,6 +220,13 @@
 														<ins><a href="/display_profile?username={{post['username']}}" title="">{{ post['name'] }}</a></ins>
 														<span> Published on: {{ post['date_time_added'] }}</span>
 														<span> VPN: {{ post['vpn'] }}</span>
+
+														{% if post['bidding_status'] == 'open' and post['bidding_end_time'] != 'N/A' %}
+														{% set tag_id = post['username'] ~ " " ~ post['post_headline'] %}
+															<p>Timer: <span id="{{tag_id}}">Yo</span></p>
+														{% else %}
+															<p>Expired</p>
+														{% endif %}
 													</div>
 
 												</div>
@@ -391,5 +397,45 @@
 			</div>
 		</div>
 	</section>
+	<script>
+
+
+		var timerData = [];
+
+function secondPassed(tag, row) {
+    var seconds = timerData[row].remaining;
+    var minutes = Math.round((seconds - 30) / 60);
+    var remainingSeconds = seconds % 60;
+    if (remainingSeconds < 10) {
+        remainingSeconds = "0" + remainingSeconds;
+    }
+    document.getElementById(tag).innerHTML = minutes + ":" + remainingSeconds;
+    if (seconds == 0) {
+        clearInterval(timerData[row].timerId);
+        document.getElementById(tag).innerHTML = "Buzz Buzz";
+    } else {
+        seconds--;
+    }
+    timerData[row].remaining = seconds;
+}
+
+function timer(tag, row, min) {
+    timerData[row] = {
+        remaining: min * 60,
+        timerId: setInterval(function () { secondPassed(tag, row); }, 1000)
+    };
+}
+		obj = {{timer | safe}}
+		len = {{timer | length}}
+		for(i=0 ; i<len ; i++)
+		{
+		console.log(obj[i]);
+			if(obj[i].bidding_end_time != 'N/A')
+			{
+
+				timer(obj[i].tag_id, obj[i].num, obj[i].bidding_end_time);
+			}
+		}
+	</script>
 
 {% include "footer.html" %}
