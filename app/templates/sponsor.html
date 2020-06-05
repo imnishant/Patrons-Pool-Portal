@@ -125,11 +125,6 @@ function sleep(milliseconds) {
 														</video>
 													{% endif %}
 
-
-													{% if post.bidding_status == 'closed' and post.bidding_person[-1] != session.username%}
-														<h5>Sponser {{ post.bidding_person[-1] }} won the Bid at price Rs {{ post.bid_price[-1] }}</h5>
-													{% endif %}
-
 													{% if post.post_type == 'audio' %}
 														<center>
 														<audio controls>
@@ -248,9 +243,6 @@ function sleep(milliseconds) {
 													{% endif %}
 
 
-													{% if post.bidding_status == 'closed' and post.bidding_person[-1] != session.username%}
-														<h5>Sponser {{ post.bidding_person[-1] }} won the Bid at price Rs {{ post.bid_price[-1] }}</h5>
-													{% endif %}
 
 														{% if post.post_type == 'audio' %}
 														<center>
@@ -322,7 +314,7 @@ function sleep(milliseconds) {
 															<input type="text" name="username" id="post_username" hidden>
 														</form>
 													{% endif %}
-												{% if post.transaction_hash != 'N/A' %}
+												{% if post.transaction_hash != 'N/A' and post.bidding_person[-1] == session.username %}
 														<center>
 														<div style="clear: both">
 															<h5>You Bought this Idea at Price:</h5>
@@ -332,6 +324,17 @@ function sleep(milliseconds) {
 
 														</center>
 												{% endif %}
+												{% if post.bidding_status == 'closed' and post.bidding_person[-1] != session.username%}
+														<center>
+														<div style="clear: both">
+															<h5>Sponser {{ post.bidding_person[-1] }} won the Bid at price Rs {{ post.bid_price[-1] }}</h5>
+														</div>
+														<hr />
+
+														</center>
+
+													{% endif %}
+
 											</div>
 										</div>
 									</div>
@@ -415,6 +418,7 @@ function secondPassed(tag, row) {
     if (seconds == 0) {
         clearInterval(timerData[row].timerId);
         document.getElementById(tag).innerHTML = "Expired";
+        window.location.reload(true);
     } else {
         seconds--;
     }
@@ -431,10 +435,9 @@ function timer(tag, row, min) {
 		len = {{timer | length}}
 		for(i=0 ; i<len ; i++)
 		{
-		console.log(obj[i]);
+			console.log(obj[i]);
 			if(obj[i].bidding_end_time != 'N/A')
 			{
-
 				timer(obj[i].tag_id, obj[i].num, obj[i].bidding_end_time);
 			}
 		}
