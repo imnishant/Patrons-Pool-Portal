@@ -1,4 +1,5 @@
 import os.path
+import os
 
 from flask import Flask
 from flask_pymongo import PyMongo
@@ -12,8 +13,12 @@ BLOB = os.path.join(my_path, 'static/BLOB')
 
 def create_app(config_name):
     app = Flask(__name__, instance_relative_config=True)
-    # Uncomment the below line when building up the docker image
-    #app.config['MONGO_URI'] = "mongodb://mongo:27017/FYP"
+    # Uncomment the below line if you are creating the docker image that will be used for k8s deployment
+    # app.config['MONGO_URI'] = os.getenv("MONGO_URI")
+
+    # Uncomment the below line when building up the docker image that won't be deployed in the k8s
+    # app.config['MONGO_URI'] = "mongodb://mongo:27017/FYP"
+
     # Comment the below line when you building the docker image and uncomment the above line
     app.config['MONGO_URI'] = "mongodb://localhost:27017/FYP"
     app.secret_key = 'hello'

@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: patrons-pool-deployment
+  labels:
+    app: patronspool
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: patronspool
+  template:
+    metadata:
+      labels:
+        app: patronspool
+    spec:
+      containers:
+      - name: patronspool
+        image: sankalpsaxena/patrons-pool:5.0.0
+        ports:
+        - containerPort: 9001
+        env:
+          - name: MONGO_URI
+            value: mongodb://10.108.133.68:27017/FYP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: patrons-pool-service
+spec:
+  selector:
+    app: patronspool
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 9001
+  type: LoadBalancer
