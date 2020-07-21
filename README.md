@@ -60,3 +60,8 @@ docker run -d --restart unless-stopped --name=mongo --network=patrons-pool-netwo
 ```
 docker run -d --restart unless-stopped --name=patrons-pool-app --network=patrons-pool-network -p 9005:9001 -e MONGO_URL=mongodb://mongo:27017/FYP patrons-pool-app
 ```
+
+## Note
+The sankalpsaxena/patrons-pool:5.0.0 image in the dockerhub is kubernetes compatible image, the environment variable for MONGO_URI has to be provided in the deployment file as the application ingest the value from the environment variable and no default path for the MONGO_URI has been specified in the image.
+
+To run the application inside the docker network with the mongo conatainer and patronspool application container only make use of image sankalpsaxena/patrons-pool:4.0.0
