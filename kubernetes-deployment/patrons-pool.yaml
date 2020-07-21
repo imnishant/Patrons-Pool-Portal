@@ -21,7 +21,7 @@ spec:
         - containerPort: 9001
         env:
           - name: MONGO_URI
-            value: mongodb://10.108.133.68:27017/FYP
+            value: mongodb://mongo:27017/FYP
 ---
 apiVersion: v1
 kind: Service
