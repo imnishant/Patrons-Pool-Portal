@@ -1,4 +1,5 @@
 # Patrons Pool Portal
+Welcome to the Patrons Pool Portal. An online crypto-currency based bidding portal for seekers seeking for patrons.
 
 ## Development
 Want to contribute? Great!
