@@ -3,7 +3,8 @@
 ## Development
 Want to contribute? Great!
 
-Follow the below instructions to setup the project for development on your machine
+Follow the below instructions to setup the project for development on your machine.
+
 Step 1: Run these below commands in the terminal to download all the dependencies for the project
 ```
 python3 -m venv venv
