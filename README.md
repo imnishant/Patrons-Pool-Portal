@@ -36,8 +36,9 @@ Make sure you haven't missed anything that is mentioned above that has to be cha
 docker build -t patrons-pool-app .
 ```
 
-# Installing
-If you want to just run the application using docker, follow the Steps mentioned below
+## Installing
+If you want to just run the application using docker, follow the Steps mentioned below.
+
 Step 1: Create a docker network named "patrons-pool-network" to establish communication between the front-end and back-end part of Patrons Pool applicaiton.
 ```
 docker network create patrons-pool-network
