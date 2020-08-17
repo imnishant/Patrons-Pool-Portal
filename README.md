@@ -4,17 +4,17 @@
 Want to contribute? Great!
 
 Follow the below instructions to setup the project for development on your machine
-First Step: Run these below commands in the terminal to download all the dependencies for the project
+Step 1: Run these below commands in the terminal to download all the dependencies for the project
 ```
 python3 -m venv venv
 source venv/bin/activate
 pip3 install -r requirements.txt
 ```
-Second Step: Make sure you install the MongoDB on your system and start the mongoDB daemon using the below command
+Step 2: Make sure you install the MongoDB on your system and start the mongoDB daemon using the below command
 ```
 sudo systemctl start mongod
 ```
-Thir Step: Run the application using the below command
+Step 3: Run the application using the below command
 ```
 flask run 
 ```
