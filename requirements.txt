@@ -45,7 +45,7 @@ one==0.2.1
 onetimepass==1.0.1
 pbr==5.4.4
 pexpect==4.2.1
-Pillow==5.1.0
+Pillow==8.2.0
 protobuf==3.0.0
 ptyprocess==0.6.0
 pyasn1==0.4.8
